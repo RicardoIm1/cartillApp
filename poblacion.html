@@ -1,0 +1,94 @@
+<div class="form-container">
+  <h3 style="margin-bottom: 1.5rem; text-align: center;">POBLACION</h3>
+  <form id="traspasoForm">
+    <div class="traspasos">
+      <label>CLUES Destino:
+            <select id="id_clues_destino" required>
+              <option value="">-- Selecciona un CLUES --</option>
+              <!-- opciones se llenan dinámicamente -->
+            </select>
+          </label>
+    </div>
+
+    <div class="traspasos">
+      <label>Cantidad:
+            <input type="number" id="cantidad" min="1" required />
+          </label>
+    </div>
+
+    <div class="traspasos">
+      <label>Tipo de cartilla:
+            <select id="id_t_cartilla" required>
+              <option value="">-- Selecciona un tipo de cartilla --</option>
+              <!-- opciones se llenan dinámicamente -->
+            </select>
+          </label>
+    </div>
+
+    <div class="traspasos">
+      <label>Año de Edición:
+            <select id="id_agno_edicion" required>
+              <option value="">-- Selecciona un Año de Edición --</option>
+              <!-- opciones se llenan dinámicamente -->
+            </select>
+          </label>
+    </div>
+
+    <div class="traspasos">
+      <button class="btn" type="submit">Guardar Mero Mero Censo</button>
+    </div>
+  </form>
+
+  <div id="error" class="error"></div>
+</div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    cargarCluesDestino();
+    cargarTiposCartilla();
+    cargarAgnosEdicion();
+  });
+
+  function cargarCluesDestino() {
+    google.script.run.withSuccessHandler(function(data) {
+      const select = document.getElementById('id_clues_destino');
+      data.forEach(opcion => {
+        const option = document.createElement('option');
+        option.value = opcion.id_clues;
+        option.textContent = `${opcion.id_clues} - ${opcion.nombre_unidad}`;
+        select.appendChild(option);
+      });
+    }).obtenerCluesDestino();
+  }
+
+  function cargarTiposCartilla() {
+    google.script.run.withSuccessHandler(function(data) {
+      const select = document.getElementById('id_t_cartilla');
+      data.forEach(opcion => {
+        const option = document.createElement('option');
+        option.value = opcion.id_t_cartilla;
+        option.textContent = opcion.t_cartilla;
+        select.appendChild(option);
+      });
+    }).obtenerTiposCartilla();
+  }
+
+function cargarAgnosEdicion() {
+  google.script.run
+    .withSuccessHandler(function(data) {
+      const select = document.getElementById('id_agno_edicion');
+      data.forEach(opcion => {
+        const option = document.createElement('option');
+        option.value = opcion.uuid;
+        option.textContent = opcion.edicion; // <-- Mostrar edicion, no uuid
+        select.appendChild(option);
+      });
+    })
+    .withFailureHandler(function (error) {
+      console.error("Error al cargar años de edición:", error.message);
+      alert("Error al cargar años: " + error.message);
+    })
+    .obtenerAgnosEdicion();
+}
+  </script>
+

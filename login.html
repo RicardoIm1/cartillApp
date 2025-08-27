@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inicio de Sesión | Sistema de Cartillas</title>
+  <base target="_top" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary: #3f37c9;
+      --dark: #1a1a2e;
+      --light: #f8f9fa;
+      --success: #4cc9f0;
+      --danger: #f72585;
+      --warning: #f8961e;
+    }
+
+    html {
+      box-sizing: border-box;
+      font-size: 80%;
+      background-color: var(--blancof);
+      height: 80%;
+
+    }
+
+    *,
+    *:before,
+    *:after {
+      box-sizing: inherit;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #141E30;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      color: var(--light);
+      overflow: hidden;
+      height: 100vh;
+      
+    }
+
+    .glass-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      padding: 3rem;
+      width: 400px;
+      max-width: 400px;
+      animation: fadeIn 0.6s ease-out 0.4s both;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo svg {
+      height: 60px;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 600;
+      color: white;
+      font-size: 1.8rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 1rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error {
+      color: var(--danger);
+      margin-top: 1rem;
+      text-align: center;
+      font-weight: 500;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20%,
+      60% {
+        transform: translateX(-5px);
+      }
+
+      40%,
+      80% {
+        transform: translateX(5px);
+      }
+    }
+
+
+    .footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      position: absolute;
+      bottom: 1rem;
+      left: 0;
+      width: 100%;
+    }
+
+    /* Efecto de partículas */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float linear infinite;
+    }
+
+    /* Animaciones */
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .glass-container {
+        padding: 2rem;
+        width: 90vw;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+        pointer-events: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="particles" id="particles"></div>
+
+  <form onsubmit="login(); return false;">
+    <div class="glass-container">
+      <div class="logo">
+        <!-- SVG logo -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="60px" height="60px">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+        </svg>
+      </div>
+
+      <h2>Iniciar Sesión</h2>
+
+      <div class="form-group">
+        <label for="curp">CURP</label>
+        <input type="text" id="curp" placeholder="Ingresa tu CURP" required autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label for="celular">Número de Celular</label>
+        <input type="password" id="celular" placeholder="Ingresa tu número" required autocomplete="off" />
+      </div>
+
+      <button type="submit" class="btn" id="loginBtn">
+        <span id="btnText">Ingresar</span>
+        <span id="btnLoader" class="loading" style="display: none;"></span>
+      </button>
+
+      <div id="error" class="error"></div>
+
+      <div class="footer">
+        Sistema de Cartillas de Salud © <span id="currentYear"></span>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+  </script>
+  
+<script>    
+  function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 15;
+
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+
+      const size = Math.random() * 10 + 5;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.bottom = `-${size}px`;
+      particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      particle.style.opacity = Math.random() * 0.5 + 0.1;
+
+      particlesContainer.appendChild(particle);
+    }
+  }
+
+  // Inicialización
+  window.addEventListener('load', () => {
+    createParticles();
+
+    // Efecto hover para inputs
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('mouseenter', () => {
+        input.style.transform = 'scale(1.02)';
+      });
+      input.addEventListener('mouseleave', () => {
+        input.style.transform = 'scale(1)';
+      });
+    });
+  });
+</script>
+
+
+  <script>  
+    function login() {
+      const curp = document.getElementById('curp').value.trim();
+      const celular = document.getElementById('celular').value.trim();
+      const errorElement = document.getElementById('error');
+      const btnText = document.getElementById('btnText');
+      const btnLoader = document.getElementById('btnLoader');
+      const loginBtn = document.getElementById('loginBtn');
+
+      if (!curp || !celular) {
+        if (errorElement) errorElement.textContent = 'Por favor completa todos los campos';
+        return;
+      }
+
+      if (btnText) btnText.textContent = 'Autenticando...';
+      if (btnLoader) btnLoader.style.display = 'inline-block';
+      if (loginBtn) loginBtn.disabled = true;
+      if (errorElement) errorElement.textContent = '';
+
+      google.script.run
+        .withSuccessHandler(handleLoginSuccess)
+        .withFailureHandler(handleError)
+        .autenticarUsuario(curp, celular);
+    }
+
+    // Manejar éxito en login
+    function handleLoginSuccess(response) {
+      try {
+        if (!response) throw new Error("No se recibió respuesta del servidor");
+
+        if (response.success && response.redirectUrl) {
+          const container = document.querySelector('.glass-container');
+          if (container) container.style.animation = 'fadeOut 0.5s ease forwards';
+
+          setTimeout(() => {
+            window.top.location.href = response.redirectUrl;
+          }, 500);
+        } else {
+          handleError({ message: response.message || "Autenticación fallida" });
+        }
+      } catch (error) {
+        console.error("Error procesando respuesta:", error);
+        handleError({ message: "Error al interpretar la respuesta del servidor" });
+      }
+    }
+
+    // Manejo de errores
+    function handleError(error) {
+      const errorElement = document.getElementById('error');
+      const btnText = document.getElementById('btnText');
+      const btnLoader = document.getElementById('btnLoader');
+      const loginBtn = document.getElementById('loginBtn');
+
+      if (btnText) btnText.textContent = 'Ingresar';
+      if (btnLoader) btnLoader.style.display = 'none';
+      if (loginBtn) loginBtn.disabled = false;
+
+      if (errorElement) {
+        errorElement.textContent = error.message || 'Error desconocido';
+        errorElement.style.display = 'block';
+      }
+
+      console.error("Error en autenticación:", error);
+    }
+  </script>
+  
+</body>
+
+</html>

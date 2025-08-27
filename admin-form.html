@@ -1,0 +1,162 @@
+  <!-- Contenido Principal -->
+    <main class="content">
+      <div class="content-header">
+        <h2 class="content-title">Panel del <span id="rol-dinamico">Coordinador Regional</span></h2>
+        <div class="actions">
+          <button class="btn active" onclick="mostrarSeccion('funcionando')">🟢 Funcionando</button>
+          <button class="btn" onclick="mostrarSeccion('proceso')">🟡 En Proceso</button>
+          <button class="btn" onclick="mostrarSeccion('inactivos')">🔴 No Funcionando</button>
+        </div>
+      </div>
+      <!-- Sección Funcionando -->
+      <section id="funcionando">
+        <h2 class="seccion-titulo">Funcionando</h2>
+        <div class="grid-formularios">
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Año de Edición</h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbwHvOZsyj50zKlVlkmtBObV1nn94jzrELHByUVVhlPTlSXGfTZQ6tOYkenEPXAfO_62kw/exec">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Discapacidad</h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbxuFbPyYJQPqaI6JHr8THn1XSUHww0QtNJEWO8TQVOkB8m4uT4t3b3GNlJMH7xJ9t49BQ/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Motivo </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbxXWwSBs2bUIm7NasyMg6jCETzctgycJZnzZzHtJFAcsMbHWpCIkc-8khG0wo_kL6Ci/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Servicio</h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbw4wCnf4ujlzsAW_8MACxaeaYElxMiT5WUbg4xhslYyXbHAlbDaNe699S45G1-TnzqF1w/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Tipo de Cartilla </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbz-Aw0vrK0vHCU6VBcxtCbxQGa3WiuqtCDzZebgxlZ7qm9xAODNOLU_s2DRuQTmJK6Z/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Tipo de Clues </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbyoZeCSgKhXCBu5ZP9AeVj92900iCivX1KT4Hw8-gKunoWo8APgo_py1rq8GpKQ2Km36A/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Tipo de Migración </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbwSxZY3nC3_vaDTXZ-B-DMZdF-7O-6WncUThgL_BzSnvf7yV2qw2BIPb0qSe5EQW661/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Tipo de Usuario </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbw4QaW0kdWMKUnPyDOFayWPEiLzKIQy93Ny3GrFNKQlbpMviy_AfCdnNNbLlKa7PBqdyA/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Clues </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbxE9rRvE71mPiC-HYmo1jGKbuxYSTeVukE6PQCU0do5ACaNlWt3Lq67q-5VPlrCa0aEog/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Usuarios </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbxssxi6S-VFL1ZmgtKDf5FOAA6_Akr1o35neO62LI2uuy6RQc08TpdWaM39qXiLZcyVug/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Tickets </h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbw4V4EcP8Wya6uLuLtY6thfWCZI9x6AYRTEGnOmtycxqDyg8tsjr6SITQlrvZWsxdJA/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección En Proceso -->
+      <section id="proceso" style="display: none;">
+        <h2 class="seccion-titulo">En Proceso...</h2>
+        <div class="grid-formularios">
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Traspasos</h3>
+            <button class="btn-abrir btn-deshabilitado" disabled>No Disponible</button>
+          </div>
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Panel Unidad</h3>
+            <button class="btn-abrir" data-url="https://script.google.com/macros/s/AKfycbzNgvqMyJpHgSBjgl7vKAfkFVzrlDf7tn05ARLsmfjo2RURkrqHfNcBfCVCD2fxJ9ho/exec" target="_blank" class="btn-abrir">Abrir</button>
+          </div>
+      </section>
+
+      <!-- Sección No Funcionando -->
+      <section id="inactivos" style="display: none;">
+        <h2 class="seccion-titulo">No Funcionando</h2>
+        <div class="grid-formularios">
+          <div class="tarjeta-formulario">
+            <h3 class="tarjeta-titulo">Censo</h3>
+            <button class="btn-abrir btn-deshabilitado" disabled>No Disponible</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Agregar el modal al final del body -->
+  <div class="modal-overlay" id="formModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Formulario</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <iframe class="modal-iframe" id="formIframe" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+    </div>
+  </div>
+</div>
+
+  <script>
+    // Función para mostrar secciones
+    function mostrarSeccion(seccionId) {
+        // Ocultar todas las secciones
+        document.querySelectorAll('main section').forEach(sec => {
+            sec.style.display = 'none';
+        });
+        
+        // Mostrar la sección seleccionada
+        document.getElementById(seccionId).style.display = 'block';
+        
+        // Actualizar botones activos del menú
+        document.querySelectorAll('.menu-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+    }
+    
+    // Nuevo código para manejar los modales
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('formModal');
+    const modalIframe = document.getElementById('formIframe');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalClose = document.getElementById('modalClose');
+    
+    // Manejar clic en botones de abrir
+    document.querySelectorAll('.btn-abrir:not(.btn-deshabilitado)').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const url = this.getAttribute('data-url');
+        const title = this.closest('.tarjeta-formulario').querySelector('.tarjeta-titulo').textContent;
+        
+        if(url) {
+          modalTitle.textContent = title;
+          modalIframe.src = url;
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    });
+    
+    // Cerrar modal
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e) {
+      if(e.target === modal) {
+        closeModal();
+      }
+    });
+    
+    function closeModal() {
+      modal.classList.remove('active');
+      modalIframe.src = '';
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Cerrar con ESC
+    document.addEventListener('keydown', function(e) {
+      if(e.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  });
+  </script>
