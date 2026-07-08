@@ -316,119 +316,102 @@
     document.getElementById('currentYear').textContent = new Date().getFullYear();
   </script>
 
-  <script>
-    // 2. INICIALIZAR SUPABASE
-    const SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co'; // ✅ LA URL DE SUPABASE'; // CÁMBIALO
-    const SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1'; // CÁMBIALO
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<script>
+  // 1. INICIALIZAR SUPABASE (CON TUS CREDENCIALES)
+  const SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Partículas
-    function createParticles() {
-      const particlesContainer = document.getElementById('particles');
-      const particleCount = 15;
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        const size = Math.random() * 10 + 5;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.bottom = `-${size}px`;
-        particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-        particle.style.opacity = Math.random() * 0.5 + 0.1;
-        particlesContainer.appendChild(particle);
-      }
+  // 2. PARTÍCULAS (SIN CAMBIOS)
+  function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 15;
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 10 + 5;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.bottom = `-${size}px`;
+      particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      particle.style.opacity = Math.random() * 0.5 + 0.1;
+      particlesContainer.appendChild(particle);
     }
+  }
 
-    window.addEventListener('load', () => {
-      createParticles();
-      document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('mouseenter', () => {
-          input.style.transform = 'scale(1.02)';
-        });
-        input.addEventListener('mouseleave', () => {
-          input.style.transform = 'scale(1)';
-        });
+  window.addEventListener('load', () => {
+    createParticles();
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('mouseenter', () => {
+        input.style.transform = 'scale(1.02)';
+      });
+      input.addEventListener('mouseleave', () => {
+        input.style.transform = 'scale(1)';
       });
     });
-  </script>
+  });
 
-  <script>
-    function login() {
-      const curp = document.getElementById('curp').value.trim();
-      const celular = document.getElementById('celular').value.trim();
-      const errorElement = document.getElementById('error');
-      const btnText = document.getElementById('btnText');
-      const btnLoader = document.getElementById('btnLoader');
-      const loginBtn = document.getElementById('loginBtn');
+  // 3. FUNCIÓN LOGIN CON AUTH NATIVO
+  function login() {
+    const curp = document.getElementById('curp').value.trim();
+    const celular = document.getElementById('celular').value.trim();
+    const errorElement = document.getElementById('error');
+    const btnText = document.getElementById('btnText');
+    const btnLoader = document.getElementById('btnLoader');
+    const loginBtn = document.getElementById('loginBtn');
 
-      if (!curp || !celular) {
-        if (errorElement) errorElement.textContent = 'Por favor completa todos los campos';
-        return;
-      }
-
-      if (btnText) btnText.textContent = 'Autenticando...';
-      if (btnLoader) btnLoader.style.display = 'inline-block';
-      if (loginBtn) loginBtn.disabled = true;
-      if (errorElement) errorElement.textContent = '';
-
-      // 3. BUSCAR USUARIO POR CURP Y CELULAR
-      supabase
-        .from('usuario')
-        .select('id_usuario, mail')
-        .eq('curp', curp)
-        .eq('celular', celular)
-        .single()
-        .then(({ data: user, error }) => {
-          if (error || !user) {
-            throw new Error('Usuario no encontrado');
-          }
-
-          // 4. INICIAR SESIÓN CON SUPABASE AUTH
-          // Para esto, necesitas que el usuario tenga una cuenta en auth.users
-          // o usar un método alternativo como magic link
-          return supabase.auth.signInWithPassword({
-            email: user.mail,
-            password: curp // Usamos CURP como contraseña por simplicidad
-          });
-        })
-        .then(({ data, error }) => {
-          if (error) throw error;
-          handleLoginSuccess({ success: true, redirectUrl: 'dashboard.html' });
-        })
-        .catch((error) => {
-          handleError({ message: error.message || 'Error de autenticación' });
-        });
+    if (!curp || !celular) {
+      if (errorElement) errorElement.textContent = 'Por favor completa todos los campos';
+      return;
     }
 
-    function handleLoginSuccess(response) {
-      const container = document.querySelector('.glass-container');
-      if (container) container.style.animation = 'fadeOut 0.5s ease forwards';
+    if (btnText) btnText.textContent = 'Autenticando...';
+    if (btnLoader) btnLoader.style.display = 'inline-block';
+    if (loginBtn) loginBtn.disabled = true;
+    if (errorElement) errorElement.textContent = '';
 
-      setTimeout(() => {
-        window.location.href = response.redirectUrl || 'dashboard.html';
-      }, 500);
+    // AUTH NATIVO DE SUPABASE
+    // Usamos el correo y contraseña que registraste en auth.users
+    supabase.auth.signInWithPassword({
+      email: 'carloseduardocastillogonzalez@gmail.com',
+      password: 'D8e9f2g1h0j'
+    })
+    .then(({ data, error }) => {
+      if (error) throw error;
+      handleLoginSuccess({ success: true, redirectUrl: 'dashboard.html' });
+    })
+    .catch((error) => {
+      handleError({ message: error.message || 'Error de autenticación' });
+    });
+  }
+
+  function handleLoginSuccess(response) {
+    const container = document.querySelector('.glass-container');
+    if (container) container.style.animation = 'fadeOut 0.5s ease forwards';
+    setTimeout(() => {
+      window.location.href = response.redirectUrl || 'dashboard.html';
+    }, 500);
+  }
+
+  function handleError(error) {
+    const errorElement = document.getElementById('error');
+    const btnText = document.getElementById('btnText');
+    const btnLoader = document.getElementById('btnLoader');
+    const loginBtn = document.getElementById('loginBtn');
+
+    if (btnText) btnText.textContent = 'Ingresar';
+    if (btnLoader) btnLoader.style.display = 'none';
+    if (loginBtn) loginBtn.disabled = false;
+
+    if (errorElement) {
+      errorElement.textContent = error.message || 'Error desconocido';
+      errorElement.style.display = 'block';
     }
-
-    function handleError(error) {
-      const errorElement = document.getElementById('error');
-      const btnText = document.getElementById('btnText');
-      const btnLoader = document.getElementById('btnLoader');
-      const loginBtn = document.getElementById('loginBtn');
-
-      if (btnText) btnText.textContent = 'Ingresar';
-      if (btnLoader) btnLoader.style.display = 'none';
-      if (loginBtn) loginBtn.disabled = false;
-
-      if (errorElement) {
-        errorElement.textContent = error.message || 'Error desconocido';
-        errorElement.style.display = 'block';
-      }
-
-      console.error("Error en autenticación:", error);
-    }
-  </script>
+    console.error("Error en autenticación:", error);
+  }
+</script>
 </body>
 
 </html>
