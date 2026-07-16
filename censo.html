@@ -50,6 +50,8 @@
             --card-bg: rgba(255, 255, 255, 0.02);
             --badge-bg: rgba(76, 201, 240, 0.15);
             --badge-text: #4cc9f0;
+            --user-badge-bg: rgba(255, 255, 255, 0.03);
+            --user-badge-border: rgba(255, 255, 255, 0.06);
         }
 
         /* Modo diurno */
@@ -89,6 +91,8 @@
             --card-bg: rgba(255, 255, 255, 0.5);
             --badge-bg: rgba(14, 165, 233, 0.10);
             --badge-text: #0ea5e9;
+            --user-badge-bg: rgba(0, 0, 0, 0.02);
+            --user-badge-border: rgba(0, 0, 0, 0.06);
         }
 
         /* ============================================================
@@ -140,7 +144,6 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
-
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -170,7 +173,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -230,6 +232,41 @@
             color: var(--text-muted);
             font-size: 0.9rem;
             transition: color 0.3s ease;
+        }
+
+        /* ============================================================
+           USER BADGE (NUEVO)
+           ============================================================ */
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            background: var(--user-badge-bg);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--user-badge-border);
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+        }
+
+        .user-badge strong {
+            color: #4cc9f0;
+        }
+
+        .user-badge .badge-rol {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            background: var(--badge-bg);
+            color: var(--badge-text);
         }
 
         /* ============================================================
@@ -461,21 +498,6 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        .badge-success {
-            background: rgba(76, 201, 240, 0.15);
-            color: #4cc9f0;
-        }
-
-        .badge-warning {
-            background: rgba(248, 150, 30, 0.15);
-            color: #f8961e;
-        }
-
-        .badge-danger {
-            background: rgba(247, 37, 133, 0.15);
-            color: #f72585;
-        }
-
         /* ============================================================
            SEARCH
            ============================================================ */
@@ -605,17 +627,14 @@
             body {
                 padding: 1rem;
             }
-
             .container {
                 padding: 1rem;
             }
-
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -623,25 +642,20 @@
                 height: 34px;
                 font-size: 1rem;
             }
-
             h1 {
                 font-size: 1.4rem;
             }
-
             .form-grid {
                 grid-template-columns: 1fr;
             }
-
             .modal-content {
                 padding: 1rem;
                 margin: 1rem;
             }
-
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .search-bar input {
                 max-width: 100%;
             }
@@ -651,11 +665,9 @@
             .container {
                 padding: 0.75rem;
             }
-
             .form-section {
                 padding: 0.75rem;
             }
-
             .checkbox-group {
                 gap: 0.75rem;
             }
@@ -687,6 +699,17 @@
                 <button class="btn btn-success" onclick="abrirModal()">
                     + Nuevo Registro
                 </button>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        USER BADGE (Usuario logueado)
+        ============================================================ -->
+        <div id="userInfo" style="display:none;">
+            <div class="user-badge">
+                <span id="userNameDisplay">👤 Cargando...</span>
+                <span class="badge-rol" id="userRolDisplay">usuario</span>
+                <span id="userCentroDisplay" style="color:var(--text-muted-light); font-size:0.8rem;"></span>
             </div>
         </div>
 
@@ -940,6 +963,78 @@
         var submitBtn = document.getElementById('submitBtn');
 
         // ============================================================
+        // 0. OBTENER USUARIO LOGUEADO
+        // ============================================================
+        var usuarioActual = null;
+
+        async function getUsuarioActual() {
+            try {
+                var session = await supabaseClient.auth.getSession();
+                if (!session.data.session) {
+                    window.location.href = 'login.html';
+                    return null;
+                }
+
+                var authUserId = session.data.session.user.id;
+                var userEmail = session.data.session.user.email;
+
+                var result = await supabaseClient
+                    .from('usuario')
+                    .select('id_uuid, nombre, paterno, materno, rol, clues_id_uuid, clues:clues_id_uuid (id_uuid, clues, nombre)')
+                    .eq('auth_user_id', authUserId);
+
+                if (result.data && result.data.length > 0) {
+                    usuarioActual = result.data[0];
+                    return usuarioActual;
+                }
+
+                // Fallback: datos virtuales
+                usuarioActual = {
+                    id_uuid: authUserId,
+                    nombre: userEmail,
+                    paterno: '',
+                    materno: '',
+                    rol: 'usuario',
+                    clues_id_uuid: null,
+                    clues: null
+                };
+                return usuarioActual;
+
+            } catch (error) {
+                console.error('Error al obtener usuario:', error);
+                return null;
+            }
+        }
+
+        // ============================================================
+        // 0.1 MOSTRAR USUARIO EN LA INTERFAZ
+        // ============================================================
+        async function mostrarUsuario() {
+            var user = await getUsuarioActual();
+            if (!user) return;
+
+            var infoDiv = document.getElementById('userInfo');
+            var nameDisplay = document.getElementById('userNameDisplay');
+            var rolDisplay = document.getElementById('userRolDisplay');
+            var centroDisplay = document.getElementById('userCentroDisplay');
+
+            var nombreCompleto = user.nombre || 'Usuario';
+            if (user.paterno) nombreCompleto += ' ' + user.paterno;
+            if (user.materno) nombreCompleto += ' ' + user.materno;
+
+            nameDisplay.textContent = '👤 ' + nombreCompleto;
+            rolDisplay.textContent = user.rol || 'usuario';
+
+            if (user.clues && user.clues.nombre) {
+                centroDisplay.textContent = '🏥 ' + user.clues.nombre;
+            } else {
+                centroDisplay.textContent = 'Sin centro asignado';
+            }
+
+            infoDiv.style.display = 'block';
+        }
+
+        // ============================================================
         // 1. CARGAR CATÁLOGOS (VERSIÓN OPTIMIZADA)
         // ============================================================
         var catalogos = { cargados: false };
@@ -1064,7 +1159,6 @@
                     .select('*')
                     .order('fecha_entrega', { ascending: false });
 
-                // Aplicar búsqueda
                 if (search.length > 0) {
                     query = query.or(
                         `nombre.ilike.%${search}%,paterno.ilike.%${search}%,materno.ilike.%${search}%,curp.ilike.%${search}%,folio.ilike.%${search}%`
@@ -1158,7 +1252,6 @@
         // 6. ABRIR MODAL PARA NUEVO REGISTRO
         // ============================================================
         function abrirModal() {
-            // Resetear el formulario
             document.getElementById('censoForm').reset();
             document.getElementById('editId').value = '';
             document.getElementById('modalTitle').textContent = '📝 Nuevo Registro de Censo';
@@ -1166,10 +1259,8 @@
             document.getElementById('edad').value = '';
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
 
-            // Limpiar selects dependientes
             document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
 
-            // Asegurar que los catálogos estén cargados antes de abrir
             if (!catalogos.cargados) {
                 cargarCatalogos().then(function () {
                     modalOverlay.classList.add('active');
@@ -1191,7 +1282,6 @@
         // ============================================================
         async function editarCenso(id) {
             try {
-                // Asegurar que los catálogos estén cargados
                 if (!catalogos.cargados) {
                     await cargarCatalogos();
                 }
@@ -1208,7 +1298,6 @@
 
                 var row = result.data;
 
-                // Llenar campos básicos
                 document.getElementById('editId').value = row.id_uuid;
                 document.getElementById('modalTitle').textContent = '✏️ Editar Registro de Censo';
                 document.getElementById('submitBtn').textContent = 'Actualizar Registro';
@@ -1223,24 +1312,18 @@
                 document.getElementById('fecha_entrega').value = row.fecha_entrega || '';
                 document.getElementById('especificar_otro').value = row.especificar_otro || '';
 
-                // Checkboxes
                 document.getElementById('pob_indigena').checked = row.pob_indigena || false;
                 document.getElementById('pob_afromex').checked = row.pob_afromex || false;
                 document.getElementById('pob_migrante').checked = row.pob_migrante || false;
 
-                // === CARGAR SELECTS CON VALORES ===
-
-                // 1. Entidad
                 document.getElementById('entidad').value = row.entidad_id_uuid || '';
 
-                // 2. Cargar municipios basados en la entidad
                 if (row.entidad_id_uuid) {
                     await cargarMunicipiosConValor(row.entidad_id_uuid, row.municipio_id_uuid);
                 } else {
                     document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
                 }
 
-                // 3. Cargar el resto de selects con sus valores
                 document.getElementById('clues').value = row.clues_id_uuid || '';
                 document.getElementById('pais').value = row.pais_id_uuid || '';
                 document.getElementById('tipo_cartilla').value = row.tipo_cartilla_id_uuid || '';
@@ -1296,7 +1379,6 @@
                 especificar_otro: document.getElementById('especificar_otro').value.trim() || null
             };
 
-            // Validar campos requeridos
             if (!data.nombre || !data.paterno || !data.curp || !data.fecha_nac || !data.sexo || !data.fecha_entrega ||
                 !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid || !data.clues_id_uuid) {
                 errorElement.textContent = 'Por favor completa todos los campos requeridos (*)';
@@ -1311,13 +1393,11 @@
                 var result;
 
                 if (isEdit) {
-                    // UPDATE
                     result = await supabaseClient
                         .from('censo')
                         .update(data)
                         .eq('id_uuid', editIdVal);
                 } else {
-                    // INSERT - Generar folio automático
                     var folioResult = await supabaseClient.rpc('generar_folio');
                     if (folioResult.error) {
                         throw folioResult.error;
@@ -1391,6 +1471,9 @@
         window.addEventListener('load', function () {
             createParticles();
 
+            // Mostrar usuario logueado
+            mostrarUsuario();
+
             // Cargar catálogos
             cargarCatalogos().then(function () {
                 cargarCenso();
@@ -1406,14 +1489,12 @@
                 });
             });
 
-            // Cerrar modal con ESC
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     cerrarModal();
                 }
             });
 
-            // Cerrar modal al hacer clic fuera
             modalOverlay.addEventListener('click', function (e) {
                 if (e.target === modalOverlay) {
                     cerrarModal();
