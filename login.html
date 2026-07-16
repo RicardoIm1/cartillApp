@@ -309,11 +309,11 @@
     /* NEXT_PUBLIC_SUPABASE_URL=https://apsvmojzniglbpmmaugd.supabase.co
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1 */
     
-    const SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
+    var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+    var SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
 
     // Inicializar cliente de Supabase
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // ============================================================
     // FUNCIONES DE AUTENTICACIÓN
