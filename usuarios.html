@@ -139,6 +139,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -165,6 +166,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -438,14 +440,17 @@
             body {
                 padding: 1rem;
             }
+
             .container {
                 padding: 1rem;
             }
+
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -453,6 +458,7 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
@@ -480,7 +486,8 @@
             </div>
         </div>
 
-        <div id="userInfo" style="margin-bottom:1rem; padding:0.5rem 1rem; background:var(--table-header-bg); border-radius:8px; display:none;">
+        <div id="userInfo"
+            style="margin-bottom:1rem; padding:0.5rem 1rem; background:var(--table-header-bg); border-radius:8px; display:none;">
             <span id="userNameDisplay"></span>
             <span class="badge-rol" id="userRolDisplay" style="margin-left:0.5rem;"></span>
         </div>
@@ -515,7 +522,7 @@
             } else {
                 icon.textContent = '🌙';
             }
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -568,17 +575,32 @@
                 }
 
                 var user = session.data.session.user;
+                console.log('Usuario autenticado:', user);
+
+                // Consulta directa sin .single()
                 var result = await supabaseClient
                     .from('usuario')
                     .select('id_uuid, nombre, paterno, materno, rol, clues_id_uuid')
-                    .eq('auth_user_id', user.id)
-                    .single();
+                    .eq('auth_user_id', user.id);
 
-                if (result.data) {
-                    usuarioActual = result.data;
+                console.log('Resultado consulta usuario:', result);
+
+                if (result.error) {
+                    console.error('Error en consulta usuario:', result.error);
+                    return null;
+                }
+
+                if (result.data && result.data.length > 0) {
+                    usuarioActual = result.data[0];
+                    console.log('Usuario encontrado:', usuarioActual);
                     return usuarioActual;
                 }
+
+                // Si el usuario no existe, mostrar mensaje
+                console.warn('Usuario no encontrado en la tabla usuario. ID:', user.id);
+                document.getElementById('error').textContent = 'Usuario no registrado en el sistema. Contacta al administrador.';
                 return null;
+
             } catch (error) {
                 console.error('Error al obtener usuario:', error);
                 return null;
@@ -685,7 +707,7 @@
                     <tbody>
             `;
 
-            data.forEach(function(user) {
+            data.forEach(function (user) {
                 var nombreCompleto = user.nombre || '';
                 if (user.paterno) nombreCompleto += ' ' + user.paterno;
                 if (user.materno) nombreCompleto += ' ' + user.materno;
@@ -766,7 +788,7 @@
                 }
 
                 successElement.textContent = '✅ Rol actualizado correctamente';
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -805,7 +827,7 @@
                 }
 
                 successElement.textContent = '✅ Usuario ' + (activar ? 'activado' : 'desactivado') + ' correctamente';
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -822,15 +844,15 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
             cargarUsuarios();
 
-            document.querySelectorAll('input, select').forEach(function(el) {
-                el.addEventListener('mouseenter', function() {
+            document.querySelectorAll('input, select').forEach(function (el) {
+                el.addEventListener('mouseenter', function () {
                     this.style.transform = 'scale(1.02)';
                 });
-                el.addEventListener('mouseleave', function() {
+                el.addEventListener('mouseleave', function () {
                     this.style.transform = 'scale(1)';
                 });
             });
