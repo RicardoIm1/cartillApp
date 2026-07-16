@@ -1170,7 +1170,32 @@
         }
 
         // ============================================================
-        // VER CONTACTO
+        // RESPONDER CONTACTO (VERSIÓN CORREGIDA)
+        // ============================================================
+        function responderContacto() {
+            if (!contactoActual) return;
+
+            cerrarVerContacto();
+
+            setTimeout(function () {
+                abrirModalContacto();
+
+                // Pre-seleccionar al remitente original como destinatario
+                var select = document.getElementById('contacto_destinatario');
+                // El remitente original es quien envió el mensaje, su ID está en remitente_id
+                // Pero necesitamos buscar el id_uuid de la tabla usuario que corresponde a ese auth.uid
+                // Como no tenemos esa relación directa, usamos el valor directamente
+                select.value = contactoActual.remitente_id;
+
+                document.getElementById('contacto_asunto').value = 'RE: ' + contactoActual.asunto;
+                document.getElementById('contacto_mensaje').value =
+                    `\n\n--- Mensaje original de ${contactoActual.remitente_nombre || 'Usuario'} ---\n${contactoActual.mensaje}`;
+
+            }, 300);
+        }
+
+        // ============================================================
+        // VER CONTACTO (VERSIÓN CORREGIDA)
         // ============================================================
         var contactoActual = null;
 
@@ -1188,7 +1213,12 @@
 
                 contactoActual = result.data;
 
-                if (contactoActual.destinatario_id === usuarioActual.id_uuid && !contactoActual.leido) {
+                // Obtener el auth.uid del usuario actual
+                var session = await supabaseClient.auth.getSession();
+                var authUserId = session.data.session.user.id;
+
+                // Marcar como leído si el destinatario es el usuario actual (usando auth.uid)
+                if (contactoActual.destinatario_id === authUserId && !contactoActual.leido) {
                     await supabaseClient
                         .from('contactos')
                         .update({ leido: true, updated_at: new Date().toISOString() })
@@ -1201,25 +1231,25 @@
                 document.getElementById('verContactoTitle').innerHTML = `<span class="icon">📄</span> ${contactoActual.asunto}`;
 
                 var html = `
-                    <div style="margin-bottom:1rem;">
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; background:var(--card-bg); padding:1rem; border-radius:12px; margin-bottom:1rem; border:1px solid var(--border-color);">
-                            <p><strong>De:</strong> ${contactoActual.remitente_nombre || 'Usuario'}</p>
-                            <p><strong>Para:</strong> ${contactoActual.destinatario_nombre || 'Usuario'}</p>
-                            <p><strong>Tipo:</strong> ${contactoActual.tipo || 'Consulta'}</p>
-                            <p><strong>Fecha:</strong> ${fecha}</p>
-                            <p><strong>Estado:</strong> ${contactoActual.leido ? '✅ Leído' : '🔴 No leído'}</p>
-                        </div>
-                        <p style="font-weight:500; margin-bottom:0.3rem;">Mensaje:</p>
-                        <div style="background:var(--card-bg); padding:1rem; border-radius:12px; border:1px solid var(--border-color); white-space:pre-wrap; min-height:80px;">
-                            ${contactoActual.mensaje}
-                        </div>
-                    </div>
-                `;
+            <div style="margin-bottom:1rem;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; background:var(--card-bg); padding:1rem; border-radius:12px; margin-bottom:1rem; border:1px solid var(--border-color);">
+                    <p><strong>De:</strong> ${contactoActual.remitente_nombre || 'Usuario'}</p>
+                    <p><strong>Para:</strong> ${contactoActual.destinatario_nombre || 'Usuario'}</p>
+                    <p><strong>Tipo:</strong> ${contactoActual.tipo || 'Consulta'}</p>
+                    <p><strong>Fecha:</strong> ${fecha}</p>
+                    <p><strong>Estado:</strong> ${contactoActual.leido ? '✅ Leído' : '🔴 No leído'}</p>
+                </div>
+                <p style="font-weight:500; margin-bottom:0.3rem;">Mensaje:</p>
+                <div style="background:var(--card-bg); padding:1rem; border-radius:12px; border:1px solid var(--border-color); white-space:pre-wrap; min-height:80px;">
+                    ${contactoActual.mensaje}
+                </div>
+            </div>
+        `;
 
                 document.getElementById('verContactoContent').innerHTML = html;
 
                 var btnResponder = document.getElementById('btnResponder');
-                if (contactoActual.destinatario_id === usuarioActual.id_uuid) {
+                if (contactoActual.destinatario_id === authUserId) {
                     btnResponder.style.display = 'inline-flex';
                 } else {
                     btnResponder.style.display = 'none';
@@ -1240,33 +1270,8 @@
             }
         }
 
-        function cerrarVerContacto() {
-            document.getElementById('modalVerContacto').classList.remove('active');
-        }
-
         // ============================================================
-        // RESPONDER CONTACTO
-        // ============================================================
-        function responderContacto() {
-            if (!contactoActual) return;
-
-            cerrarVerContacto();
-
-            setTimeout(function () {
-                abrirModalContacto();
-
-                var select = document.getElementById('contacto_destinatario');
-                select.value = contactoActual.remitente_id;
-
-                document.getElementById('contacto_asunto').value = 'RE: ' + contactoActual.asunto;
-                document.getElementById('contacto_mensaje').value =
-                    `\n\n--- Mensaje original de ${contactoActual.remitente_nombre || 'Usuario'} ---\n${contactoActual.mensaje}`;
-
-            }, 300);
-        }
-
-        // ============================================================
-        // ELIMINAR CONTACTO
+        // ELIMINAR CONTACTO (VERSIÓN CORREGIDA)
         // ============================================================
         async function eliminarContacto(id) {
             if (!confirm('¿Estás seguro de eliminar este mensaje?')) {
