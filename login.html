@@ -48,7 +48,7 @@
       color: var(--light);
       overflow: hidden;
       height: 100vh;
-      
+
     }
 
     .glass-container {
@@ -187,6 +187,7 @@
     }
 
     @keyframes shake {
+
       0%,
       100% {
         transform: translateX(0);
@@ -287,13 +288,13 @@
       <h2>Iniciar Sesión - PRUEBA FINAL 2</h2>
 
       <div class="form-group">
-        <label for="curp">CURP</label>
-        <input type="text" id="curp" placeholder="Ingresa tu CURP" required autocomplete="off" />
+        <label for="mail">mail</label>
+        <input type="text" id="mail" placeholder="Ingresa tu mail" required autocomplete="off" />
       </div>
 
       <div class="form-group">
-        <label for="celular">Número de Celular</label>
-        <input type="password" id="celular" placeholder="Ingresa tu número" required autocomplete="off" />
+        <label for="celular">contraseña</label>
+        <input type="password" id="pass" placeholder="Ingresa tu contraseña" required autocomplete="off" />
       </div>
 
       <button type="submit" class="btn" id="loginBtn">
@@ -312,48 +313,58 @@
   <script>
     document.getElementById('currentYear').textContent = new Date().getFullYear();
   </script>
-  
-<script>    
-  function createParticles() {
-    const particlesContainer = document.getElementById('particles');
-    const particleCount = 15;
 
-    for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.classList.add('particle');
+  <script>
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 15;
 
-      const size = Math.random() * 10 + 5;
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.left = `${Math.random() * 100}%`;
-      particle.style.bottom = `-${size}px`;
-      particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
-      particle.style.animationDelay = `${Math.random() * 5}s`;
-      particle.style.opacity = Math.random() * 0.5 + 0.1;
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
 
-      particlesContainer.appendChild(particle);
+        const size = Math.random() * 10 + 5;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.bottom = `-${size}px`;
+        particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particle.style.opacity = Math.random() * 0.5 + 0.1;
+
+        particlesContainer.appendChild(particle);
+      }
     }
-  }
 
-  // Inicialización
-  window.addEventListener('load', () => {
-    createParticles();
+    // Inicialización
+    window.addEventListener('load', () => {
+      createParticles();
 
-    // Efecto hover para inputs
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('mouseenter', () => {
-        input.style.transform = 'scale(1.02)';
-      });
-      input.addEventListener('mouseleave', () => {
-        input.style.transform = 'scale(1)';
+      // Efecto hover para inputs
+      document.querySelectorAll('input').forEach(input => {
+        input.addEventListener('mouseenter', () => {
+          input.style.transform = 'scale(1.02)';
+        });
+        input.addEventListener('mouseleave', () => {
+          input.style.transform = 'scale(1)';
+        });
       });
     });
-  });
-</script>
+  </script>
 
 
-  <script>  
-    function login() {
+  <script>
+    // Configuración de Supabase
+    const SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
+
+    /* NEXT_PUBLIC_SUPABASE_URL=https://apsvmojzniglbpmmaugd.supabase.co
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1 */
+
+    // Inicializar cliente de Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function login() {
       const curp = document.getElementById('curp').value.trim();
       const celular = document.getElementById('celular').value.trim();
       const errorElement = document.getElementById('error');
@@ -361,20 +372,50 @@
       const btnLoader = document.getElementById('btnLoader');
       const loginBtn = document.getElementById('loginBtn');
 
+      // Validación de campos
       if (!curp || !celular) {
         if (errorElement) errorElement.textContent = 'Por favor completa todos los campos';
         return;
       }
 
+      // Mostrar estado de carga
       if (btnText) btnText.textContent = 'Autenticando...';
       if (btnLoader) btnLoader.style.display = 'inline-block';
       if (loginBtn) loginBtn.disabled = true;
       if (errorElement) errorElement.textContent = '';
 
-      google.script.run
-        .withSuccessHandler(handleLoginSuccess)
-        .withFailureHandler(handleError)
-        .autenticarUsuario(curp, celular);
+      try {
+        // Paso 1: Autenticar con Supabase usando email/contraseña
+        // Nota: Usamos el CURP como email (porque es único)
+        const email = `${curp}@cartillas.salud.gob.mx`;
+        const password = celular; // Usamos el celular como contraseña (cambia esto después)
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        if (error) throw error;
+
+        // Paso 2: Si la autenticación es exitosa, redirigir
+        if (data && data.user) {
+          // Guardar sesión en localStorage (opcional)
+          localStorage.setItem('supabase_user', JSON.stringify(data.user));
+
+          // Mostrar animación de salida
+          const container = document.querySelector('.glass-container');
+          if (container) container.style.animation = 'fadeOut 0.5s ease forwards';
+
+          // Redirigir al dashboard
+          setTimeout(() => {
+            window.location.href = 'dashboard.html'; // Cambia por tu página principal
+          }, 500);
+        }
+
+      } catch (error) {
+        // Manejar errores de autenticación
+        handleError(error);
+      }
     }
 
     // Manejar éxito en login
@@ -405,19 +446,32 @@
       const btnLoader = document.getElementById('btnLoader');
       const loginBtn = document.getElementById('loginBtn');
 
+      // Restaurar estado del botón
       if (btnText) btnText.textContent = 'Ingresar';
       if (btnLoader) btnLoader.style.display = 'none';
       if (loginBtn) loginBtn.disabled = false;
 
+      // Mensajes de error personalizados
+      let mensaje = 'Error desconocido';
+      if (error.message) {
+        if (error.message.includes('Invalid login credentials')) {
+          mensaje = 'CURP o número de celular incorrectos';
+        } else if (error.message.includes('Email not confirmed')) {
+          mensaje = 'Tu cuenta aún no ha sido confirmada. Revisa tu correo.';
+        } else {
+          mensaje = error.message;
+        }
+      }
+
       if (errorElement) {
-        errorElement.textContent = error.message || 'Error desconocido';
+        errorElement.textContent = mensaje;
         errorElement.style.display = 'block';
       }
 
-      console.error("Error en autenticación:", error);
+      console.error('Error en autenticación:', error);
     }
   </script>
-  
+
 </body>
 
 </html>
