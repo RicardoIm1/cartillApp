@@ -641,7 +641,7 @@
                 icon.textContent = '🌙';
             }
 
-            themeToggle.addEventListener('click', function () {
+            themeToggle.addEventListener('click', function() {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -702,7 +702,7 @@
         var usuarioActual = null;
 
         // ============================================================
-        // 1. CARGAR DATOS INICIALES
+        // 1. CARGAR DATOS INICIALES (ACTUALIZADO PARA UUID)
         // ============================================================
         async function cargarDatos() {
             try {
@@ -713,6 +713,7 @@
                     return;
                 }
 
+                // CONSULTA ACTUALIZADA PARA UUID
                 var userResult = await supabaseClient
                     .from('usuario')
                     .select(`
@@ -721,13 +722,12 @@
                         paterno,
                         materno,
                         id_clues,
-                        clues:id_clues (id_clues, clues, nombre)
+                        clues:clues_id_uuid (id_uuid, clues, nombre)
                     `)
-                    .eq('auth_user_id', session.data.session.user.id)
-                    .single();
+                    .eq('auth_user_id', session.data.session.user.id);
 
-                if (userResult.data) {
-                    usuarioActual = userResult.data;
+                if (userResult.data && userResult.data.length > 0) {
+                    usuarioActual = userResult.data[0];
 
                     var nombreCompleto = usuarioActual.nombre || 'Usuario';
                     if (usuarioActual.paterno) nombreCompleto += ' ' + usuarioActual.paterno;
@@ -740,13 +740,21 @@
                             ${usuarioActual.clues ? '🏥 ' + usuarioActual.clues.nombre : 'Sin centro asignado'}
                         </div>
                     `;
+                } else {
+                    // Fallback si no tiene perfil
+                    userInfo.innerHTML = `
+                        <div class="user-badge">
+                            👤 <strong>${session.data.session.user.email}</strong>
+                            <span class="muted">· Sin perfil completo</span>
+                        </div>
+                    `;
                 }
 
                 await cargarClues();
                 await cargarTiposCartilla();
                 await cargarMotivos();
 
-                document.querySelectorAll('#origen, #destino, #tipo_cartilla, #motivo, #cantidad').forEach(function (el) {
+                document.querySelectorAll('#origen, #destino, #tipo_cartilla, #motivo, #cantidad').forEach(function(el) {
                     el.addEventListener('change', previsualizar);
                     el.addEventListener('input', previsualizar);
                 });
@@ -757,12 +765,12 @@
         }
 
         // ============================================================
-        // 2. CARGAR CLUES (Centros)
+        // 2. CARGAR CLUES (Centros) - ACTUALIZADO PARA UUID
         // ============================================================
         async function cargarClues() {
             var result = await supabaseClient
                 .from('clues')
-                .select('id_clues, clues, nombre')
+                .select('id_uuid, clues, nombre')
                 .order('nombre');
 
             if (result.error) {
@@ -771,16 +779,16 @@
             }
 
             var options = '<option value="">Seleccionar centro...</option>';
-            result.data.forEach(function (item) {
+            result.data.forEach(function(item) {
                 var label = item.clues + ' - ' + item.nombre;
-                options += `<option value="${item.id_clues}">${label}</option>`;
+                options += `<option value="${item.id_uuid}">${label}</option>`;
             });
 
             selectOrigen.innerHTML = options;
             selectDestino.innerHTML = options;
 
-            if (usuarioActual && usuarioActual.id_clues) {
-                selectOrigen.value = usuarioActual.id_clues;
+            if (usuarioActual && usuarioActual.clues) {
+                selectOrigen.value = usuarioActual.clues.id_uuid;
                 selectOrigen.disabled = true;
                 var origenLabel = document.querySelector('label[for="origen"]');
                 if (origenLabel) {
@@ -790,12 +798,12 @@
         }
 
         // ============================================================
-        // 3. CARGAR TIPOS DE CARTILLA
+        // 3. CARGAR TIPOS DE CARTILLA - ACTUALIZADO PARA UUID
         // ============================================================
         async function cargarTiposCartilla() {
             var result = await supabaseClient
                 .from('tipo_cartilla')
-                .select('id_tipo_cartilla, tipo_cartilla')
+                .select('id_uuid, tipo_cartilla')
                 .order('tipo_cartilla');
 
             if (result.error) {
@@ -804,20 +812,20 @@
             }
 
             var options = '<option value="">Seleccionar tipo...</option>';
-            result.data.forEach(function (item) {
-                options += `<option value="${item.id_tipo_cartilla}">${item.tipo_cartilla}</option>`;
+            result.data.forEach(function(item) {
+                options += `<option value="${item.id_uuid}">${item.tipo_cartilla}</option>`;
             });
 
             selectTipo.innerHTML = options;
         }
 
         // ============================================================
-        // 4. CARGAR MOTIVOS
+        // 4. CARGAR MOTIVOS - ACTUALIZADO PARA UUID
         // ============================================================
         async function cargarMotivos() {
             var result = await supabaseClient
                 .from('motivo_entrega')
-                .select('id_motivo, motivo')
+                .select('id_uuid, motivo')
                 .order('motivo');
 
             if (result.error) {
@@ -826,8 +834,8 @@
             }
 
             var options = '<option value="">Seleccionar motivo...</option>';
-            result.data.forEach(function (item) {
-                options += `<option value="${item.id_motivo}">${item.motivo}</option>`;
+            result.data.forEach(function(item) {
+                options += `<option value="${item.id_uuid}">${item.motivo}</option>`;
             });
 
             selectMotivo.innerHTML = options;
@@ -862,7 +870,7 @@
         }
 
         // ============================================================
-        // 6. REGISTRAR TRASPASO
+        // 6. REGISTRAR TRASPASO - ACTUALIZADO PARA UUID
         // ============================================================
         async function registrarTraspaso(event) {
             event.preventDefault();
@@ -884,25 +892,26 @@
             }
 
             try {
+                // Verificar stock en origen - ACTUALIZADO PARA UUID
                 var stockResult = await supabaseClient
                     .from('inventario')
                     .select('cantidad')
-                    .eq('id_clues', origenId)
-                    .eq('id_tipo_cartilla', tipoId)
-                    .single();
+                    .eq('clues_id_uuid', origenId)
+                    .eq('tipo_cartilla_id_uuid', tipoId);
 
-                var stockActual = stockResult.data ? stockResult.data.cantidad : 0;
+                var stockActual = 0;
+                if (stockResult.data && stockResult.data.length > 0) {
+                    stockActual = stockResult.data[0].cantidad;
+                }
 
                 if (stockActual < cantidad) {
                     mostrarError('Stock insuficiente en el centro de origen. Disponible: ' + stockActual);
                     return;
                 }
             } catch (error) {
-                if (error.code === 'PGRST116') {
-                    mostrarError('El centro de origen no tiene stock de este tipo de cartilla.');
-                    return;
-                }
                 console.error('Error al verificar stock:', error);
+                mostrarError('Error al verificar el stock: ' + (error.message || 'Error desconocido'));
+                return;
             }
 
             btnSubmit.disabled = true;
@@ -917,22 +926,22 @@
                     var userResult = await supabaseClient
                         .from('usuario')
                         .select('id_usuario')
-                        .eq('auth_user_id', session.data.session.user.id)
-                        .single();
+                        .eq('auth_user_id', session.data.session.user.id);
 
-                    if (userResult.data) {
-                        userId = userResult.data.id_usuario;
+                    if (userResult.data && userResult.data.length > 0) {
+                        userId = userResult.data[0].id_usuario;
                     }
                 }
 
+                // Crear traspaso con UUID
                 var traspasoData = {
-                    id_clues_origen: parseInt(origenId),
-                    id_clues_destino: parseInt(destinoId),
-                    id_tipo_cartilla: parseInt(tipoId),
-                    id_motivo: parseInt(motivoId),
+                    origen_id_uuid: origenId,
+                    destino_id_uuid: destinoId,
+                    tipo_cartilla_id_uuid: tipoId,
+                    motivo_id_uuid: motivoId,
                     cantidad: cantidad,
                     fecha: new Date().toISOString().split('T')[0],
-                    id_usuario: userId
+                    usuario_id_uuid: userId
                 };
 
                 var insertResult = await supabaseClient
@@ -943,46 +952,59 @@
                     throw insertResult.error;
                 }
 
-                // Actualizar inventario - ORIGEN
+                // ============================================================
+                // ACTUALIZAR INVENTARIO - ORIGEN (UUID)
+                // ============================================================
                 if (stockActual - cantidad <= 0) {
                     await supabaseClient
                         .from('inventario')
                         .delete()
-                        .eq('id_clues', origenId)
-                        .eq('id_tipo_cartilla', tipoId);
+                        .eq('clues_id_uuid', origenId)
+                        .eq('tipo_cartilla_id_uuid', tipoId);
                 } else {
                     await supabaseClient
                         .from('inventario')
-                        .update({ cantidad: stockActual - cantidad, updated_at: new Date().toISOString() })
-                        .eq('id_clues', origenId)
-                        .eq('id_tipo_cartilla', tipoId);
+                        .update({
+                            cantidad: stockActual - cantidad,
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq('clues_id_uuid', origenId)
+                        .eq('tipo_cartilla_id_uuid', tipoId);
                 }
 
-                // Actualizar inventario - DESTINO
+                // ============================================================
+                // ACTUALIZAR INVENTARIO - DESTINO (UUID)
+                // ============================================================
                 var stockDestinoResult = await supabaseClient
                     .from('inventario')
-                    .select('cantidad, id_inventario')
-                    .eq('id_clues', destinoId)
-                    .eq('id_tipo_cartilla', tipoId)
-                    .single();
+                    .select('id_inventario, cantidad')
+                    .eq('clues_id_uuid', destinoId)
+                    .eq('tipo_cartilla_id_uuid', tipoId);
 
-                if (stockDestinoResult.data) {
-                    var nuevaCantidadDestino = stockDestinoResult.data.cantidad + cantidad;
+                if (stockDestinoResult.data && stockDestinoResult.data.length > 0) {
+                    var stockDestino = stockDestinoResult.data[0];
+                    var nuevaCantidadDestino = stockDestino.cantidad + cantidad;
                     await supabaseClient
                         .from('inventario')
-                        .update({ cantidad: nuevaCantidadDestino, updated_at: new Date().toISOString() })
-                        .eq('id_inventario', stockDestinoResult.data.id_inventario);
+                        .update({
+                            cantidad: nuevaCantidadDestino,
+                            updated_at: new Date().toISOString()
+                        })
+                        .eq('id_inventario', stockDestino.id_inventario);
                 } else {
                     await supabaseClient
                         .from('inventario')
                         .insert({
-                            id_clues: parseInt(destinoId),
-                            id_tipo_cartilla: parseInt(tipoId),
+                            clues_id_uuid: destinoId,
+                            tipo_cartilla_id_uuid: tipoId,
                             cantidad: cantidad,
                             updated_at: new Date().toISOString()
                         });
                 }
 
+                // ============================================================
+                // ÉXITO
+                // ============================================================
                 resultado.innerHTML = `
                     <div class="success">
                         ✅ Traspaso registrado exitosamente.<br>
@@ -1024,16 +1046,16 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function () {
+        window.addEventListener('load', function() {
             createParticles();
             cargarDatos();
 
             // Efecto hover en inputs (igual que login)
-            document.querySelectorAll('input, select').forEach(function (el) {
-                el.addEventListener('mouseenter', function () {
+            document.querySelectorAll('input, select').forEach(function(el) {
+                el.addEventListener('mouseenter', function() {
                     this.style.transform = 'scale(1.02)';
                 });
-                el.addEventListener('mouseleave', function () {
+                el.addEventListener('mouseleave', function() {
                     this.style.transform = 'scale(1)';
                 });
             });
