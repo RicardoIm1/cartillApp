@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tickets de Soporte - Sistema de Cartillas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+    <style>
+        /* ============================================================
+           VARIABLES Y TEMAS
+           ============================================================ */
+        :root {
+            --bg-gradient-start: #141E30;
+            --bg-gradient-end: #243B55;
+            --container-bg: #1c2541;
+            --container-shadow-1: #0d1320;
+            --container-shadow-2: #2b3f60;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --text-muted-light: rgba(255, 255, 255, 0.4);
+            --input-bg: #1c2541;
+            --input-shadow-1: #0d1320;
+            --input-shadow-2: #2b3f60;
+            --input-focus-bg: #243b55;
+            --input-placeholder: rgba(255, 255, 255, 0.5);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-success: #4cc9f0;
+            --btn-success-hover: #3ab8dd;
+            --btn-danger: #f72585;
+            --btn-danger-hover: #d91a6e;
+            --btn-warning: #f8961e;
+            --btn-warning-hover: #e07c0a;
+            --btn-secondary-bg: #1c2541;
+            --error-color: #f72585;
+            --success-color: #4cc9f0;
+            --footer-color: rgba(255, 255, 255, 0.5);
+            --particle-color: rgba(255, 255, 255, 0.4);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --label-color: rgba(255, 255, 255, 0.7);
+            --select-option-bg: #1a1a2e;
+            --table-header-bg: rgba(255, 255, 255, 0.03);
+            --table-row-hover: rgba(255, 255, 255, 0.02);
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --badge-bg: rgba(76, 201, 240, 0.15);
+            --badge-text: #4cc9f0;
+            --urgencia-baja: rgba(76, 201, 240, 0.15);
+            --urgencia-baja-text: #4cc9f0;
+            --urgencia-media: rgba(248, 150, 30, 0.15);
+            --urgencia-media-text: #f8961e;
+            --urgencia-alta: rgba(247, 37, 133, 0.15);
+            --urgencia-alta-text: #f72585;
+        }
+
+        body.light-mode {
+            --bg-gradient-start: #e0e5ec;
+            --bg-gradient-end: #f0f2f8;
+            --container-bg: #e8ecf4;
+            --container-shadow-1: #b8bcc8;
+            --container-shadow-2: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #2d2d44;
+            --text-muted: rgba(0, 0, 0, 0.7);
+            --text-muted-light: rgba(0, 0, 0, 0.4);
+            --input-bg: #e8ecf4;
+            --input-shadow-1: #b8bcc8;
+            --input-shadow-2: #ffffff;
+            --input-focus-bg: #d5dbe8;
+            --input-placeholder: rgba(0, 0, 0, 0.4);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-success: #0ea5e9;
+            --btn-success-hover: #0284c7;
+            --btn-danger: #e63946;
+            --btn-danger-hover: #c62828;
+            --btn-warning: #f59e0b;
+            --btn-warning-hover: #d97706;
+            --btn-secondary-bg: #e8ecf4;
+            --error-color: #e63946;
+            --success-color: #0ea5e9;
+            --footer-color: rgba(0, 0, 0, 0.5);
+            --particle-color: rgba(0, 0, 0, 0.10);
+            --border-color: rgba(0, 0, 0, 0.06);
+            --label-color: rgba(0, 0, 0, 0.7);
+            --select-option-bg: #ffffff;
+            --table-header-bg: rgba(0, 0, 0, 0.02);
+            --table-row-hover: rgba(0, 0, 0, 0.02);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --badge-bg: rgba(14, 165, 233, 0.10);
+            --badge-text: #0ea5e9;
+            --urgencia-baja: rgba(14, 165, 233, 0.10);
+            --urgencia-baja-text: #0ea5e9;
+            --urgencia-media: rgba(245, 158, 11, 0.10);
+            --urgencia-media-text: #d97706;
+            --urgencia-alta: rgba(230, 57, 70, 0.10);
+            --urgencia-alta-text: #c62828;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            transition: background 0.5s ease, color 0.3s ease;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--particle-color);
+            border-radius: 50%;
+            animation: float linear infinite;
+            transition: background 0.5s ease;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--container-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 9px 9px 18px var(--container-shadow-1),
+                -9px -9px 18px var(--container-shadow-2);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--container-bg);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-right: 3.5rem;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background: var(--btn-primary);
+            color: white;
+            box-shadow: 4px 4px 8px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--btn-success);
+            color: white;
+            box-shadow: 4px 4px 8px rgba(76, 201, 240, 0.2);
+        }
+
+        .btn-success:hover {
+            background: var(--btn-success-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--btn-danger);
+            color: white;
+            box-shadow: 4px 4px 8px rgba(247, 37, 133, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: var(--btn-danger-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: var(--btn-warning);
+            color: white;
+            box-shadow: 4px 4px 8px rgba(248, 150, 30, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: var(--btn-warning-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--btn-secondary-bg);
+            color: var(--text-primary);
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-sm {
+            padding: 0.3rem 0.8rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--label-color);
+            margin-bottom: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        select,
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: inset 4px 4px 8px var(--input-shadow-1),
+                inset -4px -4px 8px var(--input-shadow-2);
+            resize: vertical;
+        }
+
+        select:focus,
+        input:focus,
+        textarea:focus {
+            outline: none;
+            background: var(--input-focus-bg);
+            box-shadow: inset 2px 2px 5px var(--input-shadow-1),
+                inset -2px -2px 5px var(--input-shadow-2),
+                0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        select option {
+            background: var(--select-option-bg);
+            color: var(--text-primary);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--input-placeholder);
+            transition: color 0.3s ease;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload .file-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            background: var(--input-bg);
+            color: var(--text-muted);
+            border: 2px dashed var(--border-color);
+            transition: all 0.3s ease;
+            box-shadow: inset 4px 4px 8px var(--input-shadow-1),
+                inset -4px -4px 8px var(--input-shadow-2);
+            cursor: pointer;
+        }
+
+        .file-upload .file-label:hover {
+            border-color: var(--btn-success);
+            background: var(--input-focus-bg);
+        }
+
+        .file-preview {
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: none;
+        }
+
+        .file-preview img {
+            max-height: 60px;
+            border-radius: 6px;
+        }
+
+        .file-preview .file-name {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            flex: 1;
+        }
+
+        .file-preview .file-remove {
+            cursor: pointer;
+            color: var(--btn-danger);
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            background: rgba(247, 37, 133, 0.1);
+        }
+
+        /* ============================================================
+           TABLA DE TICKETS
+           ============================================================ */
+        .table-container {
+            border-radius: 16px;
+            overflow: auto;
+            margin-top: 1rem;
+            background: var(--container-bg);
+            box-shadow: inset 4px 4px 8px var(--container-shadow-1),
+                inset -4px -4px 8px var(--container-shadow-2);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 800px;
+        }
+
+        thead {
+            background: var(--table-header-bg);
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+            vertical-align: middle;
+        }
+
+        tr:hover td {
+            background: var(--table-row-hover);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .badge-urgencia-baja {
+            background: var(--urgencia-baja);
+            color: var(--urgencia-baja-text);
+        }
+
+        .badge-urgencia-media {
+            background: var(--urgencia-media);
+            color: var(--urgencia-media-text);
+        }
+
+        .badge-urgencia-alta {
+            background: var(--urgencia-alta);
+            color: var(--urgencia-alta-text);
+        }
+
+        .badge-estado {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+
+        .badge-estado.abierto {
+            background: rgba(76, 201, 240, 0.15);
+            color: #4cc9f0;
+        }
+
+        .badge-estado.en-proceso {
+            background: rgba(248, 150, 30, 0.15);
+            color: #f8961e;
+        }
+
+        .badge-estado.cerrado {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted-light);
+        }
+
+        .screenshot-thumb {
+            max-height: 50px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+
+        .screenshot-thumb:hover {
+            transform: scale(1.05);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--text-muted);
+            border-radius: 50%;
+            border-top-color: var(--text-primary);
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted-light);
+            font-size: 0.9rem;
+        }
+
+        .error {
+            color: var(--error-color);
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .success-msg {
+            color: var(--success-color);
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--container-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 9px 9px 18px var(--container-shadow-1),
+                -9px -9px 18px var(--container-shadow-2);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--footer-color);
+            font-size: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+            .header-actions {
+                padding-right: 0;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .theme-toggle {
+                top: 0.5rem;
+                right: 0.5rem;
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">🌙</button>
+
+        <div class="header-actions">
+            <div>
+                <h1>🎫 Tickets de Soporte</h1>
+                <p class="subtitle">Reporta incidencias, dudas o mejoras del sistema</p>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+                    ← Volver al Dashboard
+                </button>
+                <button class="btn btn-success" onclick="abrirModalTicket()">
+                    + Nuevo Ticket
+                </button>
+            </div>
+        </div>
+
+        <div id="userInfo" style="margin-bottom:1rem; padding:0.5rem 1rem; background:var(--table-header-bg); border-radius:8px; display:none;">
+            <span id="userNameDisplay"></span>
+            <span class="badge" id="userRolDisplay" style="margin-left:0.5rem;"></span>
+        </div>
+
+        <div class="table-container" id="ticketsContainer">
+            <div class="empty-state">
+                <div class="loading-spinner"></div>
+                Cargando tickets...
+            </div>
+        </div>
+
+        <div id="error" class="error"></div>
+        <div id="success" class="success-msg"></div>
+
+        <div class="footer">
+            Sistema de Cartillas de Salud © <span id="currentYear"></span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    MODAL: NUEVO TICKET
+    ============================================================ -->
+    <div class="modal-overlay" id="modalTicket">
+        <div class="modal-content">
+            <h2>📝 Nuevo Ticket</h2>
+            <form id="ticketForm" onsubmit="guardarTicket(event)">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="ticket_asunto">Asunto *</label>
+                        <input type="text" id="ticket_asunto" placeholder="Breve descripción del problema" required />
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="ticket_descripcion">Descripción *</label>
+                        <textarea id="ticket_descripcion" rows="4" placeholder="Explica detalladamente la situación" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket_urgencia">Urgencia *</label>
+                        <select id="ticket_urgencia" required>
+                            <option value="baja">🟢 Baja</option>
+                            <option value="media" selected>🟡 Media</option>
+                            <option value="alta">🔴 Alta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ticket_categoria">Categoría</label>
+                        <select id="ticket_categoria">
+                            <option value="error">🐛 Error</option>
+                            <option value="duda">❓ Duda</option>
+                            <option value="mejora">💡 Mejora</option>
+                            <option value="otro">📌 Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="ticket_imagen">Adjuntar captura (opcional)</label>
+                        <div class="file-upload">
+                            <div class="file-label" id="fileLabel">
+                                📎 Haz clic para seleccionar una imagen
+                            </div>
+                            <input type="file" id="ticket_imagen" accept="image/*" onchange="previsualizarImagen(event)" />
+                        </div>
+                        <div class="file-preview" id="filePreview">
+                            <img id="previewImg" src="#" alt="Vista previa" />
+                            <span class="file-name" id="previewName"></span>
+                            <span class="file-remove" onclick="eliminarImagen()">✕</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModalTicket()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="submitTicketBtn">Enviar Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    MODAL: VER TICKET
+    ============================================================ -->
+    <div class="modal-overlay" id="modalVerTicket">
+        <div class="modal-content">
+            <h2 id="verTicketTitle">📄 Detalle del Ticket</h2>
+            <div id="verTicketContent"></div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="cerrarVerTicket()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // TEMA DIURNO / NOCTURNO
+        // ============================================================
+        (function setupTheme() {
+            var body = document.body;
+            var themeToggle = document.getElementById('themeToggle');
+            var icon = themeToggle;
+            var savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+            themeToggle.addEventListener('click', function() {
+                var isLight = body.classList.toggle('light-mode');
+                if (isLight) {
+                    icon.textContent = '☀️';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    icon.textContent = '🌙';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        })();
+
+        // ============================================================
+        // PARTÍCULAS
+        // ============================================================
+        function createParticles() {
+            var container = document.getElementById('particles');
+            for (var i = 0; i < 15; i++) {
+                var p = document.createElement('div');
+                p.classList.add('particle');
+                var size = Math.random() * 10 + 5;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.bottom = '-' + size + 'px';
+                p.style.animationDuration = Math.random() * 20 + 10 + 's';
+                p.style.animationDelay = Math.random() * 5 + 's';
+                p.style.opacity = Math.random() * 0.5 + 0.1;
+                container.appendChild(p);
+            }
+        }
+
+        // ============================================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================================
+        var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        var usuarioActual = null;
+
+        // ============================================================
+        // ELEMENTOS DEL DOM
+        // ============================================================
+        var ticketsContainer = document.getElementById('ticketsContainer');
+        var errorElement = document.getElementById('error');
+        var successElement = document.getElementById('success');
+
+        // ============================================================
+        // OBTENER USUARIO ACTUAL
+        // ============================================================
+        async function getUsuarioActual() {
+            try {
+                var session = await supabaseClient.auth.getSession();
+                if (!session.data.session) {
+                    window.location.href = 'login.html';
+                    return null;
+                }
+                var user = session.data.session.user;
+                var result = await supabaseClient
+                    .from('usuario')
+                    .select('id_uuid, nombre, paterno, materno, rol, clues_id_uuid')
+                    .eq('auth_user_id', user.id);
+                if (result.data && result.data.length > 0) {
+                    usuarioActual = result.data[0];
+                    return usuarioActual;
+                }
+                return null;
+            } catch (error) {
+                console.error('Error al obtener usuario:', error);
+                return null;
+            }
+        }
+
+        // ============================================================
+        // CARGAR TICKETS
+        // ============================================================
+        async function cargarTickets() {
+            try {
+                ticketsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="loading-spinner"></div>
+                        Cargando tickets...
+                    </div>
+                `;
+                errorElement.textContent = '';
+                successElement.textContent = '';
+
+                var user = await getUsuarioActual();
+                if (!user) return;
+
+                // Mostrar info del usuario
+                var infoDiv = document.getElementById('userInfo');
+                var nameDisplay = document.getElementById('userNameDisplay');
+                var rolDisplay = document.getElementById('userRolDisplay');
+                var nombreCompleto = user.nombre || 'Usuario';
+                if (user.paterno) nombreCompleto += ' ' + user.paterno;
+                if (user.materno) nombreCompleto += ' ' + user.materno;
+                nameDisplay.textContent = '👤 ' + nombreCompleto;
+                rolDisplay.textContent = user.rol || 'usuario';
+                infoDiv.style.display = 'block';
+
+                // Si es admin o coordinador, ve todos los tickets; si no, solo los suyos
+                var query = supabaseClient.from('tickets').select('*').order('created_at', { ascending: false });
+
+                if (user.rol !== 'admin' && user.rol !== 'coordinador') {
+                    query = query.eq('usuario_id', user.id_uuid);
+                }
+
+                var result = await query;
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var data = result.data || [];
+
+                if (data.length === 0) {
+                    ticketsContainer.innerHTML = `
+                        <div class="empty-state">
+                            📭 No hay tickets registrados
+                        </div>
+                    `;
+                    return;
+                }
+
+                renderTablaTickets(data);
+
+            } catch (error) {
+                console.error('Error al cargar tickets:', error);
+                errorElement.textContent = 'Error al cargar tickets: ' + error.message;
+                ticketsContainer.innerHTML = `
+                    <div class="empty-state">
+                        ❌ Error al cargar los datos
+                    </div>
+                `;
+            }
+        }
+
+        // ============================================================
+        // RENDERIZAR TABLA DE TICKETS
+        // ============================================================
+        function renderTablaTickets(data) {
+            var html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Asunto</th>
+                            <th>Urgencia</th>
+                            <th>Estado</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(function(ticket, index) {
+                var urgenciaClass = 'badge-urgencia-' + ticket.urgencia;
+                var urgenciaLabel = {
+                    'baja': '🟢 Baja',
+                    'media': '🟡 Media',
+                    'alta': '🔴 Alta'
+                } [ticket.urgencia] || ticket.urgencia;
+
+                var estadoClass = 'badge-estado ' + (ticket.estado || 'abierto');
+                var estadoLabel = {
+                    'abierto': '📂 Abierto',
+                    'en-proceso': '🔄 En proceso',
+                    'cerrado': '✅ Cerrado'
+                } [ticket.estado] || ticket.estado;
+
+                var fecha = ticket.created_at ? new Date(ticket.created_at).toLocaleDateString('es-MX') : 'N/A';
+                var usuarioNombre = ticket.usuario_nombre || 'Usuario';
+
+                var imagenHtml = ticket.imagen_url ?
+                    `<a href="${ticket.imagen_url}" target="_blank"><img src="${ticket.imagen_url}" class="screenshot-thumb" alt="Captura" /></a>` :
+                    '—';
+
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${ticket.asunto}</strong></td>
+                        <td><span class="badge ${urgenciaClass}">${urgenciaLabel}</span></td>
+                        <td><span class="${estadoClass}">${estadoLabel}</span></td>
+                        <td>${usuarioNombre}</td>
+                        <td style="color:var(--text-muted-light); font-size:0.8rem;">${fecha}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-primary btn-sm" onclick="verTicket('${ticket.id_uuid}')">👁️</button>
+                                ${usuarioActual && (usuarioActual.rol === 'admin' || usuarioActual.rol === 'coordinador') ? `
+                                    <button class="btn btn-warning btn-sm" onclick="cambiarEstadoTicket('${ticket.id_uuid}')">🔄</button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            ticketsContainer.innerHTML = html;
+        }
+
+        // ============================================================
+        // ABRIR MODAL NUEVO TICKET
+        // ============================================================
+        function abrirModalTicket() {
+            document.getElementById('ticketForm').reset();
+            document.getElementById('filePreview').style.display = 'none';
+            document.getElementById('submitTicketBtn').disabled = false;
+            document.getElementById('submitTicketBtn').textContent = 'Enviar Ticket';
+            document.getElementById('modalTicket').classList.add('active');
+        }
+
+        function cerrarModalTicket() {
+            document.getElementById('modalTicket').classList.remove('active');
+        }
+
+        // ============================================================
+        // PREVISUALIZAR IMAGEN
+        // ============================================================
+        var imagenSeleccionada = null;
+
+        function previsualizarImagen(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImg').src = e.target.result;
+                document.getElementById('previewName').textContent = file.name;
+                document.getElementById('filePreview').style.display = 'flex';
+                imagenSeleccionada = file;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function eliminarImagen() {
+            document.getElementById('ticket_imagen').value = '';
+            document.getElementById('filePreview').style.display = 'none';
+            imagenSeleccionada = null;
+        }
+
+        // ============================================================
+        // GUARDAR TICKET
+        // ============================================================
+        async function guardarTicket(event) {
+            event.preventDefault();
+
+            var submitBtn = document.getElementById('submitTicketBtn');
+            var errorElement = document.getElementById('error');
+            var successElement = document.getElementById('success');
+
+            errorElement.textContent = '';
+            successElement.textContent = '';
+
+            var asunto = document.getElementById('ticket_asunto').value.trim();
+            var descripcion = document.getElementById('ticket_descripcion').value.trim();
+            var urgencia = document.getElementById('ticket_urgencia').value;
+            var categoria = document.getElementById('ticket_categoria').value;
+
+            if (!asunto || !descripcion) {
+                errorElement.textContent = 'Completa el asunto y la descripción.';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Enviando...';
+
+            try {
+                var user = await getUsuarioActual();
+                if (!user) {
+                    throw new Error('Usuario no autenticado');
+                }
+
+                var imagenUrl = null;
+
+                // Subir imagen si existe
+                if (imagenSeleccionada) {
+                    var fileExt = imagenSeleccionada.name.split('.').pop();
+                    var fileName = `tickets/${user.id_uuid}/${Date.now()}.${fileExt}`;
+
+                    var uploadResult = await supabaseClient.storage
+                        .from('tickets')
+                        .upload(fileName, imagenSeleccionada);
+
+                    if (uploadResult.error) {
+                        console.warn('Error al subir imagen:', uploadResult.error);
+                    } else {
+                        var publicUrl = supabaseClient.storage.from('tickets').getPublicUrl(fileName);
+                        imagenUrl = publicUrl.data.publicUrl;
+                    }
+                }
+
+                var ticketData = {
+                    id_uuid: crypto.randomUUID ? crypto.randomUUID() : self.crypto.randomUUID(),
+                    asunto: asunto,
+                    descripcion: descripcion,
+                    urgencia: urgencia,
+                    categoria: categoria,
+                    estado: 'abierto',
+                    usuario_id: user.id_uuid,
+                    usuario_nombre: (user.nombre || '') + ' ' + (user.paterno || '') + ' ' + (user.materno || ''),
+                    imagen_url: imagenUrl,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+
+                var result = await supabaseClient.from('tickets').insert(ticketData);
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                successElement.textContent = '✅ Ticket enviado correctamente';
+                document.getElementById('ticketForm').reset();
+                document.getElementById('filePreview').style.display = 'none';
+                imagenSeleccionada = null;
+                cerrarModalTicket();
+                cargarTickets();
+
+            } catch (error) {
+                console.error('Error al guardar ticket:', error);
+                errorElement.textContent = 'Error al enviar: ' + error.message;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar Ticket';
+            }
+        }
+
+        // ============================================================
+        // VER TICKET
+        // ============================================================
+        async function verTicket(id) {
+            try {
+                var result = await supabaseClient
+                    .from('tickets')
+                    .select('*')
+                    .eq('id_uuid', id)
+                    .single();
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var ticket = result.data;
+
+                var urgenciaLabel = {
+                    'baja': '🟢 Baja',
+                    'media': '🟡 Media',
+                    'alta': '🔴 Alta'
+                } [ticket.urgencia] || ticket.urgencia;
+
+                var estadoLabel = {
+                    'abierto': '📂 Abierto',
+                    'en-proceso': '🔄 En proceso',
+                    'cerrado': '✅ Cerrado'
+                } [ticket.estado] || ticket.estado;
+
+                var fecha = ticket.created_at ? new Date(ticket.created_at).toLocaleString('es-MX') : 'N/A';
+
+                document.getElementById('verTicketTitle').textContent = '📄 ' + ticket.asunto;
+
+                var html = `
+                    <div style="margin-bottom:1rem;">
+                        <p><strong>Asunto:</strong> ${ticket.asunto}</p>
+                        <p><strong>Descripción:</strong></p>
+                        <p style="background:var(--card-bg); padding:1rem; border-radius:8px; margin:0.5rem 0;">${ticket.descripcion}</p>
+                        <p><strong>Urgencia:</strong> <span class="badge badge-urgencia-${ticket.urgencia}">${urgenciaLabel}</span></p>
+                        <p><strong>Estado:</strong> <span class="${ticket.estado === 'abierto' ? 'badge-estado abierto' : ticket.estado === 'en-proceso' ? 'badge-estado en-proceso' : 'badge-estado cerrado'}">${estadoLabel}</span></p>
+                        <p><strong>Categoría:</strong> ${ticket.categoria || 'No especificada'}</p>
+                        <p><strong>Usuario:</strong> ${ticket.usuario_nombre || 'Usuario'}</p>
+                        <p><strong>Fecha:</strong> ${fecha}</p>
+                        ${ticket.imagen_url ? `<p><strong>Captura:</strong></p><img src="${ticket.imagen_url}" style="max-width:100%; max-height:300px; border-radius:12px; margin-top:0.5rem; border:1px solid var(--border-color);" />` : ''}
+                    </div>
+                `;
+
+                document.getElementById('verTicketContent').innerHTML = html;
+                document.getElementById('modalVerTicket').classList.add('active');
+
+            } catch (error) {
+                console.error('Error al ver ticket:', error);
+                errorElement.textContent = 'Error al cargar ticket: ' + error.message;
+            }
+        }
+
+        function cerrarVerTicket() {
+            document.getElementById('modalVerTicket').classList.remove('active');
+        }
+
+        // ============================================================
+        // CAMBIAR ESTADO DEL TICKET (Admin/Coordinador)
+        // ============================================================
+        async function cambiarEstadoTicket(id) {
+            try {
+                // Obtener estado actual
+                var result = await supabaseClient
+                    .from('tickets')
+                    .select('estado')
+                    .eq('id_uuid', id)
+                    .single();
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var estados = ['abierto', 'en-proceso', 'cerrado'];
+                var currentIndex = estados.indexOf(result.data.estado);
+                var nextIndex = (currentIndex + 1) % estados.length;
+                var nuevoEstado = estados[nextIndex];
+
+                var updateResult = await supabaseClient
+                    .from('tickets')
+                    .update({
+                        estado: nuevoEstado,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id_uuid', id);
+
+                if (updateResult.error) {
+                    throw updateResult.error;
+                }
+
+                successElement.textContent = '✅ Estado actualizado a: ' + nuevoEstado;
+                setTimeout(function() {
+                    successElement.textContent = '';
+                }, 3000);
+
+                cargarTickets();
+
+            } catch (error) {
+                console.error('Error al cambiar estado:', error);
+                errorElement.textContent = 'Error al cambiar estado: ' + error.message;
+            }
+        }
+
+        // ============================================================
+        // INICIALIZACIÓN
+        // ============================================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        window.addEventListener('load', function() {
+            createParticles();
+            cargarTickets();
+
+            // Cerrar modales con ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    cerrarModalTicket();
+                    cerrarVerTicket();
+                }
+            });
+
+            // Cerrar modales al hacer clic fuera
+            document.getElementById('modalTicket').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    cerrarModalTicket();
+                }
+            });
+            document.getElementById('modalVerTicket').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    cerrarVerTicket();
+                }
+            });
+        });
+
+        // Exponer funciones globales
+        window.abrirModalTicket = abrirModalTicket;
+        window.cerrarModalTicket = cerrarModalTicket;
+        window.verTicket = verTicket;
+        window.cerrarVerTicket = cerrarVerTicket;
+        window.cambiarEstadoTicket = cambiarEstadoTicket;
+        window.guardarTicket = guardarTicket;
+        window.cargarTickets = cargarTickets;
+        window.previsualizarImagen = previsualizarImagen;
+        window.eliminarImagen = eliminarImagen;
+    </script>
+
+</body>
+
+</html>
