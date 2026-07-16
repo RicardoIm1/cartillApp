@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -132,6 +133,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -161,6 +163,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -344,9 +347,11 @@
         .cantidad-alta {
             color: var(--cantidad-alta);
         }
+
         .cantidad-media {
             color: var(--cantidad-media);
         }
+
         .cantidad-baja {
             color: var(--cantidad-baja);
         }
@@ -434,12 +439,15 @@
             body {
                 padding: 1rem;
             }
+
             .dashboard-container {
                 padding: 1rem;
             }
+
             .dashboard-header {
                 padding-right: 0;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -447,20 +455,25 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             table {
                 font-size: 0.75rem;
             }
+
             th,
             td {
                 padding: 0.5rem;
             }
+
             .header-actions {
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .btn-group {
                 justify-content: center;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
@@ -470,13 +483,16 @@
             .dashboard-container {
                 padding: 0.75rem;
             }
+
             table {
                 font-size: 0.65rem;
             }
+
             th,
             td {
                 padding: 0.3rem 0.5rem;
             }
+
             .btn {
                 font-size: 0.75rem;
                 padding: 0.4rem 1rem;
@@ -514,6 +530,11 @@
                 <span id="userRole" style="color:var(--text-muted-light);"></span>
             </div>
         </div>
+        <a href="registro_usuarios.html" class="menu-card">
+            <div class="icon">👤</div>
+            <div class="title">Registrar Usuario</div>
+            <div class="desc">Crear nuevos usuarios</div>
+        </a>
 
         <!-- TABLA INVENTARIO -->
         <div class="header-actions">
@@ -556,7 +577,7 @@
                 icon.textContent = '🌙';
             }
 
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -738,7 +759,7 @@
                     <tbody>
             `;
 
-            data.forEach(function(item) {
+            data.forEach(function (item) {
                 var clues = item.clues || {};
                 var tipoCartilla = item.tipo_cartilla || {};
 
@@ -793,7 +814,7 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         window.logout = logout;
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
             loadDashboard();
         });

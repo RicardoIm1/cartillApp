@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Usuarios - Sistema de Cartillas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+    <style>
+        /* ============================================================
+           VARIABLES Y TEMAS
+           ============================================================ */
+        :root {
+            --bg-gradient-start: #141E30;
+            --bg-gradient-end: #243B55;
+            --container-bg: #1c2541;
+            --container-shadow-1: #0d1320;
+            --container-shadow-2: #2b3f60;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --text-muted-light: rgba(255, 255, 255, 0.4);
+            --input-bg: #1c2541;
+            --input-shadow-1: #0d1320;
+            --input-shadow-2: #2b3f60;
+            --input-focus-bg: #243b55;
+            --input-placeholder: rgba(255, 255, 255, 0.5);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-primary-shadow-1: #2b3f60;
+            --btn-primary-shadow-2: #3a56d4;
+            --btn-secondary-bg: #1c2541;
+            --btn-success: #4cc9f0;
+            --btn-success-hover: #3ab8dd;
+            --error-color: #f72585;
+            --success-color: #4cc9f0;
+            --footer-color: rgba(255, 255, 255, 0.5);
+            --particle-color: rgba(255, 255, 255, 0.4);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --label-color: rgba(255, 255, 255, 0.7);
+            --select-option-bg: #1a1a2e;
+        }
+
+        body.light-mode {
+            --bg-gradient-start: #e0e5ec;
+            --bg-gradient-end: #f0f2f8;
+            --container-bg: #e8ecf4;
+            --container-shadow-1: #b8bcc8;
+            --container-shadow-2: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #2d2d44;
+            --text-muted: rgba(0, 0, 0, 0.7);
+            --text-muted-light: rgba(0, 0, 0, 0.4);
+            --input-bg: #e8ecf4;
+            --input-shadow-1: #b8bcc8;
+            --input-shadow-2: #ffffff;
+            --input-focus-bg: #d5dbe8;
+            --input-placeholder: rgba(0, 0, 0, 0.4);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-primary-shadow-1: #2a3f8a;
+            --btn-primary-shadow-2: #6b8aff;
+            --btn-secondary-bg: #e8ecf4;
+            --btn-success: #0ea5e9;
+            --btn-success-hover: #0284c7;
+            --error-color: #e63946;
+            --success-color: #0ea5e9;
+            --footer-color: rgba(0, 0, 0, 0.5);
+            --particle-color: rgba(0, 0, 0, 0.10);
+            --border-color: rgba(0, 0, 0, 0.06);
+            --label-color: rgba(0, 0, 0, 0.7);
+            --select-option-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s ease, color 0.3s ease;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--particle-color);
+            border-radius: 50%;
+            animation: float linear infinite;
+            transition: background 0.5s ease;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: var(--container-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 9px 9px 18px var(--container-shadow-1),
+                -9px -9px 18px var(--container-shadow-2);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--container-bg);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-right: 3.5rem;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background: var(--btn-primary);
+            color: white;
+            box-shadow: 4px 4px 8px var(--btn-primary-shadow-1),
+                -4px -4px 8px var(--btn-primary-shadow-2);
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--btn-success);
+            color: white;
+            box-shadow: 4px 4px 8px rgba(76, 201, 240, 0.2);
+        }
+
+        .btn-success:hover {
+            background: var(--btn-success-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--btn-secondary-bg);
+            color: var(--text-primary);
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--label-color);
+            margin-bottom: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 12px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: inset 4px 4px 8px var(--input-shadow-1),
+                inset -4px -4px 8px var(--input-shadow-2);
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            background: var(--input-focus-bg);
+            box-shadow: inset 2px 2px 5px var(--input-shadow-1),
+                inset -2px -2px 5px var(--input-shadow-2),
+                0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        select option {
+            background: var(--select-option-bg);
+            color: var(--text-primary);
+        }
+
+        input::placeholder {
+            color: var(--input-placeholder);
+            transition: color 0.3s ease;
+        }
+
+        .error {
+            color: var(--error-color);
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .success-msg {
+            color: var(--success-color);
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--text-primary);
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--footer-color);
+            font-size: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .badge-rol {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            background: rgba(76, 201, 240, 0.15);
+            color: #4cc9f0;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-actions {
+                padding-right: 0;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .theme-toggle {
+                top: 0.5rem;
+                right: 0.5rem;
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">🌙</button>
+
+        <div class="header-actions">
+            <div>
+                <h1>👤 Registrar Usuario</h1>
+                <p class="subtitle">Crear nuevos usuarios para el sistema</p>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="window.location.href='usuarios.html'">
+                    ← Administrar Usuarios
+                </button>
+                <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
+                    ← Volver al Dashboard
+                </button>
+            </div>
+        </div>
+
+        <!-- Información del usuario actual -->
+        <div id="userInfo" style="margin-bottom:1rem; padding:0.5rem 1rem; background:rgba(255,255,255,0.02); border-radius:8px; display:none;">
+            <span id="userNameDisplay"></span>
+            <span class="badge-rol" id="userRolDisplay" style="margin-left:0.5rem;"></span>
+        </div>
+
+        <!-- Formulario -->
+        <form id="registroForm" onsubmit="registrarUsuario(event)">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="email">Correo Electrónico *</label>
+                    <input type="email" id="email" placeholder="correo@dominio.com" required />
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="password">Contraseña *</label>
+                    <input type="password" id="password" placeholder="Mínimo 6 caracteres" required minlength="6" />
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre *</label>
+                    <input type="text" id="nombre" placeholder="Nombre" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="paterno">Apellido Paterno *</label>
+                    <input type="text" id="paterno" placeholder="Apellido Paterno" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="materno">Apellido Materno</label>
+                    <input type="text" id="materno" placeholder="Apellido Materno" />
+                </div>
+
+                <div class="form-group">
+                    <label for="curp">CURP *</label>
+                    <input type="text" id="curp" placeholder="CURP" required maxlength="18" />
+                </div>
+
+                <div class="form-group">
+                    <label for="celular">Celular *</label>
+                    <input type="text" id="celular" placeholder="3312345678" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="rol">Rol *</label>
+                    <select id="rol" required>
+                        <option value="usuario">Usuario</option>
+                        <option value="coordinador">Coordinador</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="clues">Centro de Salud (CLUES) *</label>
+                    <select id="clues" required>
+                        <option value="">Seleccionar centro...</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success" id="submitBtn" style="width:100%; margin-top:1rem;">
+                Registrar Usuario
+            </button>
+
+            <div id="error" class="error"></div>
+            <div id="success" class="success-msg"></div>
+        </form>
+
+        <div class="footer">
+            Sistema de Cartillas de Salud © <span id="currentYear"></span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // TEMA DIURNO / NOCTURNO
+        // ============================================================
+        (function setupTheme() {
+            var body = document.body;
+            var themeToggle = document.getElementById('themeToggle');
+            var icon = themeToggle;
+            var savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+            themeToggle.addEventListener('click', function() {
+                var isLight = body.classList.toggle('light-mode');
+                if (isLight) {
+                    icon.textContent = '☀️';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    icon.textContent = '🌙';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        })();
+
+        // ============================================================
+        // PARTÍCULAS
+        // ============================================================
+        function createParticles() {
+            var container = document.getElementById('particles');
+            for (var i = 0; i < 15; i++) {
+                var p = document.createElement('div');
+                p.classList.add('particle');
+                var size = Math.random() * 10 + 5;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.bottom = '-' + size + 'px';
+                p.style.animationDuration = Math.random() * 20 + 10 + 's';
+                p.style.animationDelay = Math.random() * 5 + 's';
+                p.style.opacity = Math.random() * 0.5 + 0.1;
+                container.appendChild(p);
+            }
+        }
+
+        // ============================================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================================
+        var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        var usuarioActual = null;
+
+        // ============================================================
+        // OBTENER USUARIO ACTUAL Y SU ROL
+        // ============================================================
+        async function getUsuarioActual() {
+            try {
+                var session = await supabaseClient.auth.getSession();
+                if (!session.data.session) {
+                    window.location.href = 'login.html';
+                    return null;
+                }
+
+                var user = session.data.session.user;
+                var result = await supabaseClient
+                    .from('usuario')
+                    .select('id_uuid, nombre, paterno, materno, rol, clues_id_uuid')
+                    .eq('auth_user_id', user.id);
+
+                if (result.data && result.data.length > 0) {
+                    usuarioActual = result.data[0];
+                    return usuarioActual;
+                }
+                return null;
+            } catch (error) {
+                console.error('Error al obtener usuario:', error);
+                return null;
+            }
+        }
+
+        // ============================================================
+        // CARGAR CLUES
+        // ============================================================
+        async function cargarClues() {
+            try {
+                var result = await supabaseClient
+                    .from('clues')
+                    .select('id_uuid, clues, nombre')
+                    .order('nombre');
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var select = document.getElementById('clues');
+                select.innerHTML = '<option value="">Seleccionar centro...</option>';
+                if (result.data) {
+                    result.data.forEach(function(c) {
+                        select.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar CLUES:', error);
+                document.getElementById('error').textContent = 'Error al cargar centros: ' + error.message;
+            }
+        }
+
+        // ============================================================
+        // REGISTRAR USUARIO
+        // ============================================================
+        async function registrarUsuario(event) {
+            event.preventDefault();
+
+            var errorElement = document.getElementById('error');
+            var successElement = document.getElementById('success');
+            var submitBtn = document.getElementById('submitBtn');
+
+            errorElement.textContent = '';
+            successElement.textContent = '';
+
+            var email = document.getElementById('email').value.trim();
+            var password = document.getElementById('password').value.trim();
+            var nombre = document.getElementById('nombre').value.trim();
+            var paterno = document.getElementById('paterno').value.trim();
+            var materno = document.getElementById('materno').value.trim();
+            var curp = document.getElementById('curp').value.trim().toUpperCase();
+            var celular = document.getElementById('celular').value.trim();
+            var rol = document.getElementById('rol').value;
+            var cluesId = document.getElementById('clues').value;
+
+            // Validaciones básicas
+            if (!email || !password || !nombre || !paterno || !curp || !celular || !rol || !cluesId) {
+                errorElement.textContent = 'Por favor completa todos los campos requeridos.';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorElement.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+                return;
+            }
+
+            // Deshabilitar botón
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Registrando...';
+
+            try {
+                var result = await supabaseClient.rpc('registrar_usuario', {
+                    p_email: email,
+                    p_password: password,
+                    p_nombre: nombre,
+                    p_paterno: paterno,
+                    p_materno: materno || '',
+                    p_curp: curp,
+                    p_celular: celular,
+                    p_rol: rol,
+                    p_clues_id: cluesId
+                });
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var data = result.data;
+
+                if (data && data.success) {
+                    successElement.textContent = '✅ ' + data.message;
+                    document.getElementById('registroForm').reset();
+                    document.getElementById('clues').value = '';
+                } else {
+                    errorElement.textContent = '❌ ' + (data?.error || 'Error desconocido');
+                }
+
+            } catch (error) {
+                console.error('Error al registrar usuario:', error);
+                errorElement.textContent = 'Error al registrar: ' + (error.message || 'Error desconocido');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Registrar Usuario';
+            }
+        }
+
+        // ============================================================
+        // INICIALIZACIÓN
+        // ============================================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        window.addEventListener('load', function() {
+            createParticles();
+            cargarClues();
+
+            // Verificar usuario actual
+            getUsuarioActual().then(function(user) {
+                var infoDiv = document.getElementById('userInfo');
+                var nameDisplay = document.getElementById('userNameDisplay');
+                var rolDisplay = document.getElementById('userRolDisplay');
+
+                if (user) {
+                    var nombreCompleto = user.nombre || 'Usuario';
+                    if (user.paterno) nombreCompleto += ' ' + user.paterno;
+                    if (user.materno) nombreCompleto += ' ' + user.materno;
+                    nameDisplay.textContent = '👤 ' + nombreCompleto;
+                    rolDisplay.textContent = user.rol || 'usuario';
+                    infoDiv.style.display = 'block';
+
+                    if (user.rol !== 'admin') {
+                        document.getElementById('registroForm').innerHTML = `
+                            <div style="text-align:center; padding:2rem; color:var(--text-muted);">
+                                ⛔ No tienes permisos para registrar usuarios.
+                                <br>Contacta al administrador del sistema.
+                            </div>
+                        `;
+                    }
+                }
+            });
+
+            document.querySelectorAll('input, select').forEach(function(el) {
+                el.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                el.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+
+        window.registrarUsuario = registrarUsuario;
+    </script>
+
+</body>
+
+</html>
