@@ -52,6 +52,9 @@
             --badge-leido-text: #4cc9f0;
             --badge-no-leido: rgba(247, 37, 133, 0.15);
             --badge-no-leido-text: #f72585;
+            --modal-shadow-1: #0d1320;
+            --modal-shadow-2: #2b3f60;
+            --modal-bg: #1c2541;
         }
 
         body.light-mode {
@@ -92,6 +95,9 @@
             --badge-leido-text: #0ea5e9;
             --badge-no-leido: rgba(230, 57, 70, 0.10);
             --badge-no-leido-text: #c62828;
+            --modal-shadow-1: #b8bcc8;
+            --modal-shadow-2: #ffffff;
+            --modal-bg: #e8ecf4;
         }
 
         * {
@@ -137,6 +143,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -163,6 +170,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -285,72 +293,6 @@
         }
 
         /* ============================================================
-           FORMULARIO DE CONTACTO
-           ============================================================ */
-        .contact-form {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-            transition: background 0.3s ease, border 0.3s ease;
-        }
-
-        .contact-form .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .contact-form .form-group {
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-form .form-group.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .contact-form label {
-            display: block;
-            font-weight: 500;
-            font-size: 0.85rem;
-            color: var(--label-color);
-            margin-bottom: 0.3rem;
-            transition: color 0.3s ease;
-        }
-
-        .contact-form select,
-        .contact-form input,
-        .contact-form textarea {
-            width: 100%;
-            padding: 0.6rem 1rem;
-            border: none;
-            border-radius: 12px;
-            background: var(--input-bg);
-            color: var(--text-primary);
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            box-shadow: inset 4px 4px 8px var(--input-shadow-1),
-                inset -4px -4px 8px var(--input-shadow-2);
-            resize: vertical;
-        }
-
-        .contact-form select:focus,
-        .contact-form input:focus,
-        .contact-form textarea:focus {
-            outline: none;
-            background: var(--input-focus-bg);
-            box-shadow: inset 2px 2px 5px var(--input-shadow-1),
-                inset -2px -2px 5px var(--input-shadow-2),
-                0 0 0 3px rgba(67, 97, 238, 0.2);
-        }
-
-        .contact-form select option {
-            background: var(--select-option-bg);
-            color: var(--text-primary);
-        }
-
-        /* ============================================================
            TABLA DE CONTACTOS
            ============================================================ */
         .table-container {
@@ -470,41 +412,124 @@
             transition: color 0.3s ease;
         }
 
+        /* ============================================================
+           MODAL CLAYMORPHISM MEJORADO
+           ============================================================ */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 1rem;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .modal-overlay.active {
             display: flex;
+            opacity: 1;
         }
 
         .modal-content {
-            background: var(--container-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 700px;
+            background: var(--modal-bg);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 650px;
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 9px 9px 18px var(--container-shadow-1),
-                -9px -9px 18px var(--container-shadow-2);
-            animation: fadeIn 0.3s ease-out;
+            box-shadow: 12px 12px 24px var(--modal-shadow-1),
+                -8px -8px 20px var(--modal-shadow-2);
+            transform: scale(0.92) translateY(20px);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+            opacity: 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
         }
 
         .modal-content h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
             color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-content h2 .icon {
+            font-size: 1.8rem;
+        }
+
+        /* Formulario dentro del modal */
+        .modal-content .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 0.25rem;
+        }
+
+        .modal-content .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .modal-content label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--label-color);
+            margin-bottom: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        .modal-content select,
+        .modal-content input,
+        .modal-content textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: none;
+            border-radius: 14px;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: inset 5px 5px 10px var(--input-shadow-1),
+                inset -5px -5px 10px var(--input-shadow-2);
+            resize: vertical;
+        }
+
+        .modal-content select:focus,
+        .modal-content input:focus,
+        .modal-content textarea:focus {
+            outline: none;
+            background: var(--input-focus-bg);
+            box-shadow: inset 3px 3px 6px var(--input-shadow-1),
+                inset -3px -3px 6px var(--input-shadow-2),
+                0 0 0 4px rgba(67, 97, 238, 0.15);
+        }
+
+        .modal-content select option {
+            background: var(--select-option-bg);
+            color: var(--text-primary);
+        }
+
+        .modal-content textarea {
+            min-height: 120px;
         }
 
         .modal-actions {
@@ -512,8 +537,36 @@
             gap: 1rem;
             margin-top: 1.5rem;
             justify-content: flex-end;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border-color);
         }
 
+        .modal-actions .btn {
+            min-width: 120px;
+            justify-content: center;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Scrollbar del modal */
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: var(--container-shadow-1);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--btn-primary);
+            border-radius: 10px;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
         .footer {
             text-align: center;
             margin-top: 2rem;
@@ -522,18 +575,24 @@
             transition: color 0.3s ease;
         }
 
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
             }
+
             .container {
                 padding: 1rem;
             }
+
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -541,14 +600,42 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
-            .contact-form .form-grid {
-                grid-template-columns: 1fr;
+
+            .modal-content {
+                padding: 1.5rem;
+                margin: 0.5rem;
             }
+
+            .modal-content .form-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .modal-actions {
+                flex-direction: column-reverse;
+            }
+
+            .modal-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .modal-content h2 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
             .modal-content {
                 padding: 1rem;
+            }
+
+            .modal-content textarea {
+                min-height: 80px;
             }
         }
     </style>
@@ -576,7 +663,8 @@
             </div>
         </div>
 
-        <div id="userInfo" style="margin-bottom:1rem; padding:0.5rem 1rem; background:var(--table-header-bg); border-radius:8px; display:none;">
+        <div id="userInfo"
+            style="margin-bottom:1rem; padding:0.5rem 1rem; background:var(--table-header-bg); border-radius:8px; display:none;">
             <span id="userNameDisplay"></span>
             <span class="badge" id="userRolDisplay" style="margin-left:0.5rem;"></span>
         </div>
@@ -597,11 +685,11 @@
     </div>
 
     <!-- ============================================================
-    MODAL: NUEVO CONTACTO
+    MODAL: NUEVO CONTACTO (MEJORADO)
     ============================================================ -->
     <div class="modal-overlay" id="modalContacto">
         <div class="modal-content">
-            <h2>✉️ Nuevo Mensaje</h2>
+            <h2><span class="icon">✉️</span> Nuevo Mensaje</h2>
             <form id="contactoForm" onsubmit="guardarContacto(event)">
                 <div class="form-grid">
                     <div class="form-group full-width">
@@ -616,7 +704,8 @@
                     </div>
                     <div class="form-group full-width">
                         <label for="contacto_mensaje">Mensaje *</label>
-                        <textarea id="contacto_mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+                        <textarea id="contacto_mensaje" rows="5" placeholder="Escribe tu mensaje aquí..."
+                            required></textarea>
                     </div>
                     <div class="form-group full-width">
                         <label for="contacto_tipo">Tipo de Mensaje</label>
@@ -630,14 +719,14 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="cerrarModalContacto()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" id="submitContactoBtn">Enviar Mensaje</button>
+                    <button type="submit" class="btn btn-primary" id="submitContactoBtn">📤 Enviar</button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- ============================================================
-    MODAL: VER CONTACTO
+    MODAL: VER CONTACTO (MEJORADO)
     ============================================================ -->
     <div class="modal-overlay" id="modalVerContacto">
         <div class="modal-content">
@@ -665,7 +754,7 @@
             } else {
                 icon.textContent = '🌙';
             }
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -758,13 +847,12 @@
                 select.innerHTML = '<option value="">Seleccionar...</option>';
 
                 if (result.data) {
-                    result.data.forEach(function(u) {
+                    result.data.forEach(function (u) {
                         var nombreCompleto = u.nombre || '';
                         if (u.paterno) nombreCompleto += ' ' + u.paterno;
                         if (u.materno) nombreCompleto += ' ' + u.materno;
                         nombreCompleto = nombreCompleto.trim() || 'Usuario';
                         var label = nombreCompleto + ' (' + (u.rol || 'usuario') + ')';
-                        // No mostrar al mismo usuario
                         if (usuarioActual && u.id_uuid !== usuarioActual.id_uuid) {
                             select.innerHTML += `<option value="${u.id_uuid}">${label}</option>`;
                         }
@@ -792,7 +880,6 @@
                 var user = await getUsuarioActual();
                 if (!user) return;
 
-                // Mostrar info del usuario
                 var infoDiv = document.getElementById('userInfo');
                 var nameDisplay = document.getElementById('userNameDisplay');
                 var rolDisplay = document.getElementById('userRolDisplay');
@@ -803,10 +890,8 @@
                 rolDisplay.textContent = user.rol || 'usuario';
                 infoDiv.style.display = 'block';
 
-                // Cargar destinatarios para el modal
                 await cargarDestinatarios();
 
-                // Cargar mensajes: los que envía o recibe el usuario
                 var query = supabaseClient
                     .from('contactos')
                     .select('*')
@@ -863,7 +948,7 @@
                     <tbody>
             `;
 
-            data.forEach(function(contacto) {
+            data.forEach(function (contacto) {
                 var esRemitente = contacto.remitente_id === user.id_uuid;
                 var esDestinatario = contacto.destinatario_id === user.id_uuid;
 
@@ -875,14 +960,13 @@
                     'solicitud': '📋 Solicitud',
                     'retroalimentacion': '💬 Retroalimentación',
                     'otro': '📌 Otro'
-                } [contacto.tipo] || contacto.tipo || '📌 Otro';
+                }[contacto.tipo] || contacto.tipo || '📌 Otro';
 
                 var fecha = contacto.created_at ? new Date(contacto.created_at).toLocaleDateString('es-MX') : 'N/A';
 
                 var remitenteNombre = contacto.remitente_nombre || 'Usuario';
                 var destinatarioNombre = contacto.destinatario_nombre || 'Usuario';
 
-                // Resaltar si es para mí y no leído
                 var rowClass = (!contacto.leido && esDestinatario) ? 'style="background:rgba(76,201,240,0.03);"' : '';
 
                 html += `
@@ -917,8 +1001,13 @@
         function abrirModalContacto() {
             document.getElementById('contactoForm').reset();
             document.getElementById('submitContactoBtn').disabled = false;
-            document.getElementById('submitContactoBtn').textContent = 'Enviar Mensaje';
+            document.getElementById('submitContactoBtn').textContent = '📤 Enviar';
             document.getElementById('modalContacto').classList.add('active');
+            // Pequeño retraso para que la animación se vea bien
+            document.querySelector('#modalContacto .modal-content').style.transform = 'scale(0.92) translateY(20px)';
+            requestAnimationFrame(() => {
+                document.querySelector('#modalContacto .modal-content').style.transform = 'scale(1) translateY(0)';
+            });
         }
 
         function cerrarModalContacto() {
@@ -962,7 +1051,6 @@
                 if (user.materno) nombreCompleto += ' ' + user.materno;
                 nombreCompleto = nombreCompleto.trim() || 'Usuario';
 
-                // Obtener nombre del destinatario
                 var destResult = await supabaseClient
                     .from('usuario')
                     .select('nombre, paterno, materno')
@@ -1007,7 +1095,7 @@
                 errorElement.textContent = 'Error al enviar: ' + error.message;
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Enviar Mensaje';
+                submitBtn.textContent = '📤 Enviar';
             }
         }
 
@@ -1030,7 +1118,6 @@
 
                 contactoActual = result.data;
 
-                // Marcar como leído si el destinatario es el usuario actual
                 if (contactoActual.destinatario_id === usuarioActual.id_uuid && !contactoActual.leido) {
                     await supabaseClient
                         .from('contactos')
@@ -1041,34 +1128,40 @@
 
                 var fecha = contactoActual.created_at ? new Date(contactoActual.created_at).toLocaleString('es-MX') : 'N/A';
 
-                document.getElementById('verContactoTitle').textContent = '📄 ' + contactoActual.asunto;
+                document.getElementById('verContactoTitle').innerHTML = `<span class="icon">📄</span> ${contactoActual.asunto}`;
 
                 var html = `
                     <div style="margin-bottom:1rem;">
-                        <p><strong>De:</strong> ${contactoActual.remitente_nombre || 'Usuario'}</p>
-                        <p><strong>Para:</strong> ${contactoActual.destinatario_nombre || 'Usuario'}</p>
-                        <p><strong>Tipo:</strong> ${contactoActual.tipo || 'Consulta'}</p>
-                        <p><strong>Fecha:</strong> ${fecha}</p>
-                        <p><strong>Estado:</strong> ${contactoActual.leido ? '✅ Leído' : '🔴 No leído'}</p>
-                        <hr style="border-color:var(--border-color); margin:1rem 0;" />
-                        <p><strong>Mensaje:</strong></p>
-                        <p style="background:var(--card-bg); padding:1rem; border-radius:8px; margin:0.5rem 0; white-space:pre-wrap;">${contactoActual.mensaje}</p>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; background:var(--card-bg); padding:1rem; border-radius:12px; margin-bottom:1rem; border:1px solid var(--border-color);">
+                            <p><strong>De:</strong> ${contactoActual.remitente_nombre || 'Usuario'}</p>
+                            <p><strong>Para:</strong> ${contactoActual.destinatario_nombre || 'Usuario'}</p>
+                            <p><strong>Tipo:</strong> ${contactoActual.tipo || 'Consulta'}</p>
+                            <p><strong>Fecha:</strong> ${fecha}</p>
+                            <p><strong>Estado:</strong> ${contactoActual.leido ? '✅ Leído' : '🔴 No leído'}</p>
+                        </div>
+                        <p style="font-weight:500; margin-bottom:0.3rem;">Mensaje:</p>
+                        <div style="background:var(--card-bg); padding:1rem; border-radius:12px; border:1px solid var(--border-color); white-space:pre-wrap; min-height:80px;">
+                            ${contactoActual.mensaje}
+                        </div>
                     </div>
                 `;
 
                 document.getElementById('verContactoContent').innerHTML = html;
 
-                // Mostrar botón de responder solo si el usuario es el destinatario
                 var btnResponder = document.getElementById('btnResponder');
                 if (contactoActual.destinatario_id === usuarioActual.id_uuid) {
-                    btnResponder.style.display = 'inline-block';
+                    btnResponder.style.display = 'inline-flex';
                 } else {
                     btnResponder.style.display = 'none';
                 }
 
                 document.getElementById('modalVerContacto').classList.add('active');
+                // Animar entrada
+                document.querySelector('#modalVerContacto .modal-content').style.transform = 'scale(0.92) translateY(20px)';
+                requestAnimationFrame(() => {
+                    document.querySelector('#modalVerContacto .modal-content').style.transform = 'scale(1) translateY(0)';
+                });
 
-                // Recargar lista para actualizar estado
                 cargarContactos();
 
             } catch (error) {
@@ -1089,11 +1182,9 @@
 
             cerrarVerContacto();
 
-            // Abrir modal con datos precargados
-            setTimeout(function() {
+            setTimeout(function () {
                 abrirModalContacto();
 
-                // Pre-seleccionar al remitente original como destinatario
                 var select = document.getElementById('contacto_destinatario');
                 select.value = contactoActual.remitente_id;
 
@@ -1123,7 +1214,7 @@
                 }
 
                 successElement.textContent = '✅ Mensaje eliminado correctamente';
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1140,25 +1231,23 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
             cargarContactos();
 
-            // Cerrar modales con ESC
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     cerrarModalContacto();
                     cerrarVerContacto();
                 }
             });
 
-            // Cerrar modales al hacer clic fuera
-            document.getElementById('modalContacto').addEventListener('click', function(e) {
+            document.getElementById('modalContacto').addEventListener('click', function (e) {
                 if (e.target === this) {
                     cerrarModalContacto();
                 }
             });
-            document.getElementById('modalVerContacto').addEventListener('click', function(e) {
+            document.getElementById('modalVerContacto').addEventListener('click', function (e) {
                 if (e.target === this) {
                     cerrarVerContacto();
                 }
