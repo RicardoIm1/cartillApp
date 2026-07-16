@@ -1338,6 +1338,26 @@
         window.eliminarContacto = eliminarContacto;
         window.guardarContacto = guardarContacto;
         window.cargarContactos = cargarContactos;
+
+        // ============================================================
+        // CERRAR MODAL NUEVO CONTACTO
+        // ============================================================
+        function cerrarModalContacto() {
+            var modal = document.getElementById('modalContacto');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
+
+        // ============================================================
+        // CERRAR MODAL VER CONTACTO
+        // ============================================================
+        function cerrarVerContacto() {
+            var modal = document.getElementById('modalVerContacto');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        }
     </script>
 
 </body>
