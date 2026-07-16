@@ -7,74 +7,10 @@
     <title>Dashboard - Sistema de Cartillas</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-
-    <!-- Librería de Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
     <style>
-        /* ============================================================
-               CSS VARIABLES PARA TEMA DIURNO / NOCTURNO
-               ============================================================ */
-        :root {
-            /* Modo nocturno (por defecto) */
-            --bg-gradient-start: #141E30;
-            --bg-gradient-end: #243B55;
-            --container-bg: #1c2541;
-            --container-shadow-1: #0d1320;
-            --container-shadow-2: #2b3f60;
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.9);
-            --text-muted: rgba(255, 255, 255, 0.6);
-            --text-muted-light: rgba(255, 255, 255, 0.5);
-            --card-bg: #1c2541;
-            --card-shadow-1: #0d1320;
-            --card-shadow-2: #2b3f60;
-            --btn-bg: #f72585;
-            --btn-shadow-1: #c71c6a;
-            --btn-shadow-2: #ff2a9f;
-            --btn-hover: #d91a6e;
-            --badge-active: #4cc9f0;
-            --badge-inactive: #f72585;
-            --error-color: #f72585;
-            --footer-color: rgba(255, 255, 255, 0.4);
-            --menu-card-bg: #1c2541;
-            --menu-card-shadow-1: #0d1320;
-            --menu-card-shadow-2: #2b3f60;
-            --menu-card-hover: #2a3b5a;
-        }
-
-        /* Modo diurno */
-        body.light-mode {
-            --bg-gradient-start: #e0e5ec;
-            --bg-gradient-end: #f0f2f8;
-            --container-bg: #e8ecf4;
-            --container-shadow-1: #b8bcc8;
-            --container-shadow-2: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #2d2d44;
-            --text-muted: rgba(0, 0, 0, 0.7);
-            --text-muted-light: rgba(0, 0, 0, 0.5);
-            --card-bg: #e8ecf4;
-            --card-shadow-1: #b8bcc8;
-            --card-shadow-2: #ffffff;
-            --btn-bg: #4361ee;
-            --btn-shadow-1: #2a3f8a;
-            --btn-shadow-2: #6b8aff;
-            --btn-hover: #3a56d4;
-            --badge-active: #2a9d8f;
-            --badge-inactive: #e63946;
-            --error-color: #e63946;
-            --footer-color: rgba(0, 0, 0, 0.4);
-            --menu-card-bg: #e8ecf4;
-            --menu-card-shadow-1: #b8bcc8;
-            --menu-card-shadow-2: #ffffff;
-            --menu-card-hover: #d5dbe8;
-        }
-
-        /* ============================================================
-               ESTILOS GENERALES
-               ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -83,153 +19,162 @@
         }
 
         body {
-            background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            background: #141E30;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            transition: background 0.5s ease;
-        }
-
-        /* Claymorphism container */
-        .dashboard-container {
-            background: var(--container-bg);
-            border-radius: 20px;
             padding: 2rem;
-            width: 600px;
-            max-width: 100%;
-            color: var(--text-primary);
-            box-shadow: 9px 9px 18px var(--container-shadow-1),
-                -9px -9px 18px var(--container-shadow-2);
-            animation: fadeIn 0.6s ease-out;
-            transition: background 0.4s ease, box-shadow 0.4s ease, color 0.3s ease;
-            position: relative;
         }
 
-        /* Botón de cambio de tema */
-        .theme-toggle {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--container-bg);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.3rem;
-            cursor: pointer;
-            box-shadow: 4px 4px 8px var(--container-shadow-1),
-                -4px -4px 8px var(--container-shadow-2);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.05);
-        }
-
-        /* Animación */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            color: white;
         }
 
         h1 {
-            text-align: center;
-            margin-bottom: 1rem;
             font-weight: 600;
             font-size: 1.8rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-            color: var(--text-primary);
-            transition: color 0.3s ease;
+            margin-bottom: 0.25rem;
         }
 
-        /* Claymorphism cards */
-        .user-info {
-            background: var(--card-bg);
-            padding: 1rem;
-            border-radius: 15px;
-            margin: 1.5rem 0;
-            text-align: center;
-            box-shadow: inset 4px 4px 8px var(--card-shadow-1),
-                inset -4px -4px 8px var(--card-shadow-2);
-            transition: background 0.4s ease, box-shadow 0.4s ease;
+        .subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
         }
 
-        .user-info p {
-            margin: 0.5rem 0;
-            color: var(--text-secondary);
-            transition: color 0.3s ease;
-        }
-
-        .user-info .label {
-            font-weight: 300;
-            color: var(--text-muted);
+        .user-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
             font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Claymorphism button */
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            border: none;
+        .user-badge strong {
+            color: #4cc9f0;
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
-            background: var(--btn-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .cantidad {
+            font-weight: 600;
+        }
+
+        .cantidad-alta {
+            color: #4cc9f0;
+        }
+
+        .cantidad-media {
+            color: #f8961e;
+        }
+
+        .cantidad-baja {
+            color: #f72585;
+        }
+
+        .badge-clues {
+            display: inline-block;
+            background: rgba(67, 97, 238, 0.15);
+            color: #8ba1f7;
+            padding: 0.15rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            background: #f72585;
             color: white;
-            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 6px 6px 12px var(--btn-shadow-1),
-                -6px -6px 12px var(--btn-shadow-2);
+            font-size: 0.85rem;
         }
 
         .btn:hover {
-            background: var(--btn-hover);
-            transform: translateY(-2px);
+            background: #d91a6e;
         }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: var(--footer-color);
-            font-size: 0.8rem;
-            transition: color 0.3s ease;
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Error */
-        .error {
-            color: var(--error-color);
-            text-align: center;
-            margin-top: 1rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Spinner */
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
         .loading-spinner {
             display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
             vertical-align: middle;
         }
 
@@ -239,103 +184,44 @@
             }
         }
 
-        /* Status badge */
-        .status-badge {
-            display: inline-block;
-            padding: 0.25rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-top: 0.5rem;
-            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3),
-                inset -2px -2px 5px rgba(255, 255, 255, 0.1);
-            transition: color 0.3s ease;
-        }
-
-        .status-badge.active {
-            background: var(--card-bg);
-            color: var(--badge-active);
-        }
-
-        .status-badge.inactive {
-            background: var(--card-bg);
-            color: var(--badge-inactive);
-        }
-
-        /* Menu grid */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 2rem 0;
-        }
-
-        .menu-card {
-            background: var(--menu-card-bg);
-            padding: 1.5rem;
-            border-radius: 15px;
+        .error {
+            color: #f72585;
             text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            color: var(--text-primary);
-            box-shadow: 6px 6px 12px var(--menu-card-shadow-1),
-                -6px -6px 12px var(--menu-card-shadow-2);
-            text-decoration: none;
-            display: block;
-        }
-
-        .menu-card:hover {
-            transform: translateY(-3px);
-            background: var(--menu-card-hover);
-        }
-
-        .menu-card .icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .menu-card .title {
+            margin-top: 1rem;
             font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 0.75rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.2);
             font-size: 0.9rem;
         }
 
-        .menu-card .desc {
-            font-size: 0.75rem;
-            color: var(--text-muted-light);
-            margin-top: 0.25rem;
-            transition: color 0.3s ease;
-        }
-
-        /* Responsividad ultrapequeña */
-        @media (max-width: 360px) {
+        @media (max-width: 768px) {
             .dashboard-container {
                 padding: 1rem;
-                border-radius: 15px;
             }
 
-            h1 {
-                font-size: 1.4rem;
+            table {
+                font-size: 0.75rem;
             }
 
-            .btn {
-                font-size: 0.85rem;
-                padding: 0.75rem;
+            th,
+            td {
+                padding: 0.5rem;
             }
 
-            .menu-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .menu-card {
-                padding: 1rem;
-            }
-
-            .theme-toggle {
-                top: 0.5rem;
-                right: 0.5rem;
-                width: 32px;
-                height: 32px;
-                font-size: 1rem;
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
             }
         }
     </style>
@@ -343,53 +229,42 @@
 
 <body>
 
-    <div class="dashboard-container" id="dashboardContainer">
-        <!-- Botón para cambiar tema -->
-        <button class="theme-toggle" id="themeToggle" title="Cambiar tema">
-            🌙
-        </button>
+    <div class="dashboard-container" id="app">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:1rem;">
+            <div>
+                <h1>📋 Panel de Control</h1>
+                <p class="subtitle">Sistema de Control de Cartillas</p>
+            </div>
+            <button class="btn" onclick="logout()"
+                style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.05);">
+                Cerrar Sesión
+            </button>
+        </div>
 
-        <h1>Panel de Control</h1>
-        <p
-            style="text-align:center; color:var(--text-muted-light); font-size:0.9rem; margin-bottom:1.5rem; transition: color 0.3s ease;">
-            Sistema de Cartillas de Salud
-        </p>
-
-        <div class="user-info" id="userInfo">
-            <div id="userContent">
-                <div style="text-align:center; padding:1rem;">
-                    <div class="loading-spinner"></div>
-                    <p style="margin-top:1rem; color:var(--text-muted);">Cargando sesión...</p>
-                </div>
+        <!-- Información del usuario -->
+        <div id="userInfo">
+            <div class="user-badge">
+                <span id="userName">Cargando...</span> ·
+                <span id="userRole" style="color:rgba(255,255,255,0.4);"></span>
             </div>
         </div>
 
-        <div class="menu-grid">
-            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
-                <div class="icon">📋</div>
-                <div class="title">Inventario</div>
-                <div class="desc">Consultar y gestionar existencias</div>
-            </a>
-            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
-                <div class="icon">📊</div>
-                <div class="title">Reportes</div>
-                <div class="desc">Generar reportes mensuales</div>
-            </a>
-            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
-                <div class="icon">🔄</div>
-                <div class="title">Movimientos</div>
-                <div class="desc">Registrar traslados y entregas</div>
-            </a>
-            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
-                <div class="icon">👥</div>
-                <div class="title">Centros</div>
-                <div class="desc">Administrar centros de salud</div>
-            </a>
+        <!-- Tabla de inventario -->
+        <div class="header-actions">
+            <span style="color:rgba(255,255,255,0.3); font-size:0.8rem;">
+                <span id="totalRegistros">0</span> registros encontrados
+            </span>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="loadDashboard()">🔄 Actualizar</button>
+            </div>
         </div>
 
-        <button class="btn" onclick="logout()">
-            Cerrar Sesión
-        </button>
+        <div class="table-container" id="inventarioContainer">
+            <div style="text-align:center; padding:2rem; color:rgba(255,255,255,0.3);">
+                <div class="loading-spinner"></div>
+                Cargando inventario...
+            </div>
+        </div>
 
         <div id="error" class="error"></div>
         <div class="footer">
@@ -399,203 +274,197 @@
 
     <script>
         // ============================================================
-        // CONFIGURACIÓN DE SUPABASE
+        // CONFIGURACIÓN DE SUPABASE (Tus credenciales)
         // ============================================================
         var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
-        var SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc3Ztb2p6bmlnbGJwbW1hdWdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwMDY0MTgsImV4cCI6MjA1OTU4MjQxOH0.0L1rPUc7c7z66CqD5N9g5fTx2sE3zFgUye3z7i6e2Vk';
         var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================================
         // ELEMENTOS DEL DOM
         // ============================================================
-        var userContent = document.getElementById('userContent');
+        var inventarioContainer = document.getElementById('inventarioContainer');
         var errorElement = document.getElementById('error');
+        var userName = document.getElementById('userName');
+        var userRole = document.getElementById('userRole');
+        var totalRegistros = document.getElementById('totalRegistros');
 
         // ============================================================
-        // 1. VERIFICAR SESIÓN Y CARGAR PERFIL
+        // 1. OBTENER USUARIO Y SUS CLUES
         // ============================================================
-        async function loadDashboard() {
+        async function getUserInfo() {
             try {
-                // Verificar sesión
+                // Obtener sesión
                 var sessionResult = await supabaseClient.auth.getSession();
                 var session = sessionResult.data.session;
-                var error = sessionResult.error;
 
-                if (error) throw error;
                 if (!session) {
                     window.location.href = 'login.html';
-                    return;
+                    return null;
                 }
 
-                // Obtener perfil del usuario desde la función que creamos en Supabase
-                var profileResult = await supabaseClient.rpc('get_my_profile');
-                var profile = profileResult.data;
-                var profileError = profileResult.error;
-
-                if (profileError) throw profileError;
-
-                // Si no tiene perfil, mostrar mensaje (pero no bloquear)
-                var userData = session.user;
-                var userMeta = profile && profile.length > 0 ? profile[0] : null;
-
-                // Construir saludo personalizado
-                var nombreCompleto = 'Usuario';
-                var rol = 'usuario';
-                var centroNombre = 'Sin centro asignado';
-
-                if (userMeta) {
-                    nombreCompleto = userMeta.nombre + ' ' + userMeta.apellidos || 'Usuario';
-                    rol = userMeta.rol || 'usuario';
-                    centroNombre = userMeta.centro_nombre || 'Sin centro asignado';
-                } else {
-                    // Si no tiene perfil, intentamos obtener metadata del auth
-                    nombreCompleto = userData.user_metadata?.nombre || userData.email;
-                }
-
-                // ============================================================
-                // 2. CARGAR ESTADÍSTICAS (Según rol)
-                // ============================================================
-
-                var statsHTML = '';
-
-                // Si es admin o coordinador, ve totales generales
-                if (rol === 'admin' || rol === 'coordinador') {
-                    // Total de centros
-                    var centrosResult = await supabaseClient
-                        .from('centros_de_salud')
-                        .select('*', { count: 'exact', head: true });
-                    var totalCentros = centrosResult.count || 0;
-
-                    // Total de cartillas (suma de inventario)
-                    var cartillasResult = await supabaseClient
-                        .from('inventario')
-                        .select('cantidad');
-                    var totalCartillas = 0;
-                    if (cartillasResult.data) {
-                        cartillasResult.data.forEach(function (item) {
-                            totalCartillas += item.cantidad;
-                        });
-                    }
-
-                    statsHTML = `
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0;">
-            <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:10px; text-align:center;">
-              <div style="font-size:2rem; font-weight:600; color:#4cc9f0;">${totalCentros}</div>
-              <div style="font-size:0.8rem; color:rgba(255,255,255,0.5);">Centros registrados</div>
-            </div>
-            <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:10px; text-align:center;">
-              <div style="font-size:2rem; font-weight:600; color:#4cc9f0;">${totalCartillas}</div>
-              <div style="font-size:0.8rem; color:rgba(255,255,255,0.5);">Cartillas en inventario</div>
-            </div>
-          </div>
-        `;
-                } else {
-                    // Si es usuario normal, solo ve su centro
-                    var centroId = userMeta ? userMeta.centro_id : null;
-                    var totalCartillasCentro = 0;
-
-                    if (centroId) {
-                        var inventarioResult = await supabaseClient
-                            .from('inventario')
-                            .select('cantidad')
-                            .eq('centro_id', centroId);
-
-                        if (inventarioResult.data) {
-                            inventarioResult.data.forEach(function (item) {
-                                totalCartillasCentro += item.cantidad;
-                            });
-                        }
-                    }
-
-                    statsHTML = `
-          <div style="display:grid; grid-template-columns:1fr; gap:1rem; margin:1rem 0;">
-            <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:10px; text-align:center;">
-              <div style="font-size:2rem; font-weight:600; color:#4cc9f0;">${totalCartillasCentro}</div>
-              <div style="font-size:0.8rem; color:rgba(255,255,255,0.5);">Cartillas en ${centroNombre}</div>
-            </div>
-          </div>
-        `;
-                }
-
-                // ============================================================
-                // 3. CARGAR MOVIMIENTOS RECIENTES
-                // ============================================================
-
-                var movimientosHTML = '';
-                var movimientosResult = await supabaseClient
-                    .from('movimientos')
+                // Buscar el usuario en tu tabla 'usuario' usando auth_user_id
+                var userResult = await supabaseClient
+                    .from('usuario')
                     .select(`
-          id,
-          tipo,
-          cantidad,
-          observaciones,
-          created_at,
-          centros_de_salud (nombre),
-          cartillas (tipo, codigo_barras)
-        `)
-                    .order('created_at', { ascending: false })
-                    .limit(10);
+                        id_usuario,
+                        nombre,
+                        paterno,
+                        materno,
+                        id_clues,
+                        clues:id_clues (id_clues, clues, nombre)
+                    `)
+                    .eq('auth_user_id', session.user.id)
+                    .single();
 
-                if (movimientosResult.data && movimientosResult.data.length > 0) {
-                    movimientosHTML = '<div style="margin-top:1.5rem;"><h3 style="font-weight:400; color:rgba(255,255,255,0.7); font-size:1rem; margin-bottom:0.75rem;">Últimos movimientos</h3>';
-                    movimientosResult.data.forEach(function (mov) {
-                        var fecha = new Date(mov.created_at).toLocaleString();
-                        var tipoIcon = mov.tipo === 'entrada' ? '📥' : mov.tipo === 'salida' ? '📤' : '🔄';
-                        var centroNombre = mov.centros_de_salud ? mov.centros_de_salud.nombre : 'N/A';
-                        var cartillaInfo = mov.cartillas ? mov.cartillas.tipo + ' (' + mov.cartillas.codigo_barras + ')' : 'N/A';
-
-                        movimientosHTML += `
-            <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:0.5rem 1rem; border-radius:8px; margin-bottom:0.5rem; border-left:3px solid ${mov.tipo === 'entrada' ? '#4cc9f0' : mov.tipo === 'salida' ? '#f72585' : '#f8961e'};">
-              <div>
-                <span style="font-weight:500;">${tipoIcon} ${mov.tipo.charAt(0).toUpperCase() + mov.tipo.slice(1)}</span>
-                <span style="font-size:0.8rem; color:rgba(255,255,255,0.5); margin-left:0.5rem;">${cartillaInfo}</span>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-weight:500;">${mov.cantidad} unidades</div>
-                <div style="font-size:0.7rem; color:rgba(255,255,255,0.3);">${fecha}</div>
-              </div>
-            </div>
-          `;
-                    });
-                    movimientosHTML += '</div>';
-                } else {
-                    movimientosHTML = `
-          <div style="margin-top:1.5rem; padding:1rem; background:rgba(255,255,255,0.03); border-radius:10px; text-align:center; color:rgba(255,255,255,0.3);">
-            No hay movimientos registrados
-          </div>
-        `;
+                if (userResult.error) {
+                    console.warn('Usuario no encontrado en tabla usuario:', userResult.error);
+                    // Si no existe en tu tabla, usamos el email como fallback
+                    return {
+                        nombre: session.user.email,
+                        id_clues: null,
+                        clues: null
+                    };
                 }
 
-                // ============================================================
-                // 4. RENDERIZAR TODO EN EL DASHBOARD
-                // ============================================================
-
-                userContent.innerHTML = `
-        <div style="text-align:left;">
-          <p style="margin-bottom:0.25rem;">
-            <span style="color:rgba(255,255,255,0.5);">Bienvenido,</span><br>
-            <strong style="font-size:1.2rem;">${nombreCompleto}</strong>
-          </p>
-          <p style="font-size:0.8rem; color:rgba(255,255,255,0.4); margin-bottom:0.5rem;">
-            ${rol === 'admin' ? '🔑 Administrador' : rol === 'coordinador' ? '📋 Coordinador' : '🏥 ' + centroNombre}
-          </p>
-          ${statsHTML}
-          ${movimientosHTML}
-        </div>
-      `;
+                return userResult.data;
 
             } catch (error) {
-                console.error('Error al cargar el dashboard:', error);
-                if (errorElement) {
-                    errorElement.textContent = 'Error al cargar los datos: ' + error.message;
-                }
+                console.error('Error al obtener usuario:', error);
+                return null;
             }
         }
 
         // ============================================================
-        // 5. FUNCIÓN PARA CERRAR SESIÓN
+        // 2. CARGAR INVENTARIO
         // ============================================================
+        async function loadDashboard() {
+            try {
+                // Mostrar loading
+                inventarioContainer.innerHTML = `
+                    <div style="text-align:center; padding:2rem; color:rgba(255,255,255,0.3);">
+                        <div class="loading-spinner"></div>
+                        Cargando inventario...
+                    </div>
+                `;
+                errorElement.textContent = '';
 
+                // Obtener usuario
+                var user = await getUserInfo();
+                if (!user) return;
+
+                // Mostrar nombre del usuario
+                var nombreCompleto = user.nombre || 'Usuario';
+                if (user.paterno) nombreCompleto += ' ' + user.paterno;
+                if (user.materno) nombreCompleto += ' ' + user.materno;
+                userName.textContent = nombreCompleto;
+                userRole.textContent = user.clues ? '🏥 ' + user.clues.nombre : '👤 Sin centro asignado';
+
+                // Construir la consulta
+                var query = supabaseClient
+                    .from('inventario')
+                    .select(`
+                        id_inventario,
+                        cantidad,
+                        updated_at,
+                        clues:id_clues (id_clues, clues, nombre),
+                        tipo_cartilla:id_tipo_cartilla (id_tipo_cartilla, tipo_cartilla)
+                    `);
+
+                // Si el usuario tiene un centro asignado, filtrar por él
+                if (user.id_clues) {
+                    query = query.eq('id_clues', user.id_clues);
+                }
+
+                var result = await query.order('id_clues');
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var inventario = result.data || [];
+
+                // Mostrar tabla
+                renderInventoryTable(inventario);
+
+            } catch (error) {
+                console.error('Error al cargar inventario:', error);
+                errorElement.textContent = 'Error: ' + (error.message || 'No se pudo cargar el inventario');
+                inventarioContainer.innerHTML = `
+                    <div class="empty-state">
+                        ❌ Error al cargar los datos
+                    </div>
+                `;
+            }
+        }
+
+        // ============================================================
+        // 3. RENDERIZAR TABLA DE INVENTARIO
+        // ============================================================
+        function renderInventoryTable(data) {
+            totalRegistros.textContent = data.length;
+
+            if (!data || data.length === 0) {
+                inventarioContainer.innerHTML = `
+                    <div class="empty-state">
+                        📭 No hay registros de inventario
+                    </div>
+                `;
+                return;
+            }
+
+            var html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>CLUES</th>
+                            <th>Centro de Salud</th>
+                            <th>Tipo de Cartilla</th>
+                            <th style="text-align:center;">Cantidad</th>
+                            <th>Última actualización</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(function (item) {
+                var clues = item.clues || {};
+                var tipoCartilla = item.tipo_cartilla || {};
+
+                var codigoClues = clues.clues || 'N/A';
+                var nombreClues = clues.nombre || 'Sin nombre';
+                var tipo = tipoCartilla.tipo_cartilla || 'Sin tipo';
+
+                var cantidad = item.cantidad || 0;
+                var cantidadClass = cantidad > 100 ? 'cantidad-alta' :
+                    cantidad > 20 ? 'cantidad-media' : 'cantidad-baja';
+
+                var fecha = item.updated_at ? new Date(item.updated_at).toLocaleDateString('es-MX') : 'N/A';
+
+                html += `
+                    <tr>
+                        <td><span class="badge-clues">${codigoClues}</span></td>
+                        <td>${nombreClues}</td>
+                        <td>${tipo}</td>
+                        <td style="text-align:center;">
+                            <span class="cantidad ${cantidadClass}">${cantidad}</span>
+                        </td>
+                        <td style="color:rgba(255,255,255,0.3); font-size:0.8rem;">${fecha}</td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            inventarioContainer.innerHTML = html;
+        }
+
+        // ============================================================
+        // 4. CERRAR SESIÓN
+        // ============================================================
         async function logout() {
             try {
                 await supabaseClient.auth.signOut();
@@ -608,61 +477,16 @@
         }
 
         // ============================================================
-        // 6. INICIALIZACIÓN
+        // 5. INICIALIZACIÓN
         // ============================================================
-
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         window.logout = logout;
 
-        // Cargar dashboard al iniciar
+        // Cargar datos al iniciar
         window.addEventListener('load', function () {
             loadDashboard();
         });
     </script>
-
-    <script>
-        // ============================================================
-        // FUNCIONES AUXILIARES (Partículas, año, etc.)
-        // ============================================================
-
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 15;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-
-                const size = Math.random() * 10 + 5;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.bottom = '-' + size + 'px';
-                particle.style.animationDuration = Math.random() * 20 + 10 + 's';
-                particle.style.animationDelay = Math.random() * 5 + 's';
-                particle.style.opacity = Math.random() * 0.5 + 0.1;
-
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        window.addEventListener('load', function () {
-            createParticles();
-
-            document.querySelectorAll('input').forEach(function (input) {
-                input.addEventListener('mouseenter', function () {
-                    input.style.transform = 'scale(1.02)';
-                });
-                input.addEventListener('mouseleave', function () {
-                    input.style.transform = 'scale(1)';
-                });
-            });
-        });
-    </script>
-
-
 
 </body>
 
