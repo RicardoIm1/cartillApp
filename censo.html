@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Censo - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -139,6 +140,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -168,6 +170,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -602,14 +605,17 @@
             body {
                 padding: 1rem;
             }
+
             .container {
                 padding: 1rem;
             }
+
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -617,20 +623,25 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
             .modal-content {
                 padding: 1rem;
                 margin: 1rem;
             }
+
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .search-bar input {
                 max-width: 100%;
             }
@@ -640,9 +651,11 @@
             .container {
                 padding: 0.75rem;
             }
+
             .form-section {
                 padding: 0.75rem;
             }
+
             .checkbox-group {
                 gap: 0.75rem;
             }
@@ -679,7 +692,8 @@
 
         <!-- Búsqueda -->
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar por nombre, CURP o folio..." oninput="cargarCenso()" />
+            <input type="text" id="searchInput" placeholder="Buscar por nombre, CURP o folio..."
+                oninput="cargarCenso()" />
             <span class="info" id="totalRegistros">0 registros</span>
         </div>
 
@@ -871,7 +885,7 @@
                 icon.textContent = '🌙';
             }
 
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -933,122 +947,150 @@
         async function cargarCatalogos() {
             try {
                 // Entidades
-                var entidades = await supabaseClient.from('entidad').select('id_uuid, entidad').order('entidad');
+                var entidades = await supabaseClient
+                    .from('entidad')
+                    .select('id_uuid, entidad')
+                    .order('entidad');
                 if (entidades.data) {
                     var entidadSelect = document.getElementById('entidad');
                     entidadSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    entidades.data.forEach(function(e) {
+                    entidades.data.forEach(function (e) {
                         entidadSelect.innerHTML += `<option value="${e.id_uuid}">${e.entidad}</option>`;
                     });
                 }
 
                 // Pais
-                var paises = await supabaseClient.from('pais').select('id_uuid, pais').order('pais');
+                var paises = await supabaseClient
+                    .from('pais')
+                    .select('id_uuid, pais')
+                    .order('pais');
                 if (paises.data) {
                     var paisSelect = document.getElementById('pais');
                     paisSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    paises.data.forEach(function(p) {
+                    paises.data.forEach(function (p) {
                         paisSelect.innerHTML += `<option value="${p.id_uuid}">${p.pais}</option>`;
                     });
                 }
 
                 // CLUES
-                var clues = await supabaseClient.from('clues').select('id_uuid, clues, nombre').order('nombre');
+                var clues = await supabaseClient
+                    .from('clues')
+                    .select('id_uuid, clues, nombre')
+                    .order('nombre');
                 if (clues.data) {
                     var cluesSelect = document.getElementById('clues');
                     cluesSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    clues.data.forEach(function(c) {
-                        cluesSelect.innerHTML +=
-                            `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
+                    clues.data.forEach(function (c) {
+                        cluesSelect.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
                     });
                 }
 
                 // Tipo Cartilla
-                var tipos = await supabaseClient.from('tipo_cartilla').select('id_uuid, tipo_cartilla').order(
-                    'tipo_cartilla');
+                var tipos = await supabaseClient
+                    .from('tipo_cartilla')
+                    .select('id_uuid, tipo_cartilla')
+                    .order('tipo_cartilla');
                 if (tipos.data) {
                     var tipoSelect = document.getElementById('tipo_cartilla');
                     tipoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    tipos.data.forEach(function(t) {
+                    tipos.data.forEach(function (t) {
                         tipoSelect.innerHTML += `<option value="${t.id_uuid}">${t.tipo_cartilla}</option>`;
                     });
                 }
 
                 // Motivo Entrega
-                var motivos = await supabaseClient.from('motivo_entrega').select('id_uuid, motivo').order('motivo');
+                var motivos = await supabaseClient
+                    .from('motivo_entrega')
+                    .select('id_uuid, motivo')
+                    .order('motivo');
                 if (motivos.data) {
                     var motivoSelect = document.getElementById('motivo_entrega');
                     motivoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    motivos.data.forEach(function(m) {
+                    motivos.data.forEach(function (m) {
                         motivoSelect.innerHTML += `<option value="${m.id_uuid}">${m.motivo}</option>`;
                     });
                 }
 
-                // Año Edición
-                var agnos = await supabaseClient.from('agno_edicion').select('id_uuid, agno_edicion').order(
-                    'agno_edicion DESC');
+                // Año Edición - CORREGIDO
+                var agnos = await supabaseClient
+                    .from('agno_edicion')
+                    .select('id_uuid, agno_edicion')
+                    .order('agno_edicion', { ascending: false });
                 if (agnos.data) {
                     var agnoSelect = document.getElementById('agno_edicion');
                     agnoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    agnos.data.forEach(function(a) {
+                    agnos.data.forEach(function (a) {
                         agnoSelect.innerHTML += `<option value="${a.id_uuid}">${a.agno_edicion}</option>`;
                     });
                 }
 
                 // Servicio Entrega
-                var servicios = await supabaseClient.from('servicio_entrega').select('id_uuid, servicio_entrega').order(
-                    'servicio_entrega');
+                var servicios = await supabaseClient
+                    .from('servicio_entrega')
+                    .select('id_uuid, servicio_entrega')
+                    .order('servicio_entrega');
                 if (servicios.data) {
                     var servicioSelect = document.getElementById('servicio_entrega');
                     servicioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    servicios.data.forEach(function(s) {
+                    servicios.data.forEach(function (s) {
                         servicioSelect.innerHTML += `<option value="${s.id_uuid}">${s.servicio_entrega}</option>`;
                     });
                 }
 
                 // Si/No
-                var si_no = await supabaseClient.from('si_no').select('id_uuid, sino').order('sino');
+                var si_no = await supabaseClient
+                    .from('si_no')
+                    .select('id_uuid, sino')
+                    .order('sino');
                 if (si_no.data) {
                     var siNoSelect = document.getElementById('se_proporciono_info');
                     siNoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    si_no.data.forEach(function(s) {
+                    si_no.data.forEach(function (s) {
                         siNoSelect.innerHTML += `<option value="${s.id_uuid}">${s.sino}</option>`;
                     });
                 }
 
                 // Discapacidad
-                var discapacidades = await supabaseClient.from('discapacidad').select('id_uuid, discapacidad').order(
-                    'discapacidad');
+                var discapacidades = await supabaseClient
+                    .from('discapacidad')
+                    .select('id_uuid, discapacidad')
+                    .order('discapacidad');
                 if (discapacidades.data) {
                     var discSelect = document.getElementById('discapacidad');
                     discSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    discapacidades.data.forEach(function(d) {
+                    discapacidades.data.forEach(function (d) {
                         discSelect.innerHTML += `<option value="${d.id_uuid}">${d.discapacidad}</option>`;
                     });
                 }
 
                 // Embarazo
-                var embarazos = await supabaseClient.from('embarazo').select('id_uuid, embarazo').order('embarazo');
+                var embarazos = await supabaseClient
+                    .from('embarazo')
+                    .select('id_uuid, embarazo')
+                    .order('embarazo');
                 if (embarazos.data) {
                     var embSelect = document.getElementById('embarazo');
                     embSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    embarazos.data.forEach(function(e) {
+                    embarazos.data.forEach(function (e) {
                         embSelect.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
                     });
                 }
 
                 // Tipo Migración
-                var migraciones = await supabaseClient.from('tipo_migracion').select('id_uuid, migracion').order(
-                    'migracion');
+                var migraciones = await supabaseClient
+                    .from('tipo_migracion')
+                    .select('id_uuid, migracion')
+                    .order('migracion');
                 if (migraciones.data) {
                     var migSelect = document.getElementById('tipo_migracion');
                     migSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    migraciones.data.forEach(function(m) {
+                    migraciones.data.forEach(function (m) {
                         migSelect.innerHTML += `<option value="${m.id_uuid}">${m.migracion}</option>`;
                     });
                 }
 
                 catalogos.cargados = true;
+                console.log('Catálogos cargados correctamente');
             } catch (error) {
                 console.error('Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
@@ -1076,7 +1118,7 @@
 
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(m) {
+                    result.data.forEach(function (m) {
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                     });
                 }
@@ -1126,7 +1168,7 @@
                 if (search.length > 0) {
                     query = query.or(
                         `nombre.ilike.%${search}%,paterno.ilike.%${search}%,materno.ilike.%${search}%,curp.ilike.%${search}%,folio.ilike.%${search}%`
-                        );
+                    );
                 }
 
                 var result = await query;
@@ -1180,7 +1222,7 @@
                     <tbody>
             `;
 
-            data.forEach(function(row) {
+            data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
                 var tipoCartilla = row.tipo_cartilla || 'N/A';
@@ -1371,7 +1413,7 @@
 
                 successElement.textContent = isEdit ? '✅ Registro actualizado correctamente' :
                     '✅ Registro guardado correctamente';
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1406,7 +1448,7 @@
                 }
 
                 successElement.textContent = '✅ Registro eliminado correctamente';
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1423,33 +1465,33 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
 
             // Cargar catálogos
-            cargarCatalogos().then(function() {
+            cargarCatalogos().then(function () {
                 cargarCenso();
             });
 
             // Efecto hover en inputs
-            document.querySelectorAll('input, select').forEach(function(el) {
-                el.addEventListener('mouseenter', function() {
+            document.querySelectorAll('input, select').forEach(function (el) {
+                el.addEventListener('mouseenter', function () {
                     this.style.transform = 'scale(1.02)';
                 });
-                el.addEventListener('mouseleave', function() {
+                el.addEventListener('mouseleave', function () {
                     this.style.transform = 'scale(1)';
                 });
             });
 
             // Cerrar modal con ESC
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     cerrarModal();
                 }
             });
 
             // Cerrar modal al hacer clic fuera
-            modalOverlay.addEventListener('click', function(e) {
+            modalOverlay.addEventListener('click', function (e) {
                 if (e.target === modalOverlay) {
                     cerrarModal();
                 }
