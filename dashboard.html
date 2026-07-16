@@ -401,130 +401,223 @@
         // ============================================================
         // CONFIGURACIÓN DE SUPABASE
         // ============================================================
-        var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
-        var SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
-
+        var SUPABASE_URL = 'https://tu-proyecto.supabase.co';
+        var SUPABASE_ANON_KEY = 'tu-clave-anon-publica';
         var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================================
-        // FUNCIONALIDAD DIURNO / NOCTURNO
+        // ELEMENTOS DEL DOM
         // ============================================================
-
-        (function setupTheme() {
-            var body = document.body;
-            var themeToggle = document.getElementById('themeToggle');
-            var icon = themeToggle;
-
-            // Cargar tema guardado
-            var savedTheme = localStorage.getItem('theme') || 'dark';
-            if (savedTheme === 'light') {
-                body.classList.add('light-mode');
-                icon.textContent = '☀️';
-            } else {
-                icon.textContent = '🌙';
-            }
-
-            // Cambiar tema al hacer clic
-            themeToggle.addEventListener('click', function () {
-                var isLight = body.classList.toggle('light-mode');
-                if (isLight) {
-                    icon.textContent = '☀️';
-                    localStorage.setItem('theme', 'light');
-                } else {
-                    icon.textContent = '🌙';
-                    localStorage.setItem('theme', 'dark');
-                }
-            });
-        })();
+        var userContent = document.getElementById('userContent');
+        var errorElement = document.getElementById('error');
 
         // ============================================================
-        // VERIFICAR SESIÓN
+        // 1. VERIFICAR SESIÓN Y CARGAR PERFIL
         // ============================================================
-
-        async function checkSession() {
-            var userContent = document.getElementById('userContent');
-            var errorElement = document.getElementById('error');
-
+        async function loadDashboard() {
             try {
-                var result = await supabaseClient.auth.getSession();
-                var session = result.data.session;
-                var error = result.error;
+                // Verificar sesión
+                var sessionResult = await supabaseClient.auth.getSession();
+                var session = sessionResult.data.session;
+                var error = sessionResult.error;
 
-                if (error) {
-                    throw error;
-                }
-
+                if (error) throw error;
                 if (!session) {
                     window.location.href = 'login.html';
                     return;
                 }
 
-                var user = session.user;
-                var userMetadata = user.user_metadata || {};
+                // Obtener perfil del usuario desde la función que creamos en Supabase
+                var profileResult = await supabaseClient.rpc('get_my_profile');
+                var profile = profileResult.data;
+                var profileError = profileResult.error;
 
-                userContent.innerHTML = `
-                        <p><span class="label">Correo electrónico</span><br><strong>${user.email}</strong></p>
-                        <p><span class="label">ID de usuario</span><br><span style="font-size:0.8rem; color:var(--text-muted);">${user.id}</span></p>
-                        <p><span class="label">Último acceso</span><br><span style="font-size:0.8rem; color:var(--text-muted);">${new Date(user.last_sign_in_at || Date.now()).toLocaleString()}</span></p>
-                        <div style="margin-top:0.75rem;">
-                            <span class="status-badge active">● Sesión activa</span>
-                        </div>
-                    `;
+                if (profileError) throw profileError;
 
-                localStorage.setItem('supabase_user', JSON.stringify(user));
-                localStorage.setItem('supabase_session', JSON.stringify(session));
+                // Si no tiene perfil, mostrar mensaje (pero no bloquear)
+                var userData = session.user;
+                var userMeta = profile && profile.length > 0 ? profile[0] : null;
 
-            } catch (error) {
-                console.error('Error al verificar sesión:', error);
-                if (errorElement) {
-                    errorElement.textContent = 'Error al verificar la sesión. Redirigiendo al login...';
+                // Construir saludo personalizado
+                var nombreCompleto = 'Usuario';
+                var rol = 'usuario';
+                var centroNombre = 'Sin centro asignado';
+
+                if (userMeta) {
+                    nombreCompleto = userMeta.nombre + ' ' + userMeta.apellidos || 'Usuario';
+                    rol = userMeta.rol || 'usuario';
+                    centroNombre = userMeta.centro_nombre || 'Sin centro asignado';
+                } else {
+                    // Si no tiene perfil, intentamos obtener metadata del auth
+                    nombreCompleto = userData.user_metadata?.nombre || userData.email;
                 }
 
-                setTimeout(function () {
-                    window.location.href = 'login.html';
-                }, 2000);
+                // ============================================================
+                // 2. CARGAR ESTADÍSTICAS (Según rol)
+                // ============================================================
+
+                var statsHTML = '';
+
+                // Si es admin o coordinador, ve totales generales
+                if (rol === 'admin' || rol === 'coordinador') {
+                    // Total de centros
+                    var centrosResult = await supabaseClient
+                        .from('centros_de_salud')
+                        .select('*', { count: 'exact', head: true });
+                    var totalCentros = centrosResult.count || 0;
+
+                    // Total de cartillas (suma de inventario)
+                    var cartillasResult = await supabaseClient
+                        .from('inventario')
+                        .select('cantidad');
+                    var totalCartillas = 0;
+                    if (cartillasResult.data) {
+                        cartillasResult.data.forEach(function (item) {
+                            totalCartillas += item.cantidad;
+                        });
+                    }
+
+                    statsHTML = `
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0;">
+            <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:10px; text-align:center;">
+              <div style="font-size:2rem; font-weight:600; color:#4cc9f0;">${totalCentros}</div>
+              <div style="font-size:0.8rem; color:rgba(255,255,255,0.5);">Centros registrados</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:10px; text-align:center;">
+              <div style="font-size:2rem; font-weight:600; color:#4cc9f0;">${totalCartillas}</div>
+              <div style="font-size:0.8rem; color:rgba(255,255,255,0.5);">Cartillas en inventario</div>
+            </div>
+          </div>
+        `;
+                } else {
+                    // Si es usuario normal, solo ve su centro
+                    var centroId = userMeta ? userMeta.centro_id : null;
+                    var totalCartillasCentro = 0;
+
+                    if (centroId) {
+                        var inventarioResult = await supabaseClient
+                            .from('inventario')
+                            .select('cantidad')
+                            .eq('centro_id', centroId);
+
+                        if (inventarioResult.data) {
+                            inventarioResult.data.forEach(function (item) {
+                                totalCartillasCentro += item.cantidad;
+                            });
+                        }
+                    }
+
+                    statsHTML = `
+          <div style="display:grid; grid-template-columns:1fr; gap:1rem; margin:1rem 0;">
+            <div style="background:rgba(255,255,255,0.05); padding:1rem; border-radius:10px; text-align:center;">
+              <div style="font-size:2rem; font-weight:600; color:#4cc9f0;">${totalCartillasCentro}</div>
+              <div style="font-size:0.8rem; color:rgba(255,255,255,0.5);">Cartillas en ${centroNombre}</div>
+            </div>
+          </div>
+        `;
+                }
+
+                // ============================================================
+                // 3. CARGAR MOVIMIENTOS RECIENTES
+                // ============================================================
+
+                var movimientosHTML = '';
+                var movimientosResult = await supabaseClient
+                    .from('movimientos')
+                    .select(`
+          id,
+          tipo,
+          cantidad,
+          observaciones,
+          created_at,
+          centros_de_salud (nombre),
+          cartillas (tipo, codigo_barras)
+        `)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+
+                if (movimientosResult.data && movimientosResult.data.length > 0) {
+                    movimientosHTML = '<div style="margin-top:1.5rem;"><h3 style="font-weight:400; color:rgba(255,255,255,0.7); font-size:1rem; margin-bottom:0.75rem;">Últimos movimientos</h3>';
+                    movimientosResult.data.forEach(function (mov) {
+                        var fecha = new Date(mov.created_at).toLocaleString();
+                        var tipoIcon = mov.tipo === 'entrada' ? '📥' : mov.tipo === 'salida' ? '📤' : '🔄';
+                        var centroNombre = mov.centros_de_salud ? mov.centros_de_salud.nombre : 'N/A';
+                        var cartillaInfo = mov.cartillas ? mov.cartillas.tipo + ' (' + mov.cartillas.codigo_barras + ')' : 'N/A';
+
+                        movimientosHTML += `
+            <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03); padding:0.5rem 1rem; border-radius:8px; margin-bottom:0.5rem; border-left:3px solid ${mov.tipo === 'entrada' ? '#4cc9f0' : mov.tipo === 'salida' ? '#f72585' : '#f8961e'};">
+              <div>
+                <span style="font-weight:500;">${tipoIcon} ${mov.tipo.charAt(0).toUpperCase() + mov.tipo.slice(1)}</span>
+                <span style="font-size:0.8rem; color:rgba(255,255,255,0.5); margin-left:0.5rem;">${cartillaInfo}</span>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:500;">${mov.cantidad} unidades</div>
+                <div style="font-size:0.7rem; color:rgba(255,255,255,0.3);">${fecha}</div>
+              </div>
+            </div>
+          `;
+                    });
+                    movimientosHTML += '</div>';
+                } else {
+                    movimientosHTML = `
+          <div style="margin-top:1.5rem; padding:1rem; background:rgba(255,255,255,0.03); border-radius:10px; text-align:center; color:rgba(255,255,255,0.3);">
+            No hay movimientos registrados
+          </div>
+        `;
+                }
+
+                // ============================================================
+                // 4. RENDERIZAR TODO EN EL DASHBOARD
+                // ============================================================
+
+                userContent.innerHTML = `
+        <div style="text-align:left;">
+          <p style="margin-bottom:0.25rem;">
+            <span style="color:rgba(255,255,255,0.5);">Bienvenido,</span><br>
+            <strong style="font-size:1.2rem;">${nombreCompleto}</strong>
+          </p>
+          <p style="font-size:0.8rem; color:rgba(255,255,255,0.4); margin-bottom:0.5rem;">
+            ${rol === 'admin' ? '🔑 Administrador' : rol === 'coordinador' ? '📋 Coordinador' : '🏥 ' + centroNombre}
+          </p>
+          ${statsHTML}
+          ${movimientosHTML}
+        </div>
+      `;
+
+            } catch (error) {
+                console.error('Error al cargar el dashboard:', error);
+                if (errorElement) {
+                    errorElement.textContent = 'Error al cargar los datos: ' + error.message;
+                }
             }
         }
 
         // ============================================================
-        // FUNCIÓN PARA CERRAR SESIÓN
+        // 5. FUNCIÓN PARA CERRAR SESIÓN
         // ============================================================
 
         async function logout() {
-            var errorElement = document.getElementById('error');
-
             try {
-                var result = await supabaseClient.auth.signOut();
-                var error = result.error;
-
-                if (error) {
-                    throw error;
-                }
-
+                await supabaseClient.auth.signOut();
                 localStorage.removeItem('supabase_user');
                 localStorage.removeItem('supabase_session');
-
                 window.location.href = 'login.html';
-
             } catch (error) {
                 console.error('Error al cerrar sesión:', error);
-                if (errorElement) {
-                    errorElement.textContent = 'Error al cerrar sesión: ' + error.message;
-                }
             }
         }
 
         // ============================================================
-        // INICIALIZACIÓN
+        // 6. INICIALIZACIÓN
         // ============================================================
 
         document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        window.addEventListener('load', function () {
-            checkSession();
-        });
-
         window.logout = logout;
+
+        // Cargar dashboard al iniciar
+        window.addEventListener('load', function () {
+            loadDashboard();
+        });
     </script>
 
     <script>
@@ -568,6 +661,8 @@
             });
         });
     </script>
+
+
 
 </body>
 
