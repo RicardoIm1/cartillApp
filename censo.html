@@ -95,9 +95,6 @@
             --user-badge-border: rgba(0, 0, 0, 0.06);
         }
 
-        /* ============================================================
-           ESTILOS GENERALES
-           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -117,9 +114,6 @@
             overflow-x: hidden;
         }
 
-        /* ============================================================
-           PARTÍCULAS
-           ============================================================ */
         .particles {
             position: fixed;
             top: 0;
@@ -144,16 +138,12 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
-
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
             }
         }
 
-        /* ============================================================
-           CLAYMORPHISM CONTAINER
-           ============================================================ */
         .container {
             max-width: 1200px;
             width: 100%;
@@ -174,16 +164,12 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* ============================================================
-           BOTÓN DE TEMA
-           ============================================================ */
         .theme-toggle {
             position: absolute;
             top: 1rem;
@@ -209,9 +195,6 @@
             transform: scale(1.05);
         }
 
-        /* ============================================================
-           HEADER
-           ============================================================ */
         .header-actions {
             display: flex;
             justify-content: space-between;
@@ -236,9 +219,6 @@
             transition: color 0.3s ease;
         }
 
-        /* ============================================================
-           USER BADGE (NUEVO)
-           ============================================================ */
         .user-badge {
             display: flex;
             align-items: center;
@@ -271,9 +251,6 @@
             color: var(--badge-text);
         }
 
-        /* ============================================================
-           BOTONES
-           ============================================================ */
         .btn {
             padding: 0.6rem 1.5rem;
             border: none;
@@ -341,9 +318,6 @@
             flex-wrap: wrap;
         }
 
-        /* ============================================================
-           FORMULARIO
-           ============================================================ */
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -441,9 +415,6 @@
             accent-color: var(--btn-primary);
         }
 
-        /* ============================================================
-           TABLA DE REGISTROS
-           ============================================================ */
         .table-container {
             border-radius: 16px;
             overflow: auto;
@@ -500,9 +471,6 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* ============================================================
-           SEARCH
-           ============================================================ */
         .search-bar {
             display: flex;
             gap: 1rem;
@@ -520,9 +488,6 @@
             font-size: 0.8rem;
         }
 
-        /* ============================================================
-           LOADING / EMPTY / ERROR
-           ============================================================ */
         .loading-spinner {
             display: inline-block;
             width: 16px;
@@ -564,9 +529,6 @@
             transition: color 0.3s ease;
         }
 
-        /* ============================================================
-           MODAL OVERLAY
-           ============================================================ */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -611,9 +573,6 @@
             justify-content: flex-end;
         }
 
-        /* ============================================================
-           FOOTER
-           ============================================================ */
         .footer {
             text-align: center;
             margin-top: 2rem;
@@ -622,24 +581,18 @@
             transition: color 0.3s ease;
         }
 
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
         @media (max-width: 768px) {
             body {
                 padding: 1rem;
             }
-
             .container {
                 padding: 1rem;
             }
-
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -647,25 +600,20 @@
                 height: 34px;
                 font-size: 1rem;
             }
-
             h1 {
                 font-size: 1.4rem;
             }
-
             .form-grid {
                 grid-template-columns: 1fr;
             }
-
             .modal-content {
                 padding: 1rem;
                 margin: 1rem;
             }
-
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .search-bar input {
                 max-width: 100%;
             }
@@ -675,11 +623,9 @@
             .container {
                 padding: 0.75rem;
             }
-
             .form-section {
                 padding: 0.75rem;
             }
-
             .checkbox-group {
                 gap: 0.75rem;
             }
@@ -689,16 +635,11 @@
 
 <body>
 
-    <!-- Partículas -->
     <div class="particles" id="particles"></div>
 
     <div class="container">
-        <!-- Botón de tema -->
-        <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">
-            🌙
-        </button>
+        <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">🌙</button>
 
-        <!-- HEADER -->
         <div class="header-actions">
             <div>
                 <h1>📋 Censo de Cartillas</h1>
@@ -714,9 +655,6 @@
             </div>
         </div>
 
-        <!-- ============================================================
-        USER BADGE (Usuario logueado)
-        ============================================================ -->
         <div id="userInfo" style="display:none;">
             <div class="user-badge">
                 <span id="userNameDisplay">👤 Cargando...</span>
@@ -725,14 +663,11 @@
             </div>
         </div>
 
-        <!-- Búsqueda -->
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar por nombre, CURP o folio..."
-                oninput="cargarCenso()" />
+            <input type="text" id="searchInput" placeholder="Buscar por nombre, CURP o folio..." oninput="cargarCenso()" />
             <span class="info" id="totalRegistros">0 registros</span>
         </div>
 
-        <!-- Tabla -->
         <div class="table-container" id="censoContainer">
             <div class="empty-state">
                 <div class="loading-spinner"></div>
@@ -757,7 +692,6 @@
             <form id="censoForm" onsubmit="guardarCenso(event)">
                 <input type="hidden" id="editId" value="" />
 
-                <!-- Datos Personales -->
                 <div class="form-section">
                     <div class="form-section-title">👤 Datos Personales</div>
                     <div class="form-grid">
@@ -804,7 +738,6 @@
                     </div>
                 </div>
 
-                <!-- Población y Ubicación -->
                 <div class="form-section">
                     <div class="form-section-title">📍 Ubicación y Población</div>
                     <div class="form-grid">
@@ -840,7 +773,6 @@
                     </div>
                 </div>
 
-                <!-- Cartilla -->
                 <div class="form-section">
                     <div class="form-section-title">📋 Datos de la Cartilla</div>
                     <div class="form-grid">
@@ -909,7 +841,7 @@
 
     <script>
         // ============================================================
-        // FUNCIONALIDAD DIURNO / NOCTURNO
+        // TEMA DIURNO / NOCTURNO
         // ============================================================
         (function setupTheme() {
             var body = document.body;
@@ -924,7 +856,7 @@
                 icon.textContent = '🌙';
             }
 
-            themeToggle.addEventListener('click', function () {
+            themeToggle.addEventListener('click', function() {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -972,14 +904,13 @@
         var totalRegistros = document.getElementById('totalRegistros');
         var searchInput = document.getElementById('searchInput');
 
-        // Modal
         var modalOverlay = document.getElementById('modalOverlay');
         var modalTitle = document.getElementById('modalTitle');
         var editId = document.getElementById('editId');
         var submitBtn = document.getElementById('submitBtn');
 
         // ============================================================
-        // 0. OBTENER USUARIO LOGUEADO
+        // USUARIO LOGUEADO
         // ============================================================
         var usuarioActual = null;
 
@@ -1004,7 +935,6 @@
                     return usuarioActual;
                 }
 
-                // Fallback: datos virtuales
                 usuarioActual = {
                     id_uuid: authUserId,
                     nombre: userEmail,
@@ -1022,9 +952,6 @@
             }
         }
 
-        // ============================================================
-        // 0.1 MOSTRAR USUARIO EN LA INTERFAZ
-        // ============================================================
         async function mostrarUsuario() {
             var user = await getUsuarioActual();
             if (!user) return;
@@ -1051,7 +978,7 @@
         }
 
         // ============================================================
-        // 1. CARGAR CATÁLOGOS (VERSIÓN OPTIMIZADA)
+        // CATÁLOGOS
         // ============================================================
         var catalogos = { cargados: false };
 
@@ -1078,9 +1005,6 @@
             }
         }
 
-        // ============================================================
-        // 2. CARGAR MUNICIPIOS POR ENTIDAD
-        // ============================================================
         async function cargarMunicipios() {
             var entidadId = document.getElementById('entidad').value;
             var municipioSelect = document.getElementById('municipio');
@@ -1099,7 +1023,7 @@
 
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (m) {
+                    result.data.forEach(function(m) {
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                     });
                 }
@@ -1108,9 +1032,6 @@
             }
         }
 
-        // ============================================================
-        // 2.1 CARGAR MUNICIPIOS CON VALOR PRESELECCIONADO
-        // ============================================================
         async function cargarMunicipiosConValor(entidadId, valorSeleccionado) {
             var municipioSelect = document.getElementById('municipio');
 
@@ -1128,7 +1049,7 @@
 
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (m) {
+                    result.data.forEach(function(m) {
                         var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
                     });
@@ -1138,9 +1059,6 @@
             }
         }
 
-        // ============================================================
-        // 3. CALCULAR EDAD (ACTUALIZADO)
-        // ============================================================
         function calcularEdad() {
             var fechaNacInput = document.getElementById('fecha_nac');
             var edadInput = document.getElementById('edad');
@@ -1163,7 +1081,7 @@
         }
 
         // ============================================================
-        // 4. CARGAR REGISTROS DE CENSO
+        // CARGAR REGISTROS DE CENSO
         // ============================================================
         async function cargarCenso() {
             try {
@@ -1219,9 +1137,6 @@
             }
         }
 
-        // ============================================================
-        // 5. RENDERIZAR TABLA
-        // ============================================================
         function renderTable(data) {
             var html = `
                 <table>
@@ -1239,7 +1154,7 @@
                     <tbody>
             `;
 
-            data.forEach(function (row) {
+            data.forEach(function(row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
                 var tipoCartilla = row.tipo_cartilla || 'N/A';
@@ -1272,7 +1187,7 @@
         }
 
         // ============================================================
-        // 6. ABRIR MODAL PARA NUEVO REGISTRO
+        // MODAL
         // ============================================================
         function abrirModal() {
             document.getElementById('censoForm').reset();
@@ -1281,11 +1196,10 @@
             document.getElementById('submitBtn').textContent = 'Guardar Registro';
             document.getElementById('edad').value = '';
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
-
             document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
 
             if (!catalogos.cargados) {
-                cargarCatalogos().then(function () {
+                cargarCatalogos().then(function() {
                     modalOverlay.classList.add('active');
                 });
             } else {
@@ -1293,15 +1207,12 @@
             }
         }
 
-        // ============================================================
-        // 7. CERRAR MODAL
-        // ============================================================
         function cerrarModal() {
             modalOverlay.classList.remove('active');
         }
 
         // ============================================================
-        // 8. EDITAR REGISTRO (MEJORADO)
+        // EDITAR REGISTRO
         // ============================================================
         async function editarCenso(id) {
             try {
@@ -1367,7 +1278,7 @@
         }
 
         // ============================================================
-        // 9. GUARDAR REGISTRO (INSERT O UPDATE)
+        // GUARDAR REGISTRO
         // ============================================================
         async function guardarCenso(event) {
             event.preventDefault();
@@ -1439,7 +1350,7 @@
 
                 successElement.textContent = isEdit ? '✅ Registro actualizado correctamente' :
                     '✅ Registro guardado correctamente';
-                setTimeout(function () {
+                setTimeout(function() {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1456,7 +1367,7 @@
         }
 
         // ============================================================
-        // 10. ELIMINAR REGISTRO
+        // ELIMINAR REGISTRO
         // ============================================================
         async function eliminarCenso(id) {
             if (!confirm('¿Estás seguro de eliminar este registro?')) {
@@ -1474,7 +1385,7 @@
                 }
 
                 successElement.textContent = '✅ Registro eliminado correctamente';
-                setTimeout(function () {
+                setTimeout(function() {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1487,55 +1398,15 @@
         }
 
         // ============================================================
-        // 11. INICIALIZACIÓN
+        // FUNCIONES PARA CATÁLOGOS
         // ============================================================
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-        window.addEventListener('load', function () {
-            createParticles();
-
-            // Mostrar usuario logueado
-            mostrarUsuario();
-
-            // Cargar catálogos
-            cargarCatalogos().then(function () {
-                cargarCenso();
-            });
-
-            // Efecto hover en inputs
-            document.querySelectorAll('input, select').forEach(function (el) {
-                el.addEventListener('mouseenter', function () {
-                    this.style.transform = 'scale(1.02)';
-                });
-                el.addEventListener('mouseleave', function () {
-                    this.style.transform = 'scale(1)';
-                });
-            });
-
-            document.addEventListener('keydown', function (e) {
-                if (e.key === 'Escape') {
-                    cerrarModal();
-                }
-            });
-
-            modalOverlay.addEventListener('click', function (e) {
-                if (e.target === modalOverlay) {
-                    cerrarModal();
-                }
-            });
-        });
-
-        // ============================================================
-        // FUNCIONES SEPARADAS PARA CADA CATÁLOGO
-        // ============================================================
-
         async function cargarEntidades() {
             try {
                 var result = await supabaseClient.from('entidad').select('id_uuid, entidad').order('entidad');
                 var select = document.getElementById('entidad');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (e) {
+                    result.data.forEach(function(e) {
                         select.innerHTML += `<option value="${e.id_uuid}">${e.entidad}</option>`;
                     });
                 }
@@ -1550,7 +1421,7 @@
                 var select = document.getElementById('pais');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (p) {
+                    result.data.forEach(function(p) {
                         select.innerHTML += `<option value="${p.id_uuid}">${p.pais}</option>`;
                     });
                 }
@@ -1565,7 +1436,7 @@
                 var select = document.getElementById('clues');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (c) {
+                    result.data.forEach(function(c) {
                         select.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
                     });
                 }
@@ -1580,7 +1451,7 @@
                 var select = document.getElementById('tipo_cartilla');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (t) {
+                    result.data.forEach(function(t) {
                         select.innerHTML += `<option value="${t.id_uuid}">${t.tipo_cartilla}</option>`;
                     });
                 }
@@ -1595,7 +1466,7 @@
                 var select = document.getElementById('motivo_entrega');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (m) {
+                    result.data.forEach(function(m) {
                         select.innerHTML += `<option value="${m.id_uuid}">${m.motivo}</option>`;
                     });
                 }
@@ -1610,7 +1481,7 @@
                 var select = document.getElementById('agno_edicion');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (a) {
+                    result.data.forEach(function(a) {
                         select.innerHTML += `<option value="${a.id_uuid}">${a.agno_edicion}</option>`;
                     });
                 }
@@ -1625,7 +1496,7 @@
                 var select = document.getElementById('servicio_entrega');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (s) {
+                    result.data.forEach(function(s) {
                         select.innerHTML += `<option value="${s.id_uuid}">${s.servicio_entrega}</option>`;
                     });
                 }
@@ -1640,7 +1511,7 @@
                 var select = document.getElementById('se_proporciono_info');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (s) {
+                    result.data.forEach(function(s) {
                         select.innerHTML += `<option value="${s.id_uuid}">${s.sino}</option>`;
                     });
                 }
@@ -1655,7 +1526,7 @@
                 var select = document.getElementById('discapacidad');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (d) {
+                    result.data.forEach(function(d) {
                         select.innerHTML += `<option value="${d.id_uuid}">${d.discapacidad}</option>`;
                     });
                 }
@@ -1670,7 +1541,7 @@
                 var select = document.getElementById('embarazo');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (e) {
+                    result.data.forEach(function(e) {
                         select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
                     });
                 }
@@ -1685,7 +1556,7 @@
                 var select = document.getElementById('tipo_migracion');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function (m) {
+                    result.data.forEach(function(m) {
                         select.innerHTML += `<option value="${m.id_uuid}">${m.migracion}</option>`;
                     });
                 }
@@ -1693,131 +1564,169 @@
                 console.error('Error cargando migraciones:', error);
             }
         }
-    </script>
-    <<script>
+
         // ============================================================
         // FUNCIONES PARA DECODIFICAR CURP
         // ============================================================
-
-        /**
-        * Obtiene el sexo desde el CURP (posición 10)
-        * @param {string} curp - CURP de la persona
-        * @returns {string} 'H' o 'M'
-        */
         function obtenerSexoDesdeCurp(curp) {
-        if (!curp || curp.length < 11) return null; var sexoChar=curp.charAt(10).toUpperCase(); if (sexoChar==='H' )
-            return 'H' ; if (sexoChar==='M' ) return 'M' ; return null; } /** * Obtiene la clave de entidad desde el
-            CURP (posiciones 17-18) * @param {string} curp - CURP de la persona * @returns {string|null} Clave de
-            entidad (ej. '14' para Jalisco) */ function obtenerEntidadDesdeCurp(curp) { if (!curp || curp.length < 18)
-            return null; return curp.substring(16, 18); } /** * Mapa de claves de entidad a nombres de estado */ var
-            entidadMap={ '01' : 'Aguascalientes' , '02' : 'Baja California' , '03' : 'Baja California Sur' , '04'
-            : 'Campeche' , '05' : 'Coahuila' , '06' : 'Colima' , '07' : 'Chiapas' , '08' : 'Chihuahua' , '09'
-            : 'Ciudad de México' , '10' : 'Durango' , '11' : 'Guanajuato' , '12' : 'Guerrero' , '13' : 'Hidalgo' , '14'
-            : 'Jalisco' , '15' : 'Estado de México' , '16' : 'Michoacán' , '17' : 'Morelos' , '18' : 'Nayarit' , '19'
-            : 'Nuevo León' , '20' : 'Oaxaca' , '21' : 'Puebla' , '22' : 'Querétaro' , '23' : 'Quintana Roo' , '24'
-            : 'San Luis Potosí' , '25' : 'Sinaloa' , '26' : 'Sonora' , '27' : 'Tabasco' , '28' : 'Tamaulipas' , '29'
-            : 'Tlaxcala' , '30' : 'Veracruz' , '31' : 'Yucatán' , '32' : 'Zacatecas' }; /** * Obtiene el nombre de la
-            entidad desde la clave * @param {string} clave - Clave de entidad (2 dígitos) * @returns {string|null}
-            Nombre de la entidad o null */ function obtenerNombreEntidad(clave) { if (!clave) return null; return
-            entidadMap[clave] || null; } /** * Obtiene la fecha de nacimiento desde el CURP (posiciones 11-16) * @param
-            {string} curp - CURP de la persona * @returns {Date|null} Fecha de nacimiento o null */ function
-            obtenerFechaNacDesdeCurp(curp) { if (!curp || curp.length < 17) return null; var anioStr=curp.substring(11,
-            13); var mesStr=curp.substring(13, 15); var diaStr=curp.substring(15, 17); var anio=parseInt(anioStr); var
-            mes=parseInt(mesStr) - 1; // JS months 0-11 var dia=parseInt(diaStr); // Determinar el siglo (asumimos
-            1900-2099) var anioCompleto=anio; var fecha=new Date(); var añoActual=fecha.getFullYear(); var
-            siglo=Math.floor(añoActual / 100) * 100; // Si el año es mayor que el año actual, es del siglo pasado if
-            (anioCompleto> (añoActual - 2000)) {
-            anioCompleto = 1900 + anio;
-            } else {
-            anioCompleto = 2000 + anio;
-            }
+            if (!curp || curp.length < 11) return null;
+            var sexoChar = curp.charAt(10).toUpperCase();
+            if (sexoChar === 'H') return 'H';
+            if (sexoChar === 'M') return 'M';
+            return null;
+        }
 
+        function obtenerEntidadDesdeCurp(curp) {
+            if (!curp || curp.length < 18) return null;
+            return curp.substring(16, 18);
+        }
+
+        var entidadMap = {
+            '01': 'Aguascalientes', '02': 'Baja California', '03': 'Baja California Sur',
+            '04': 'Campeche', '05': 'Coahuila', '06': 'Colima',
+            '07': 'Chiapas', '08': 'Chihuahua', '09': 'Ciudad de México',
+            '10': 'Durango', '11': 'Guanajuato', '12': 'Guerrero',
+            '13': 'Hidalgo', '14': 'Jalisco', '15': 'Estado de México',
+            '16': 'Michoacán', '17': 'Morelos', '18': 'Nayarit',
+            '19': 'Nuevo León', '20': 'Oaxaca', '21': 'Puebla',
+            '22': 'Querétaro', '23': 'Quintana Roo', '24': 'San Luis Potosí',
+            '25': 'Sinaloa', '26': 'Sonora', '27': 'Tabasco',
+            '28': 'Tamaulipas', '29': 'Tlaxcala', '30': 'Veracruz',
+            '31': 'Yucatán', '32': 'Zacatecas'
+        };
+
+        function obtenerNombreEntidad(clave) {
+            if (!clave) return null;
+            return entidadMap[clave] || null;
+        }
+
+        function obtenerFechaNacDesdeCurp(curp) {
+            if (!curp || curp.length < 17) return null;
+            var anioStr = curp.substring(11, 13);
+            var mesStr = curp.substring(13, 15);
+            var diaStr = curp.substring(15, 17);
+            var anio = parseInt(anioStr);
+            var mes = parseInt(mesStr) - 1;
+            var dia = parseInt(diaStr);
+            var añoActual = new Date().getFullYear();
+            var anioCompleto = (anio > (añoActual - 2000)) ? 1900 + anio : 2000 + anio;
             return new Date(anioCompleto, mes, dia);
+        }
+
+        function validarCurp(curp) {
+            if (!curp) return false;
+            var curpLimpio = curp.trim().toUpperCase();
+            var regex = /^[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}$/;
+            return regex.test(curpLimpio);
+        }
+
+        // ============================================================
+        // PROCESAR CURP AL ESCRIBIR
+        // ============================================================
+        async function procesarCurp(curp) {
+            if (!curp) return;
+
+            var curpLimpio = curp.trim().toUpperCase();
+            var entidadSelect = document.getElementById('entidad');
+
+            if (curpLimpio.length >= 11) {
+                var sexo = obtenerSexoDesdeCurp(curpLimpio);
+                if (sexo) {
+                    var sexoSelect = document.getElementById('sexo');
+                    if (sexoSelect) {
+                        sexoSelect.value = sexo;
+                    }
+                }
             }
 
-            /**
-            * Calcula la edad a partir de una fecha de nacimiento
-            * @param {Date} fechaNac - Fecha de nacimiento
-            * @returns {number} Edad en años
-            */
-            function calcularEdadDesdeFecha(fechaNac) {
-            if (!fechaNac || isNaN(fechaNac.getTime())) return null;
-            var hoy = new Date();
-            var edad = hoy.getFullYear() - fechaNac.getFullYear();
-            var m = hoy.getMonth() - fechaNac.getMonth();
-            if (m < 0 || (m===0 && hoy.getDate() < fechaNac.getDate())) { edad--; } return edad; } /** * Valida que el
-                CURP tenga el formato correcto (18 caracteres) * @param {string} curp - CURP a validar * @returns
-                {boolean} true si es válido */ function validarCurp(curp) { if (!curp) return false; var
-                curpLimpio=curp.trim().toUpperCase(); // Expresión regular para CURP (18 caracteres alfanuméricos) var
-                regex=/^[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}$/; return regex.test(curpLimpio); } </script>>
+            if (curpLimpio.length >= 17) {
+                var fechaNac = obtenerFechaNacDesdeCurp(curpLimpio);
+                if (fechaNac && !isNaN(fechaNac.getTime())) {
+                    var fechaNacInput = document.getElementById('fecha_nac');
+                    if (fechaNacInput) {
+                        var anio = fechaNac.getFullYear();
+                        var mes = String(fechaNac.getMonth() + 1).padStart(2, '0');
+                        var dia = String(fechaNac.getDate()).padStart(2, '0');
+                        fechaNacInput.value = anio + '-' + mes + '-' + dia;
+                        fechaNacInput.dispatchEvent(new Event('change'));
+                    }
+                }
+            }
 
-                <script>
-                    // ============================================================
-                    // PROCESAR CURP AL ESCRIBIR
-                    // ============================================================
-                    async function procesarCurp(curp) {
-                        if (!curp) return;
-
-                        var curpLimpio = curp.trim().toUpperCase();
-                        var entidadSelect = document.getElementById('entidad');
-
-                        // Si tiene 10 caracteres o más, intentar detectar sexo
-                        if (curpLimpio.length >= 11) {
-                            var sexo = obtenerSexoDesdeCurp(curpLimpio);
-                            if (sexo) {
-                                var sexoSelect = document.getElementById('sexo');
-                                if (sexoSelect) {
-                                    sexoSelect.value = sexo;
-                                }
+            if (curpLimpio.length === 18) {
+                var claveEntidad = obtenerEntidadDesdeCurp(curpLimpio);
+                if (claveEntidad) {
+                    var nombreEntidad = obtenerNombreEntidad(claveEntidad);
+                    if (nombreEntidad && entidadSelect) {
+                        var opciones = entidadSelect.options;
+                        for (var i = 0; i < opciones.length; i++) {
+                            if (opciones[i].text === nombreEntidad) {
+                                entidadSelect.value = opciones[i].value;
+                                break;
                             }
-                        }
-
-                        // Si tiene 17 caracteres o más, intentar detectar fecha de nacimiento
-                        if (curpLimpio.length >= 17) {
-                            var fechaNac = obtenerFechaNacDesdeCurp(curpLimpio);
-                            if (fechaNac && !isNaN(fechaNac.getTime())) {
-                                var fechaNacInput = document.getElementById('fecha_nac');
-                                if (fechaNacInput) {
-                                    var anio = fechaNac.getFullYear();
-                                    var mes = String(fechaNac.getMonth() + 1).padStart(2, '0');
-                                    var dia = String(fechaNac.getDate()).padStart(2, '0');
-                                    fechaNacInput.value = anio + '-' + mes + '-' + dia;
-                                    fechaNacInput.dispatchEvent(new Event('change'));
-                                }
-                            }
-                        }
-
-                        // Si tiene 18 caracteres, detectar entidad de nacimiento
-                        if (curpLimpio.length === 18) {
-                            var claveEntidad = obtenerEntidadDesdeCurp(curpLimpio);
-                            if (claveEntidad) {
-                                var nombreEntidad = obtenerNombreEntidad(claveEntidad);
-                                if (nombreEntidad && entidadSelect) {
-                                    // Buscar la opción que coincida con el nombre de la entidad
-                                    var opciones = entidadSelect.options;
-                                    for (var i = 0; i < opciones.length; i++) {
-                                        if (opciones[i].text === nombreEntidad) {
-                                            entidadSelect.value = opciones[i].value;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-
-                            // Validar el CURP completo
-                            if (validarCurp(curpLimpio)) {
-                                document.getElementById('curp').style.borderColor = '#4cc9f0';
-                                document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
-                            } else {
-                                document.getElementById('curp').style.borderColor = '#f72585';
-                                document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-                            }
-                        } else {
-                            document.getElementById('curp').style.borderColor = '';
-                            document.getElementById('curp').style.boxShadow = '';
                         }
                     }
-                </script>
+                }
+
+                if (validarCurp(curpLimpio)) {
+                    document.getElementById('curp').style.borderColor = '#4cc9f0';
+                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
+                } else {
+                    document.getElementById('curp').style.borderColor = '#f72585';
+                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                }
+            } else {
+                document.getElementById('curp').style.borderColor = '';
+                document.getElementById('curp').style.boxShadow = '';
+            }
+        }
+
+        // ============================================================
+        // INICIALIZACIÓN
+        // ============================================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        window.addEventListener('load', function() {
+            createParticles();
+            mostrarUsuario();
+
+            cargarCatalogos().then(function() {
+                cargarCenso();
+            });
+
+            document.querySelectorAll('input, select').forEach(function(el) {
+                el.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                el.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    cerrarModal();
+                }
+            });
+
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    cerrarModal();
+                }
+            });
+        });
+
+        // Exponer funciones globalmente
+        window.abrirModal = abrirModal;
+        window.cerrarModal = cerrarModal;
+        window.editarCenso = editarCenso;
+        window.eliminarCenso = eliminarCenso;
+        window.guardarCenso = guardarCenso;
+        window.cargarCenso = cargarCenso;
+        window.procesarCurp = procesarCurp;
+        window.calcularEdad = calcularEdad;
+        window.cargarMunicipios = cargarMunicipios;
+    </script>
 
 </body>
 
