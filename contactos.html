@@ -1015,7 +1015,7 @@
         }
 
         // ============================================================
-        // GUARDAR CONTACTO
+        // GUARDAR CONTACTO (VERSIÓN CORREGIDA)
         // ============================================================
         async function guardarContacto(event) {
             event.preventDefault();
@@ -1041,16 +1041,31 @@
             submitBtn.textContent = '⏳ Enviando...';
 
             try {
-                var user = await getUsuarioActual();
-                if (!user) {
-                    throw new Error('Usuario no autenticado');
+                // Obtener la sesión para el auth.uid()
+                var session = await supabaseClient.auth.getSession();
+                if (!session.data.session) {
+                    throw new Error('No hay sesión activa');
                 }
 
-                var nombreCompleto = user.nombre || '';
-                if (user.paterno) nombreCompleto += ' ' + user.paterno;
-                if (user.materno) nombreCompleto += ' ' + user.materno;
-                nombreCompleto = nombreCompleto.trim() || 'Usuario';
+                var authUserId = session.data.session.user.id;
+                var userEmail = session.data.session.user.email;
 
+                // Obtener el nombre del usuario desde la tabla usuario (opcional)
+                var userResult = await supabaseClient
+                    .from('usuario')
+                    .select('nombre, paterno, materno')
+                    .eq('auth_user_id', authUserId)
+                    .single();
+
+                var nombreCompleto = userEmail || 'Usuario';
+                if (userResult.data) {
+                    nombreCompleto = userResult.data.nombre || '';
+                    if (userResult.data.paterno) nombreCompleto += ' ' + userResult.data.paterno;
+                    if (userResult.data.materno) nombreCompleto += ' ' + userResult.data.materno;
+                    nombreCompleto = nombreCompleto.trim() || userEmail || 'Usuario';
+                }
+
+                // Obtener nombre del destinatario (usando auth.uid del destinatario)
                 var destResult = await supabaseClient
                     .from('usuario')
                     .select('nombre, paterno, materno')
@@ -1065,9 +1080,10 @@
                     destNombre = destNombre.trim() || 'Usuario';
                 }
 
+                // Contacto data con auth.uid() como remitente_id
                 var contactoData = {
                     id_uuid: crypto.randomUUID ? crypto.randomUUID() : self.crypto.randomUUID(),
-                    remitente_id: user.id_uuid,
+                    remitente_id: authUserId,  // <-- Usar auth.uid()
                     remitente_nombre: nombreCompleto,
                     destinatario_id: destinatarioId,
                     destinatario_nombre: destNombre,
@@ -1079,9 +1095,12 @@
                     updated_at: new Date().toISOString()
                 };
 
+                console.log('Enviando contacto:', contactoData);
+
                 var result = await supabaseClient.from('contactos').insert(contactoData);
 
                 if (result.error) {
+                    console.error('Error de Supabase:', result.error);
                     throw result.error;
                 }
 
