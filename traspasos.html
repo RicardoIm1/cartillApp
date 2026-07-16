@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Traspasos - Sistema de Cartillas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #141E30;
+            min-height: 100vh;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            color: white;
+        }
+
+        h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.4rem;
+        }
+
+        select,
+        input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #4cc9f0;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.9rem;
+            border: none;
+            border-radius: 10px;
+            background: #4cc9f0;
+            color: #141E30;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #3ab8dd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(76, 201, 240, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: #f72585;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d91a6e;
+            box-shadow: 0 4px 20px rgba(247, 37, 133, 0.2);
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .success {
+            background: rgba(76, 201, 240, 0.1);
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            color: #4cc9f0;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .error {
+            background: rgba(247, 37, 133, 0.1);
+            border: 1px solid rgba(247, 37, 133, 0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            color: #f72585;
+            text-align: center;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .info-box strong {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.12);
+            font-size: 0.7rem;
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 1rem;
+            }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-origen {
+            background: rgba(247, 37, 133, 0.15);
+            color: #f72585;
+        }
+
+        .badge-destino {
+            background: rgba(76, 201, 240, 0.15);
+            color: #4cc9f0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-actions">
+            <div>
+                <h1>🔄 Traspasos</h1>
+                <p class="subtitle">Registrar movimientos de cartillas entre centros</p>
+            </div>
+            <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'" style="width:auto; padding:0.5rem 1.2rem;">
+                ← Volver al Dashboard
+            </button>
+        </div>
+
+        <!-- Información del usuario -->
+        <div id="userInfo" style="margin-bottom:1.5rem;"></div>
+
+        <!-- Formulario -->
+        <form id="traspasoForm" onsubmit="registrarTraspaso(event)">
+            <div class="row">
+                <div class="form-group">
+                    <label for="origen">🏥 Centro Origen</label>
+                    <select id="origen" required>
+                        <option value="">Seleccionar origen...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="destino">🏥 Centro Destino</label>
+                    <select id="destino" required>
+                        <option value="">Seleccionar destino...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label for="tipo_cartilla">📋 Tipo de Cartilla</label>
+                    <select id="tipo_cartilla" required>
+                        <option value="">Seleccionar tipo...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="motivo">📌 Motivo</label>
+                    <select id="motivo" required>
+                        <option value="">Seleccionar motivo...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cantidad">🔢 Cantidad</label>
+                <input type="number" id="cantidad" placeholder="Número de cartillas a trasladar" required min="1" />
+            </div>
+
+            <div id="preview" class="info-box" style="display:none;">
+                ⚡ <strong id="previewText">Previsualización</strong>
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+                Registrar Traspaso
+            </button>
+
+            <div id="resultado"></div>
+        </form>
+
+        <div class="footer">
+            Sistema de Cartillas de Salud © <span id="currentYear"></span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================================
+        var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+        var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc3Ztb2p6bmlnbGJwbW1hdWdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQwMDY0MTgsImV4cCI6MjA1OTU4MjQxOH0.0L1rPUc7c7z66CqD5N9g5fTx2sE3zFgUye3z7i6e2Vk';
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================================
+        // ELEMENTOS DEL DOM
+        // ============================================================
+        var selectOrigen = document.getElementById('origen');
+        var selectDestino = document.getElementById('destino');
+        var selectTipo = document.getElementById('tipo_cartilla');
+        var selectMotivo = document.getElementById('motivo');
+        var inputCantidad = document.getElementById('cantidad');
+        var btnSubmit = document.getElementById('submitBtn');
+        var resultado = document.getElementById('resultado');
+        var preview = document.getElementById('preview');
+        var previewText = document.getElementById('previewText');
+        var userInfo = document.getElementById('userInfo');
+
+        var usuarioActual = null;
+
+        // ============================================================
+        // 1. CARGAR DATOS INICIALES
+        // ============================================================
+        async function cargarDatos() {
+            try {
+                // Verificar sesión
+                var session = await supabaseClient.auth.getSession();
+
+                if (!session.data.session) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Obtener usuario actual
+                var userResult = await supabaseClient
+                    .from('usuario')
+                    .select(`
+                        id_usuario,
+                        nombre,
+                        paterno,
+                        materno,
+                        id_clues,
+                        clues:id_clues (id_clues, clues, nombre)
+                    `)
+                    .eq('auth_user_id', session.data.session.user.id)
+                    .single();
+
+                if (userResult.data) {
+                    usuarioActual = userResult.data;
+
+                    var nombreCompleto = usuarioActual.nombre || 'Usuario';
+                    if (usuarioActual.paterno) nombreCompleto += ' ' + usuarioActual.paterno;
+                    if (usuarioActual.materno) nombreCompleto += ' ' + usuarioActual.materno;
+
+                    userInfo.innerHTML = `
+                        <div style="background:rgba(255,255,255,0.02); padding:0.8rem 1rem; border-radius:8px; border:1px solid rgba(255,255,255,0.03);">
+                            👤 <strong>${nombreCompleto}</strong>
+                            ${usuarioActual.clues ? ' · 🏥 ' + usuarioActual.clues.nombre : ' · Sin centro asignado'}
+                        </div>
+                    `;
+                }
+
+                // Cargar selects
+                await cargarClues();
+                await cargarTiposCartilla();
+                await cargarMotivos();
+
+                // Evento de previsualización
+                document.querySelectorAll('#origen, #destino, #tipo_cartilla, #motivo, #cantidad').forEach(function(el) {
+                    el.addEventListener('change', previsualizar);
+                    el.addEventListener('input', previsualizar);
+                });
+
+            } catch (error) {
+                console.error('Error al cargar datos:', error);
+            }
+        }
+
+        // ============================================================
+        // 2. CARGAR CLUES (Centros)
+        // ============================================================
+        async function cargarClues() {
+            var result = await supabaseClient
+                .from('clues')
+                .select('id_clues, clues, nombre')
+                .order('nombre');
+
+            if (result.error) {
+                console.error('Error al cargar CLUES:', result.error);
+                return;
+            }
+
+            var options = '<option value="">Seleccionar centro...</option>';
+            result.data.forEach(function(item) {
+                var label = item.clues + ' - ' + item.nombre;
+                options += `<option value="${item.id_clues}">${label}</option>`;
+            });
+
+            selectOrigen.innerHTML = options;
+            selectDestino.innerHTML = options;
+
+            // Si el usuario tiene un centro asignado, preseleccionarlo como origen
+            if (usuarioActual && usuarioActual.id_clues) {
+                selectOrigen.value = usuarioActual.id_clues;
+                selectOrigen.disabled = true;
+                // Agregar indicación visual
+                var origenLabel = document.querySelector('label[for="origen"]');
+                if (origenLabel) {
+                    origenLabel.innerHTML = '🏥 Centro Origen <span style="color:rgba(255,255,255,0.3); font-weight:300; font-size:0.8rem;">(tu centro)</span>';
+                }
+            }
+        }
+
+        // ============================================================
+        // 3. CARGAR TIPOS DE CARTILLA
+        // ============================================================
+        async function cargarTiposCartilla() {
+            var result = await supabaseClient
+                .from('tipo_cartilla')
+                .select('id_tipo_cartilla, tipo_cartilla')
+                .order('tipo_cartilla');
+
+            if (result.error) {
+                console.error('Error al cargar tipos:', result.error);
+                return;
+            }
+
+            var options = '<option value="">Seleccionar tipo...</option>';
+            result.data.forEach(function(item) {
+                options += `<option value="${item.id_tipo_cartilla}">${item.tipo_cartilla}</option>`;
+            });
+
+            selectTipo.innerHTML = options;
+        }
+
+        // ============================================================
+        // 4. CARGAR MOTIVOS
+        // ============================================================
+        async function cargarMotivos() {
+            var result = await supabaseClient
+                .from('motivo_entrega')
+                .select('id_motivo, motivo')
+                .order('motivo');
+
+            if (result.error) {
+                console.error('Error al cargar motivos:', result.error);
+                return;
+            }
+
+            var options = '<option value="">Seleccionar motivo...</option>';
+            result.data.forEach(function(item) {
+                options += `<option value="${item.id_motivo}">${item.motivo}</option>`;
+            });
+
+            selectMotivo.innerHTML = options;
+        }
+
+        // ============================================================
+        // 5. PREVISUALIZACIÓN
+        // ============================================================
+        function previsualizar() {
+            var origenId = selectOrigen.value;
+            var destinoId = selectDestino.value;
+            var tipoId = selectTipo.value;
+            var motivoId = selectMotivo.value;
+            var cantidad = inputCantidad.value;
+
+            if (origenId && destinoId && tipoId && motivoId && cantidad > 0) {
+                var origenText = selectOrigen.options[selectOrigen.selectedIndex].text;
+                var destinoText = selectDestino.options[selectDestino.selectedIndex].text;
+                var tipoText = selectTipo.options[selectTipo.selectedIndex].text;
+                var motivoText = selectMotivo.options[selectMotivo.selectedIndex].text;
+
+                previewText.innerHTML = `
+                    ${cantidad} cartillas de <strong>${tipoText}</strong> 
+                    desde <span class="badge badge-origen">${origenText}</span> 
+                    hacia <span class="badge badge-destino">${destinoText}</span> 
+                    · Motivo: ${motivoText}
+                `;
+                preview.style.display = 'block';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        // ============================================================
+        // 6. REGISTRAR TRASPASO
+        // ============================================================
+        async function registrarTraspaso(event) {
+            event.preventDefault();
+
+            var origenId = selectOrigen.value;
+            var destinoId = selectDestino.value;
+            var tipoId = selectTipo.value;
+            var motivoId = selectMotivo.value;
+            var cantidad = parseInt(inputCantidad.value);
+
+            // Validaciones
+            if (!origenId || !destinoId || !tipoId || !motivoId || !cantidad || cantidad < 1) {
+                mostrarError('Por favor completa todos los campos correctamente.');
+                return;
+            }
+
+            if (origenId === destinoId) {
+                mostrarError('El centro de origen y destino no pueden ser el mismo.');
+                return;
+            }
+
+            // Verificar stock en origen
+            try {
+                var stockResult = await supabaseClient
+                    .from('inventario')
+                    .select('cantidad')
+                    .eq('id_clues', origenId)
+                    .eq('id_tipo_cartilla', tipoId)
+                    .single();
+
+                var stockActual = stockResult.data ? stockResult.data.cantidad : 0;
+
+                if (stockActual < cantidad) {
+                    mostrarError('Stock insuficiente en el centro de origen. Disponible: ' + stockActual);
+                    return;
+                }
+            } catch (error) {
+                // Si no hay registro de inventario, stock = 0
+                if (error.code === 'PGRST116') {
+                    mostrarError('El centro de origen no tiene stock de este tipo de cartilla.');
+                    return;
+                }
+                console.error('Error al verificar stock:', error);
+            }
+
+            // Deshabilitar botón
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = '<span class="loading-spinner"></span> Registrando...';
+            resultado.innerHTML = '';
+
+            try {
+                // Obtener usuario ID de la tabla `usuario`
+                var session = await supabaseClient.auth.getSession();
+                var userId = null;
+
+                if (session.data.session) {
+                    var userResult = await supabaseClient
+                        .from('usuario')
+                        .select('id_usuario')
+                        .eq('auth_user_id', session.data.session.user.id)
+                        .single();
+
+                    if (userResult.data) {
+                        userId = userResult.data.id_usuario;
+                    }
+                }
+
+                // Insertar traspaso
+                var traspasoData = {
+                    id_clues_origen: parseInt(origenId),
+                    id_clues_destino: parseInt(destinoId),
+                    id_tipo_cartilla: parseInt(tipoId),
+                    id_motivo: parseInt(motivoId),
+                    cantidad: cantidad,
+                    fecha: new Date().toISOString().split('T')[0],
+                    id_usuario: userId
+                };
+
+                var insertResult = await supabaseClient
+                    .from('traspasos')
+                    .insert(traspasoData);
+
+                if (insertResult.error) {
+                    throw insertResult.error;
+                }
+
+                // ============================================================
+                // ACTUALIZAR INVENTARIO
+                // ============================================================
+
+                // 6a. Restar del origen
+                if (stockActual - cantidad <= 0) {
+                    // Si queda en 0 o menos, eliminar el registro
+                    await supabaseClient
+                        .from('inventario')
+                        .delete()
+                        .eq('id_clues', origenId)
+                        .eq('id_tipo_cartilla', tipoId);
+                } else {
+                    // Actualizar cantidad
+                    await supabaseClient
+                        .from('inventario')
+                        .update({ cantidad: stockActual - cantidad, updated_at: new Date().toISOString() })
+                        .eq('id_clues', origenId)
+                        .eq('id_tipo_cartilla', tipoId);
+                }
+
+                // 6b. Sumar al destino
+                var stockDestinoResult = await supabaseClient
+                    .from('inventario')
+                    .select('cantidad, id_inventario')
+                    .eq('id_clues', destinoId)
+                    .eq('id_tipo_cartilla', tipoId)
+                    .single();
+
+                if (stockDestinoResult.data) {
+                    // Ya existe, actualizar
+                    var nuevaCantidadDestino = stockDestinoResult.data.cantidad + cantidad;
+                    await supabaseClient
+                        .from('inventario')
+                        .update({ cantidad: nuevaCantidadDestino, updated_at: new Date().toISOString() })
+                        .eq('id_inventario', stockDestinoResult.data.id_inventario);
+                } else {
+                    // No existe, crear nuevo registro
+                    await supabaseClient
+                        .from('inventario')
+                        .insert({
+                            id_clues: parseInt(destinoId),
+                            id_tipo_cartilla: parseInt(tipoId),
+                            cantidad: cantidad,
+                            updated_at: new Date().toISOString()
+                        });
+                }
+
+                // ============================================================
+                // ÉXITO
+                // ============================================================
+                resultado.innerHTML = `
+                    <div class="success">
+                        ✅ Traspaso registrado exitosamente.<br>
+                        <span style="font-size:0.8rem; opacity:0.7;">${cantidad} cartillas trasladadas de ${selectOrigen.options[selectOrigen.selectedIndex].text} a ${selectDestino.options[selectDestino.selectedIndex].text}</span>
+                    </div>
+                `;
+
+                // Limpiar formulario (excepto origen si está fijo)
+                if (!selectOrigen.disabled) {
+                    selectOrigen.value = '';
+                }
+                selectDestino.value = '';
+                selectTipo.value = '';
+                selectMotivo.value = '';
+                inputCantidad.value = '';
+                preview.style.display = 'none';
+
+                // Recargar selects de destino (por si cambiaron stocks)
+                // No recargamos todo para no perder selecciones
+
+            } catch (error) {
+                console.error('Error al registrar traspaso:', error);
+                mostrarError('Error al registrar: ' + (error.message || 'Error desconocido'));
+            } finally {
+                // Restaurar botón
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = 'Registrar Traspaso';
+            }
+        }
+
+        // ============================================================
+        // 7. FUNCIONES AUXILIARES
+        // ============================================================
+        function mostrarError(mensaje) {
+            resultado.innerHTML = `
+                <div class="error" style="display:block;">
+                    ❌ ${mensaje}
+                </div>
+            `;
+        }
+
+        // ============================================================
+        // 8. INICIALIZACIÓN
+        // ============================================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        window.addEventListener('load', function() {
+            cargarDatos();
+        });
+    </script>
+
+</body>
+</html>
