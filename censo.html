@@ -95,6 +95,9 @@
             --user-badge-border: rgba(0, 0, 0, 0.06);
         }
 
+        /* ============================================================
+           ESTILOS GENERALES
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -1062,6 +1065,8 @@
         function calcularEdad() {
             var fechaNacInput = document.getElementById('fecha_nac');
             var edadInput = document.getElementById('edad');
+            var sexoSelect = document.getElementById('sexo');
+            var tipoCartillaSelect = document.getElementById('tipo_cartilla');
 
             if (!fechaNacInput || !edadInput) return;
 
@@ -1076,7 +1081,213 @@
                         edad--;
                     }
                     edadInput.value = edad;
+
+                    var sexo = sexoSelect.value;
+                    if (sexo && !isNaN(edad)) {
+                        var sugerencia = sugerirTipoCartilla(edad, sexo);
+                        if (sugerencia) {
+                            var opciones = tipoCartillaSelect.options;
+                            for (var i = 0; i < opciones.length; i++) {
+                                if (opciones[i].text === sugerencia) {
+                                    tipoCartillaSelect.value = opciones[i].value;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
+            }
+        }
+
+        // ============================================================
+        // FUNCIONES PARA DECODIFICAR CURP
+        // ============================================================
+        function obtenerSexoDesdeCurp(curp) {
+            if (!curp || curp.length < 11) return null;
+            var sexoChar = curp.charAt(10).toUpperCase();
+            if (sexoChar === 'H') return 'H';
+            if (sexoChar === 'M') return 'M';
+            return null;
+        }
+
+        function obtenerEntidadDesdeCurp(curp) {
+            if (!curp || curp.length < 18) return null;
+            return curp.substring(16, 18);
+        }
+
+        var entidadMap = {
+            '01': 'Aguascalientes',
+            '02': 'Baja California',
+            '03': 'Baja California Sur',
+            '04': 'Campeche',
+            '05': 'Coahuila',
+            '06': 'Colima',
+            '07': 'Chiapas',
+            '08': 'Chihuahua',
+            '09': 'Ciudad de México',
+            '10': 'Durango',
+            '11': 'Guanajuato',
+            '12': 'Guerrero',
+            '13': 'Hidalgo',
+            '14': 'Jalisco',
+            '15': 'Estado de México',
+            '16': 'Michoacán',
+            '17': 'Morelos',
+            '18': 'Nayarit',
+            '19': 'Nuevo León',
+            '20': 'Oaxaca',
+            '21': 'Puebla',
+            '22': 'Querétaro',
+            '23': 'Quintana Roo',
+            '24': 'San Luis Potosí',
+            '25': 'Sinaloa',
+            '26': 'Sonora',
+            '27': 'Tabasco',
+            '28': 'Tamaulipas',
+            '29': 'Tlaxcala',
+            '30': 'Veracruz',
+            '31': 'Yucatán',
+            '32': 'Zacatecas'
+        };
+
+        function obtenerNombreEntidad(clave) {
+            if (!clave) return null;
+            return entidadMap[clave] || null;
+        }
+
+        function obtenerFechaNacDesdeCurp(curp) {
+            if (!curp || curp.length < 17) return null;
+            var anioStr = curp.substring(11, 13);
+            var mesStr = curp.substring(13, 15);
+            var diaStr = curp.substring(15, 17);
+            var anio = parseInt(anioStr);
+            var mes = parseInt(mesStr) - 1;
+            var dia = parseInt(diaStr);
+            var añoActual = new Date().getFullYear();
+            var anioCompleto = (anio > (añoActual - 2000)) ? 1900 + anio : 2000 + anio;
+            return new Date(anioCompleto, mes, dia);
+        }
+
+        function validarCurp(curp) {
+            if (!curp) return false;
+            var curpLimpio = curp.trim().toUpperCase();
+            var regex = /^[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}$/;
+            return regex.test(curpLimpio);
+        }
+
+        // ============================================================
+        // SUGERIR TIPO DE CARTILLA SEGÚN EDAD Y SEXO
+        // ============================================================
+        function sugerirTipoCartilla(edad, sexo) {
+            if (edad === null || edad === undefined || isNaN(edad)) return null;
+            if (!sexo) return null;
+
+            if (edad >= 0 && edad <= 9) return 'NIÑAS Y NIÑOS';
+            if (edad >= 10 && edad <= 19) return 'ADOLESCENTES';
+            if (edad >= 20 && edad <= 59) {
+                if (sexo === 'H') return 'HOMBRES';
+                if (sexo === 'M') return 'MUJERES';
+            }
+            if (edad >= 60) return 'ADULTO MAYOR';
+            return null;
+        }
+
+        // ============================================================
+        // ACTUALIZAR RESTRICCIONES SEGÚN SEXO
+        // ============================================================
+        function actualizarRestriccionesPorSexo(sexo) {
+            var embarazoSelect = document.getElementById('embarazo');
+            if (!embarazoSelect) return;
+
+            if (sexo === 'H') {
+                embarazoSelect.disabled = true;
+                var opciones = embarazoSelect.options;
+                for (var i = 0; i < opciones.length; i++) {
+                    if (opciones[i].text === 'No aplica' || opciones[i].value === '') {
+                        embarazoSelect.value = opciones[i].value;
+                        break;
+                    }
+                }
+            } else if (sexo === 'M') {
+                embarazoSelect.disabled = false;
+            }
+        }
+
+        // ============================================================
+        // PROCESAR CURP AL ESCRIBIR
+        // ============================================================
+        async function procesarCurp(curp) {
+            if (!curp) return;
+
+            var curpLimpio = curp.trim().toUpperCase();
+            var entidadSelect = document.getElementById('entidad');
+            var fechaNacInput = document.getElementById('fecha_nac');
+            var edadInput = document.getElementById('edad');
+            var sexoSelect = document.getElementById('sexo');
+            var tipoCartillaSelect = document.getElementById('tipo_cartilla');
+
+            // Detectar sexo
+            if (curpLimpio.length >= 11) {
+                var sexo = obtenerSexoDesdeCurp(curpLimpio);
+                if (sexo) {
+                    sexoSelect.value = sexo;
+                    actualizarRestriccionesPorSexo(sexo);
+                }
+            }
+
+            // Detectar fecha de nacimiento
+            if (curpLimpio.length >= 17) {
+                var fechaNac = obtenerFechaNacDesdeCurp(curpLimpio);
+                if (fechaNac && !isNaN(fechaNac.getTime())) {
+                    var anio = fechaNac.getFullYear();
+                    var mes = String(fechaNac.getMonth() + 1).padStart(2, '0');
+                    var dia = String(fechaNac.getDate()).padStart(2, '0');
+                    fechaNacInput.value = anio + '-' + mes + '-' + dia;
+                    calcularEdad();
+
+                    var edad = parseInt(edadInput.value);
+                    var sexo = sexoSelect.value;
+                    if (!isNaN(edad) && sexo) {
+                        var sugerencia = sugerirTipoCartilla(edad, sexo);
+                        if (sugerencia) {
+                            var opciones = tipoCartillaSelect.options;
+                            for (var i = 0; i < opciones.length; i++) {
+                                if (opciones[i].text === sugerencia) {
+                                    tipoCartillaSelect.value = opciones[i].value;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Detectar entidad
+            if (curpLimpio.length === 18) {
+                var claveEntidad = obtenerEntidadDesdeCurp(curpLimpio);
+                if (claveEntidad) {
+                    var nombreEntidad = obtenerNombreEntidad(claveEntidad);
+                    if (nombreEntidad && entidadSelect) {
+                        var opciones = entidadSelect.options;
+                        for (var i = 0; i < opciones.length; i++) {
+                            if (opciones[i].text === nombreEntidad) {
+                                entidadSelect.value = opciones[i].value;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (validarCurp(curpLimpio)) {
+                    document.getElementById('curp').style.borderColor = '#4cc9f0';
+                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
+                } else {
+                    document.getElementById('curp').style.borderColor = '#f72585';
+                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                }
+            } else {
+                document.getElementById('curp').style.borderColor = '';
+                document.getElementById('curp').style.boxShadow = '';
             }
         }
 
@@ -1198,6 +1409,12 @@
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
             document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
 
+            // Restaurar estado del select de embarazo (habilitado por defecto)
+            var embarazoSelect = document.getElementById('embarazo');
+            if (embarazoSelect) {
+                embarazoSelect.disabled = false;
+            }
+
             if (!catalogos.cargados) {
                 cargarCatalogos().then(function() {
                     modalOverlay.classList.add('active');
@@ -1251,6 +1468,11 @@
                 document.getElementById('pob_migrante').checked = row.pob_migrante || false;
 
                 document.getElementById('entidad').value = row.entidad_id_uuid || '';
+
+                // Actualizar restricciones por sexo
+                if (row.sexo) {
+                    actualizarRestriccionesPorSexo(row.sexo);
+                }
 
                 if (row.entidad_id_uuid) {
                     await cargarMunicipiosConValor(row.entidad_id_uuid, row.municipio_id_uuid);
@@ -1566,122 +1788,6 @@
         }
 
         // ============================================================
-        // FUNCIONES PARA DECODIFICAR CURP
-        // ============================================================
-        function obtenerSexoDesdeCurp(curp) {
-            if (!curp || curp.length < 11) return null;
-            var sexoChar = curp.charAt(10).toUpperCase();
-            if (sexoChar === 'H') return 'H';
-            if (sexoChar === 'M') return 'M';
-            return null;
-        }
-
-        function obtenerEntidadDesdeCurp(curp) {
-            if (!curp || curp.length < 18) return null;
-            return curp.substring(16, 18);
-        }
-
-        var entidadMap = {
-            '01': 'Aguascalientes', '02': 'Baja California', '03': 'Baja California Sur',
-            '04': 'Campeche', '05': 'Coahuila', '06': 'Colima',
-            '07': 'Chiapas', '08': 'Chihuahua', '09': 'Ciudad de México',
-            '10': 'Durango', '11': 'Guanajuato', '12': 'Guerrero',
-            '13': 'Hidalgo', '14': 'Jalisco', '15': 'Estado de México',
-            '16': 'Michoacán', '17': 'Morelos', '18': 'Nayarit',
-            '19': 'Nuevo León', '20': 'Oaxaca', '21': 'Puebla',
-            '22': 'Querétaro', '23': 'Quintana Roo', '24': 'San Luis Potosí',
-            '25': 'Sinaloa', '26': 'Sonora', '27': 'Tabasco',
-            '28': 'Tamaulipas', '29': 'Tlaxcala', '30': 'Veracruz',
-            '31': 'Yucatán', '32': 'Zacatecas'
-        };
-
-        function obtenerNombreEntidad(clave) {
-            if (!clave) return null;
-            return entidadMap[clave] || null;
-        }
-
-        function obtenerFechaNacDesdeCurp(curp) {
-            if (!curp || curp.length < 17) return null;
-            var anioStr = curp.substring(11, 13);
-            var mesStr = curp.substring(13, 15);
-            var diaStr = curp.substring(15, 17);
-            var anio = parseInt(anioStr);
-            var mes = parseInt(mesStr) - 1;
-            var dia = parseInt(diaStr);
-            var añoActual = new Date().getFullYear();
-            var anioCompleto = (anio > (añoActual - 2000)) ? 1900 + anio : 2000 + anio;
-            return new Date(anioCompleto, mes, dia);
-        }
-
-        function validarCurp(curp) {
-            if (!curp) return false;
-            var curpLimpio = curp.trim().toUpperCase();
-            var regex = /^[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}$/;
-            return regex.test(curpLimpio);
-        }
-
-        // ============================================================
-        // PROCESAR CURP AL ESCRIBIR
-        // ============================================================
-        async function procesarCurp(curp) {
-            if (!curp) return;
-
-            var curpLimpio = curp.trim().toUpperCase();
-            var entidadSelect = document.getElementById('entidad');
-
-            if (curpLimpio.length >= 11) {
-                var sexo = obtenerSexoDesdeCurp(curpLimpio);
-                if (sexo) {
-                    var sexoSelect = document.getElementById('sexo');
-                    if (sexoSelect) {
-                        sexoSelect.value = sexo;
-                    }
-                }
-            }
-
-            if (curpLimpio.length >= 17) {
-                var fechaNac = obtenerFechaNacDesdeCurp(curpLimpio);
-                if (fechaNac && !isNaN(fechaNac.getTime())) {
-                    var fechaNacInput = document.getElementById('fecha_nac');
-                    if (fechaNacInput) {
-                        var anio = fechaNac.getFullYear();
-                        var mes = String(fechaNac.getMonth() + 1).padStart(2, '0');
-                        var dia = String(fechaNac.getDate()).padStart(2, '0');
-                        fechaNacInput.value = anio + '-' + mes + '-' + dia;
-                        fechaNacInput.dispatchEvent(new Event('change'));
-                    }
-                }
-            }
-
-            if (curpLimpio.length === 18) {
-                var claveEntidad = obtenerEntidadDesdeCurp(curpLimpio);
-                if (claveEntidad) {
-                    var nombreEntidad = obtenerNombreEntidad(claveEntidad);
-                    if (nombreEntidad && entidadSelect) {
-                        var opciones = entidadSelect.options;
-                        for (var i = 0; i < opciones.length; i++) {
-                            if (opciones[i].text === nombreEntidad) {
-                                entidadSelect.value = opciones[i].value;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (validarCurp(curpLimpio)) {
-                    document.getElementById('curp').style.borderColor = '#4cc9f0';
-                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
-                } else {
-                    document.getElementById('curp').style.borderColor = '#f72585';
-                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-                }
-            } else {
-                document.getElementById('curp').style.borderColor = '';
-                document.getElementById('curp').style.boxShadow = '';
-            }
-        }
-
-        // ============================================================
         // INICIALIZACIÓN
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -1689,6 +1795,32 @@
         window.addEventListener('load', function() {
             createParticles();
             mostrarUsuario();
+
+            // Evento para cambios en sexo
+            var sexoSelect = document.getElementById('sexo');
+            if (sexoSelect) {
+                sexoSelect.addEventListener('change', function() {
+                    var sexo = this.value;
+                    actualizarRestriccionesPorSexo(sexo);
+
+                    var edadInput = document.getElementById('edad');
+                    var tipoCartillaSelect = document.getElementById('tipo_cartilla');
+                    var edad = parseInt(edadInput.value);
+
+                    if (!isNaN(edad) && sexo) {
+                        var sugerencia = sugerirTipoCartilla(edad, sexo);
+                        if (sugerencia) {
+                            var opciones = tipoCartillaSelect.options;
+                            for (var i = 0; i < opciones.length; i++) {
+                                if (opciones[i].text === sugerencia) {
+                                    tipoCartillaSelect.value = opciones[i].value;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
 
             cargarCatalogos().then(function() {
                 cargarCenso();
