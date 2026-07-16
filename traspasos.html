@@ -1,14 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Traspasos - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
     <style>
+        /* ============================================================
+           CSS VARIABLES PARA TEMA DIURNO / NOCTURNO
+           ============================================================ */
+        :root {
+            /* Modo nocturno (por defecto) */
+            --bg-gradient-start: #141E30;
+            --bg-gradient-end: #243B55;
+            --container-bg: #1c2541;
+            --container-shadow-1: #0d1320;
+            --container-shadow-2: #2b3f60;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --text-muted-light: rgba(255, 255, 255, 0.4);
+            --input-bg: #1c2541;
+            --input-shadow-1: #0d1320;
+            --input-shadow-2: #2b3f60;
+            --input-focus-bg: #243b55;
+            --input-placeholder: rgba(255, 255, 255, 0.5);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-primary-shadow-1: #2b3f60;
+            --btn-primary-shadow-2: #3a56d4;
+            --btn-danger: #f72585;
+            --btn-danger-hover: #d91a6e;
+            --btn-secondary-bg: #1c2541;
+            --error-color: #f72585;
+            --footer-color: rgba(255, 255, 255, 0.5);
+            --particle-color: rgba(255, 255, 255, 0.4);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --badge-origen-bg: rgba(247, 37, 133, 0.15);
+            --badge-origen-text: #f72585;
+            --badge-destino-bg: rgba(76, 201, 240, 0.15);
+            --badge-destino-text: #4cc9f0;
+            --success-bg: rgba(76, 201, 240, 0.1);
+            --success-border: rgba(76, 201, 240, 0.2);
+            --success-text: #4cc9f0;
+            --error-bg: rgba(247, 37, 133, 0.1);
+            --error-border: rgba(247, 37, 133, 0.2);
+            --error-text: #f72585;
+            --info-box-bg: rgba(255, 255, 255, 0.02);
+            --info-box-border: rgba(255, 255, 255, 0.03);
+            --info-box-text: rgba(255, 255, 255, 0.4);
+            --select-option-bg: #1a1a2e;
+            --label-color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Modo diurno */
+        body.light-mode {
+            --bg-gradient-start: #e0e5ec;
+            --bg-gradient-end: #f0f2f8;
+            --container-bg: #e8ecf4;
+            --container-shadow-1: #b8bcc8;
+            --container-shadow-2: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #2d2d44;
+            --text-muted: rgba(0, 0, 0, 0.7);
+            --text-muted-light: rgba(0, 0, 0, 0.4);
+            --input-bg: #e8ecf4;
+            --input-shadow-1: #b8bcc8;
+            --input-shadow-2: #ffffff;
+            --input-focus-bg: #d5dbe8;
+            --input-placeholder: rgba(0, 0, 0, 0.4);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-primary-shadow-1: #2a3f8a;
+            --btn-primary-shadow-2: #6b8aff;
+            --btn-danger: #e63946;
+            --btn-danger-hover: #c62828;
+            --btn-secondary-bg: #e8ecf4;
+            --error-color: #e63946;
+            --footer-color: rgba(0, 0, 0, 0.5);
+            --particle-color: rgba(0, 0, 0, 0.10);
+            --border-color: rgba(0, 0, 0, 0.06);
+            --badge-origen-bg: rgba(230, 57, 70, 0.10);
+            --badge-origen-text: #c62828;
+            --badge-destino-bg: rgba(14, 165, 233, 0.10);
+            --badge-destino-text: #0ea5e9;
+            --success-bg: rgba(14, 165, 233, 0.08);
+            --success-border: rgba(14, 165, 233, 0.15);
+            --success-text: #0ea5e9;
+            --error-bg: rgba(230, 57, 70, 0.08);
+            --error-border: rgba(230, 57, 70, 0.15);
+            --error-text: #c62828;
+            --info-box-bg: rgba(0, 0, 0, 0.02);
+            --info-box-border: rgba(0, 0, 0, 0.04);
+            --info-box-text: rgba(0, 0, 0, 0.4);
+            --select-option-bg: #ffffff;
+            --label-color: rgba(0, 0, 0, 0.7);
+        }
+
+        /* ============================================================
+           ESTILOS GENERALES
+           ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -17,37 +113,196 @@
         }
 
         body {
-            background: #141E30;
+            background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
             min-height: 100vh;
             padding: 2rem;
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            transition: background 0.5s ease, color 0.3s ease;
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
 
+        /* ============================================================
+           PARTÍCULAS (igual que login y dashboard)
+           ============================================================ */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--particle-color);
+            border-radius: 50%;
+            animation: float linear infinite;
+            transition: background 0.5s ease;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
+           CLAYMORPHISM CONTAINER
+           ============================================================ */
         .container {
             max-width: 700px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            margin: 0 auto;
+            background: var(--container-bg);
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 2rem;
-            color: white;
+            position: relative;
+            z-index: 1;
+            box-shadow: 9px 9px 18px var(--container-shadow-1),
+                -9px -9px 18px var(--container-shadow-2);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            animation: fadeIn 0.6s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+           BOTÓN DE TEMA (igual que login y dashboard)
+           ============================================================ */
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--container-bg);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.3rem;
+            cursor: pointer;
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+        }
+
+        /* ============================================================
+           HEADER
+           ============================================================ */
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-right: 3.5rem;
         }
 
         h1 {
             font-weight: 600;
             font-size: 1.8rem;
             margin-bottom: 0.25rem;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
         }
 
         .subtitle {
-            color: rgba(255, 255, 255, 0.3);
+            color: var(--text-muted);
             font-size: 0.9rem;
-            margin-bottom: 1.5rem;
+            transition: color 0.3s ease;
         }
 
+        /* ============================================================
+           BOTONES CLAY
+           ============================================================ */
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--btn-primary);
+            color: white;
+            font-size: 1rem;
+            box-shadow: 6px 6px 12px var(--btn-primary-shadow-1),
+                -6px -6px 12px var(--btn-primary-shadow-2);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--btn-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--btn-secondary-bg);
+            color: var(--text-primary);
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--btn-danger);
+            color: white;
+            box-shadow: 4px 4px 8px rgba(247, 37, 133, 0.2),
+                -4px -4px 8px rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-danger:hover {
+            background: var(--btn-danger-hover);
+        }
+
+        /* ============================================================
+           FORMULARIO
+           ============================================================ */
         .form-group {
             margin-bottom: 1.25rem;
         }
@@ -56,80 +311,42 @@
             display: block;
             font-weight: 500;
             font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--label-color);
             margin-bottom: 0.4rem;
+            transition: color 0.3s ease;
         }
 
         select,
         input {
             width: 100%;
             padding: 0.7rem 1rem;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
+            border: none;
+            border-radius: 12px;
+            background: var(--input-bg);
+            color: var(--text-primary);
             font-size: 0.95rem;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: inset 4px 4px 8px var(--input-shadow-1),
+                inset -4px -4px 8px var(--input-shadow-2);
         }
 
         select:focus,
         input:focus {
             outline: none;
-            border-color: #4cc9f0;
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--input-focus-bg);
+            box-shadow: inset 2px 2px 5px var(--input-shadow-1),
+                inset -2px -2px 5px var(--input-shadow-2),
+                0 0 0 3px rgba(67, 97, 238, 0.2);
         }
 
         select option {
-            background: #1a1a2e;
-            color: white;
+            background: var(--select-option-bg);
+            color: var(--text-primary);
         }
 
-        .btn {
-            width: 100%;
-            padding: 0.9rem;
-            border: none;
-            border-radius: 10px;
-            background: #4cc9f0;
-            color: #141E30;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 0.5rem;
-        }
-
-        .btn:hover {
-            background: #3ab8dd;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(76, 201, 240, 0.2);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 0.5rem;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: none;
-        }
-
-        .btn-danger {
-            background: #f72585;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #d91a6e;
-            box-shadow: 0 4px 20px rgba(247, 37, 133, 0.2);
+        input::placeholder {
+            color: var(--input-placeholder);
+            transition: color 0.3s ease;
         }
 
         .row {
@@ -138,25 +355,76 @@
             gap: 1rem;
         }
 
+        /* ============================================================
+           USER BADGE
+           ============================================================ */
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            background: var(--container-bg);
+            padding: 0.6rem 1.2rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            transition: background 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+        }
+
+        .user-badge strong {
+            color: var(--text-primary);
+        }
+
+        .user-badge .muted {
+            color: var(--text-muted-light);
+        }
+
+        /* ============================================================
+           PREVIEW, SUCCESS, ERROR
+           ============================================================ */
+        .info-box {
+            background: var(--info-box-bg);
+            padding: 0.8rem 1rem;
+            border-radius: 12px;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--info-box-text);
+            border: 1px solid var(--info-box-border);
+            transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+        }
+
+        .info-box strong {
+            color: var(--text-secondary);
+        }
+
         .success {
-            background: rgba(76, 201, 240, 0.1);
-            border: 1px solid rgba(76, 201, 240, 0.2);
+            background: var(--success-bg);
+            border: 1px solid var(--success-border);
             padding: 1rem;
-            border-radius: 10px;
-            color: #4cc9f0;
+            border-radius: 12px;
+            color: var(--success-text);
             text-align: center;
             margin-top: 1rem;
+            transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
         }
 
         .error {
-            background: rgba(247, 37, 133, 0.1);
-            border: 1px solid rgba(247, 37, 133, 0.2);
+            background: var(--error-bg);
+            border: 1px solid var(--error-border);
             padding: 1rem;
-            border-radius: 10px;
-            color: #f72585;
+            border-radius: 12px;
+            color: var(--error-text);
             text-align: center;
             margin-top: 1rem;
             display: none;
+            transition: background 0.3s ease, border 0.3s ease, color 0.3s ease;
+        }
+
+        .error.show {
+            display: block;
         }
 
         .loading-spinner {
@@ -165,7 +433,7 @@
             height: 18px;
             border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            border-top-color: white;
+            border-top-color: var(--text-primary);
             animation: spin 0.8s linear infinite;
             margin-right: 0.5rem;
             vertical-align: middle;
@@ -177,45 +445,9 @@
             }
         }
 
-        .info-box {
-            background: rgba(255, 255, 255, 0.02);
-            padding: 0.8rem 1rem;
-            border-radius: 8px;
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .info-box strong {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .header-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            color: rgba(255, 255, 255, 0.12);
-            font-size: 0.7rem;
-        }
-
-        @media (max-width: 600px) {
-            .row {
-                grid-template-columns: 1fr;
-            }
-            .container {
-                padding: 1rem;
-            }
-        }
-
+        /* ============================================================
+           BADGES
+           ============================================================ */
         .badge {
             display: inline-block;
             padding: 0.2rem 0.8rem;
@@ -225,25 +457,110 @@
         }
 
         .badge-origen {
-            background: rgba(247, 37, 133, 0.15);
-            color: #f72585;
+            background: var(--badge-origen-bg);
+            color: var(--badge-origen-text);
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .badge-destino {
-            background: rgba(76, 201, 240, 0.15);
-            color: #4cc9f0;
+            background: var(--badge-destino-bg);
+            color: var(--badge-destino-text);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--footer-color);
+            font-size: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                padding-right: 0;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .theme-toggle {
+                top: 0.5rem;
+                right: 0.5rem;
+                width: 34px;
+                height: 34px;
+                font-size: 1rem;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .btn-primary {
+                font-size: 0.9rem;
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .user-badge {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            select,
+            input {
+                font-size: 0.85rem;
+                padding: 0.5rem 0.7rem;
+            }
         }
     </style>
 </head>
+
 <body>
 
+    <!-- Partículas (igual que login y dashboard) -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
+        <!-- Botón de tema (igual que login y dashboard) -->
+        <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">
+            🌙
+        </button>
+
+        <!-- HEADER -->
         <div class="header-actions">
             <div>
                 <h1>🔄 Traspasos</h1>
                 <p class="subtitle">Registrar movimientos de cartillas entre centros</p>
             </div>
-            <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'" style="width:auto; padding:0.5rem 1.2rem;">
+            <button class="btn btn-secondary" onclick="window.location.href='dashboard.html'">
                 ← Volver al Dashboard
             </button>
         </div>
@@ -294,7 +611,7 @@
                 ⚡ <strong id="previewText">Previsualización</strong>
             </div>
 
-            <button type="submit" class="btn" id="submitBtn">
+            <button type="submit" class="btn btn-primary" id="submitBtn">
                 Registrar Traspaso
             </button>
 
@@ -307,6 +624,60 @@
     </div>
 
     <script>
+        // ============================================================
+        // FUNCIONALIDAD DIURNO / NOCTURNO (igual que login y dashboard)
+        // ============================================================
+
+        (function setupTheme() {
+            var body = document.body;
+            var themeToggle = document.getElementById('themeToggle');
+            var icon = themeToggle;
+
+            var savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                body.classList.add('light-mode');
+                icon.textContent = '☀️';
+            } else {
+                icon.textContent = '🌙';
+            }
+
+            themeToggle.addEventListener('click', function () {
+                var isLight = body.classList.toggle('light-mode');
+                if (isLight) {
+                    icon.textContent = '☀️';
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    icon.textContent = '🌙';
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        })();
+
+        // ============================================================
+        // PARTÍCULAS (igual que login y dashboard)
+        // ============================================================
+
+        function createParticles() {
+            var particlesContainer = document.getElementById('particles');
+            var particleCount = 15;
+
+            for (var i = 0; i < particleCount; i++) {
+                var particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                var size = Math.random() * 10 + 5;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '-' + size + 'px';
+                particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
         // ============================================================
         // CONFIGURACIÓN DE SUPABASE
         // ============================================================
@@ -335,7 +706,6 @@
         // ============================================================
         async function cargarDatos() {
             try {
-                // Verificar sesión
                 var session = await supabaseClient.auth.getSession();
 
                 if (!session.data.session) {
@@ -343,7 +713,6 @@
                     return;
                 }
 
-                // Obtener usuario actual
                 var userResult = await supabaseClient
                     .from('usuario')
                     .select(`
@@ -365,20 +734,19 @@
                     if (usuarioActual.materno) nombreCompleto += ' ' + usuarioActual.materno;
 
                     userInfo.innerHTML = `
-                        <div style="background:rgba(255,255,255,0.02); padding:0.8rem 1rem; border-radius:8px; border:1px solid rgba(255,255,255,0.03);">
+                        <div class="user-badge">
                             👤 <strong>${nombreCompleto}</strong>
-                            ${usuarioActual.clues ? ' · 🏥 ' + usuarioActual.clues.nombre : ' · Sin centro asignado'}
+                            <span class="muted">·</span>
+                            ${usuarioActual.clues ? '🏥 ' + usuarioActual.clues.nombre : 'Sin centro asignado'}
                         </div>
                     `;
                 }
 
-                // Cargar selects
                 await cargarClues();
                 await cargarTiposCartilla();
                 await cargarMotivos();
 
-                // Evento de previsualización
-                document.querySelectorAll('#origen, #destino, #tipo_cartilla, #motivo, #cantidad').forEach(function(el) {
+                document.querySelectorAll('#origen, #destino, #tipo_cartilla, #motivo, #cantidad').forEach(function (el) {
                     el.addEventListener('change', previsualizar);
                     el.addEventListener('input', previsualizar);
                 });
@@ -403,7 +771,7 @@
             }
 
             var options = '<option value="">Seleccionar centro...</option>';
-            result.data.forEach(function(item) {
+            result.data.forEach(function (item) {
                 var label = item.clues + ' - ' + item.nombre;
                 options += `<option value="${item.id_clues}">${label}</option>`;
             });
@@ -411,14 +779,12 @@
             selectOrigen.innerHTML = options;
             selectDestino.innerHTML = options;
 
-            // Si el usuario tiene un centro asignado, preseleccionarlo como origen
             if (usuarioActual && usuarioActual.id_clues) {
                 selectOrigen.value = usuarioActual.id_clues;
                 selectOrigen.disabled = true;
-                // Agregar indicación visual
                 var origenLabel = document.querySelector('label[for="origen"]');
                 if (origenLabel) {
-                    origenLabel.innerHTML = '🏥 Centro Origen <span style="color:rgba(255,255,255,0.3); font-weight:300; font-size:0.8rem;">(tu centro)</span>';
+                    origenLabel.innerHTML = '🏥 Centro Origen <span style="color:var(--text-muted-light); font-weight:300; font-size:0.75rem;">(tu centro)</span>';
                 }
             }
         }
@@ -438,7 +804,7 @@
             }
 
             var options = '<option value="">Seleccionar tipo...</option>';
-            result.data.forEach(function(item) {
+            result.data.forEach(function (item) {
                 options += `<option value="${item.id_tipo_cartilla}">${item.tipo_cartilla}</option>`;
             });
 
@@ -460,7 +826,7 @@
             }
 
             var options = '<option value="">Seleccionar motivo...</option>';
-            result.data.forEach(function(item) {
+            result.data.forEach(function (item) {
                 options += `<option value="${item.id_motivo}">${item.motivo}</option>`;
             });
 
@@ -507,7 +873,6 @@
             var motivoId = selectMotivo.value;
             var cantidad = parseInt(inputCantidad.value);
 
-            // Validaciones
             if (!origenId || !destinoId || !tipoId || !motivoId || !cantidad || cantidad < 1) {
                 mostrarError('Por favor completa todos los campos correctamente.');
                 return;
@@ -518,7 +883,6 @@
                 return;
             }
 
-            // Verificar stock en origen
             try {
                 var stockResult = await supabaseClient
                     .from('inventario')
@@ -534,7 +898,6 @@
                     return;
                 }
             } catch (error) {
-                // Si no hay registro de inventario, stock = 0
                 if (error.code === 'PGRST116') {
                     mostrarError('El centro de origen no tiene stock de este tipo de cartilla.');
                     return;
@@ -542,13 +905,11 @@
                 console.error('Error al verificar stock:', error);
             }
 
-            // Deshabilitar botón
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<span class="loading-spinner"></span> Registrando...';
             resultado.innerHTML = '';
 
             try {
-                // Obtener usuario ID de la tabla `usuario`
                 var session = await supabaseClient.auth.getSession();
                 var userId = null;
 
@@ -564,7 +925,6 @@
                     }
                 }
 
-                // Insertar traspaso
                 var traspasoData = {
                     id_clues_origen: parseInt(origenId),
                     id_clues_destino: parseInt(destinoId),
@@ -583,20 +943,14 @@
                     throw insertResult.error;
                 }
 
-                // ============================================================
-                // ACTUALIZAR INVENTARIO
-                // ============================================================
-
-                // 6a. Restar del origen
+                // Actualizar inventario - ORIGEN
                 if (stockActual - cantidad <= 0) {
-                    // Si queda en 0 o menos, eliminar el registro
                     await supabaseClient
                         .from('inventario')
                         .delete()
                         .eq('id_clues', origenId)
                         .eq('id_tipo_cartilla', tipoId);
                 } else {
-                    // Actualizar cantidad
                     await supabaseClient
                         .from('inventario')
                         .update({ cantidad: stockActual - cantidad, updated_at: new Date().toISOString() })
@@ -604,7 +958,7 @@
                         .eq('id_tipo_cartilla', tipoId);
                 }
 
-                // 6b. Sumar al destino
+                // Actualizar inventario - DESTINO
                 var stockDestinoResult = await supabaseClient
                     .from('inventario')
                     .select('cantidad, id_inventario')
@@ -613,14 +967,12 @@
                     .single();
 
                 if (stockDestinoResult.data) {
-                    // Ya existe, actualizar
                     var nuevaCantidadDestino = stockDestinoResult.data.cantidad + cantidad;
                     await supabaseClient
                         .from('inventario')
                         .update({ cantidad: nuevaCantidadDestino, updated_at: new Date().toISOString() })
                         .eq('id_inventario', stockDestinoResult.data.id_inventario);
                 } else {
-                    // No existe, crear nuevo registro
                     await supabaseClient
                         .from('inventario')
                         .insert({
@@ -631,9 +983,6 @@
                         });
                 }
 
-                // ============================================================
-                // ÉXITO
-                // ============================================================
                 resultado.innerHTML = `
                     <div class="success">
                         ✅ Traspaso registrado exitosamente.<br>
@@ -641,7 +990,6 @@
                     </div>
                 `;
 
-                // Limpiar formulario (excepto origen si está fijo)
                 if (!selectOrigen.disabled) {
                     selectOrigen.value = '';
                 }
@@ -651,14 +999,10 @@
                 inputCantidad.value = '';
                 preview.style.display = 'none';
 
-                // Recargar selects de destino (por si cambiaron stocks)
-                // No recargamos todo para no perder selecciones
-
             } catch (error) {
                 console.error('Error al registrar traspaso:', error);
                 mostrarError('Error al registrar: ' + (error.message || 'Error desconocido'));
             } finally {
-                // Restaurar botón
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = 'Registrar Traspaso';
             }
@@ -668,11 +1012,11 @@
         // 7. FUNCIONES AUXILIARES
         // ============================================================
         function mostrarError(mensaje) {
-            resultado.innerHTML = `
-                <div class="error" style="display:block;">
-                    ❌ ${mensaje}
-                </div>
-            `;
+            var errorDiv = document.createElement('div');
+            errorDiv.className = 'error show';
+            errorDiv.innerHTML = '❌ ' + mensaje;
+            resultado.innerHTML = '';
+            resultado.appendChild(errorDiv);
         }
 
         // ============================================================
@@ -680,10 +1024,22 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
+            createParticles();
             cargarDatos();
+
+            // Efecto hover en inputs (igual que login)
+            document.querySelectorAll('input, select').forEach(function (el) {
+                el.addEventListener('mouseenter', function () {
+                    this.style.transform = 'scale(1.02)';
+                });
+                el.addEventListener('mouseleave', function () {
+                    this.style.transform = 'scale(1)';
+                });
+            });
         });
     </script>
 
 </body>
+
 </html>
