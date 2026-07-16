@@ -949,7 +949,7 @@
         }
 
         // ============================================================
-        // 6. REGISTRAR TRASPASO
+        // 6. REGISTRAR TRASPASO - CORREGIDO (SIN parseInt en UUID)
         // ============================================================
         async function registrarTraspaso(event) {
             event.preventDefault();
@@ -959,6 +959,8 @@
             var tipoId = selectTipo.value;
             var motivoId = selectMotivo.value;
             var cantidad = parseInt(inputCantidad.value);
+
+            console.log('Datos del traspaso:', { origenId, destinoId, tipoId, motivoId, cantidad });
 
             if (!origenId || !destinoId || !tipoId || !motivoId || !cantidad || cantidad < 1) {
                 mostrarError('Por favor completa todos los campos correctamente.');
@@ -970,13 +972,25 @@
                 return;
             }
 
+            // Verificar que los IDs sean UUID válidos (formato 8-4-4-4-12)
+            const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            if (!uuidRegex.test(origenId) || !uuidRegex.test(destinoId) || !uuidRegex.test(tipoId) || !uuidRegex.test(motivoId)) {
+                mostrarError('Error: Los datos seleccionados no son válidos.');
+                console.error('UUID inválido:', { origenId, destinoId, tipoId, motivoId });
+                return;
+            }
+
             try {
-                // Verificar stock en origen
+                // Verificar stock en origen - USANDO UUID DIRECTAMENTE (sin parseInt)
+                console.log('Verificando stock para:', { clues_id_uuid: origenId, tipo_cartilla_id_uuid: tipoId });
+
                 var stockResult = await supabaseClient
                     .from('inventario')
                     .select('cantidad')
                     .eq('clues_id_uuid', origenId)
                     .eq('tipo_cartilla_id_uuid', tipoId);
+
+                console.log('Resultado stock:', stockResult);
 
                 var stockActual = 0;
                 if (stockResult.data && stockResult.data.length > 0) {
@@ -1004,15 +1018,15 @@
                 if (session.data.session) {
                     var userResult = await supabaseClient
                         .from('usuario')
-                        .select('id_usuario')
+                        .select('id_uuid')
                         .eq('auth_user_id', session.data.session.user.id);
 
                     if (userResult.data && userResult.data.length > 0) {
-                        userId = userResult.data[0].id_usuario;
+                        userId = userResult.data[0].id_uuid;
                     }
                 }
 
-                // Crear traspaso con UUID
+                // Crear traspaso con UUID (sin parseInt)
                 var traspasoData = {
                     origen_id_uuid: origenId,
                     destino_id_uuid: destinoId,
@@ -1023,11 +1037,14 @@
                     usuario_id_uuid: userId
                 };
 
+                console.log('Datos a insertar:', traspasoData);
+
                 var insertResult = await supabaseClient
                     .from('traspasos')
                     .insert(traspasoData);
 
                 if (insertResult.error) {
+                    console.error('Error al insertar traspaso:', insertResult.error);
                     throw insertResult.error;
                 }
 
@@ -1085,11 +1102,11 @@
                 // ÉXITO
                 // ============================================================
                 resultado.innerHTML = `
-                    <div class="success">
-                        ✅ Traspaso registrado exitosamente.<br>
-                        <span style="font-size:0.8rem; opacity:0.7;">${cantidad} cartillas trasladadas de ${selectOrigen.options[selectOrigen.selectedIndex].text} a ${selectDestino.options[selectDestino.selectedIndex].text}</span>
-                    </div>
-                `;
+            <div class="success">
+                ✅ Traspaso registrado exitosamente.<br>
+                <span style="font-size:0.8rem; opacity:0.7;">${cantidad} cartillas trasladadas de ${selectOrigen.options[selectOrigen.selectedIndex].text} a ${selectDestino.options[selectDestino.selectedIndex].text}</span>
+            </div>
+        `;
 
                 if (!selectOrigen.disabled) {
                     selectOrigen.value = '';
