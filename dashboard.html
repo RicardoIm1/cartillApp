@@ -1,37 +1,366 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-    <title>Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sistema de Cartillas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Librería de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #141E30;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            padding: 3rem;
+            width: 600px;
+            max-width: 100%;
+            animation: fadeIn 0.6s ease-out;
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            font-size: 2rem;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info p {
+            margin: 0.5rem 0;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .user-info .label {
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: #f72585;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: #d91a6e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.3);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+        }
+
+        .error {
+            color: #f72585;
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 500;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        .status-badge.active {
+            background: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .status-badge.inactive {
+            background: rgba(247, 37, 133, 0.2);
+            color: #f72585;
+            border: 1px solid rgba(247, 37, 133, 0.3);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .menu-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            border-color: rgba(67, 97, 238, 0.3);
+        }
+
+        .menu-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-card .title {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .menu-card .desc {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.25rem;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Bienvenido</h1>
-    <div id="user-info"></div>
-    <button onclick="logout()">Cerrar Sesión</button>
+
+    <div class="dashboard-container" id="dashboardContainer">
+        <h1>Panel de Control</h1>
+        <p style="text-align:center; color:rgba(255,255,255,0.5); font-size:0.9rem; margin-bottom:1.5rem;">
+            Sistema de Cartillas de Salud
+        </p>
+
+        <div class="user-info" id="userInfo">
+            <div id="userContent">
+                <div style="text-align:center; padding:1rem;">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top:1rem; color:rgba(255,255,255,0.6);">Cargando sesión...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="menu-grid">
+            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
+                <div class="icon">📋</div>
+                <div class="title">Inventario</div>
+                <div class="desc">Consultar y gestionar existencias</div>
+            </a>
+            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
+                <div class="icon">📊</div>
+                <div class="title">Reportes</div>
+                <div class="desc">Generar reportes mensuales</div>
+            </a>
+            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
+                <div class="icon">🔄</div>
+                <div class="title">Movimientos</div>
+                <div class="desc">Registrar traslados y entregas</div>
+            </a>
+            <a href="#" class="menu-card" onclick="alert('Módulo en construcción')">
+                <div class="icon">👥</div>
+                <div class="title">Centros</div>
+                <div class="desc">Administrar centros de salud</div>
+            </a>
+        </div>
+
+        <button class="btn" onclick="logout()">
+            Cerrar Sesión
+        </button>
+
+        <div id="error" class="error"></div>
+        <div class="footer">
+            Sistema de Cartillas de Salud © <span id="currentYear"></span>
+        </div>
+    </div>
 
     <script>
-        const SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // ============================================================
+        // CONFIGURACIÓN DE SUPABASE
+        // ============================================================
+        // Reemplaza estos valores con los de tu proyecto
+        var SUPABASE_URL = 'https://tu-proyecto.supabase.co';
+        var SUPABASE_ANON_KEY = 'tu-clave-anon-publica';
 
-        // Verificar sesión al cargar
+        // Inicializar cliente de Supabase
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ============================================================
+        // VERIFICAR SESIÓN
+        // ============================================================
+
         async function checkSession() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) {
-                window.location.href = 'login.html';
-                return;
+            var userContent = document.getElementById('userContent');
+            var errorElement = document.getElementById('error');
+
+            try {
+                // Obtener sesión actual
+                var result = await supabaseClient.auth.getSession();
+                var session = result.data.session;
+                var error = result.error;
+
+                if (error) {
+                    throw error;
+                }
+
+                if (!session) {
+                    // No hay sesión, redirigir al login
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Obtener datos del usuario
+                var user = session.user;
+                var userMetadata = user.user_metadata || {};
+
+                // Mostrar información del usuario
+                userContent.innerHTML = `
+                    <p><span class="label">Correo electrónico</span><br><strong>${user.email}</strong></p>
+                    <p><span class="label">ID de usuario</span><br><span style="font-size:0.8rem; color:rgba(255,255,255,0.6);">${user.id}</span></p>
+                    <p><span class="label">Último acceso</span><br><span style="font-size:0.8rem; color:rgba(255,255,255,0.6);">${new Date(user.last_sign_in_at || Date.now()).toLocaleString()}</span></p>
+                    <div style="margin-top:0.75rem;">
+                        <span class="status-badge active">● Sesión activa</span>
+                    </div>
+                `;
+
+                // Guardar usuario en localStorage para otros módulos
+                localStorage.setItem('supabase_user', JSON.stringify(user));
+                localStorage.setItem('supabase_session', JSON.stringify(session));
+
+            } catch (error) {
+                console.error('Error al verificar sesión:', error);
+                if (errorElement) {
+                    errorElement.textContent = 'Error al verificar la sesión. Redirigiendo al login...';
+                }
+
+                // Redirigir al login después de 2 segundos
+                setTimeout(function () {
+                    window.location.href = 'login.html';
+                }, 2000);
             }
-            document.getElementById('user-info').textContent = 
-                `Usuario: ${session.user.email}`;
         }
 
-        // Cerrar sesión
+        // ============================================================
+        // FUNCIÓN PARA CERRAR SESIÓN
+        // ============================================================
+
         async function logout() {
-            await supabase.auth.signOut();
-            window.location.href = 'login.html';
+            var errorElement = document.getElementById('error');
+
+            try {
+                var result = await supabaseClient.auth.signOut();
+                var error = result.error;
+
+                if (error) {
+                    throw error;
+                }
+
+                // Limpiar localStorage
+                localStorage.removeItem('supabase_user');
+                localStorage.removeItem('supabase_session');
+
+                // Redirigir al login
+                window.location.href = 'login.html';
+
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+                if (errorElement) {
+                    errorElement.textContent = 'Error al cerrar sesión: ' + error.message;
+                }
+            }
         }
 
-        checkSession();
+        // ============================================================
+        // INICIALIZACIÓN
+        // ============================================================
+
+        // Año actual en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Verificar sesión al cargar la página
+        window.addEventListener('load', function () {
+            checkSession();
+        });
+
+        // Exponer logout globalmente
+        window.logout = logout;
     </script>
+
 </body>
+
 </html>
