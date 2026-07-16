@@ -4,11 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title> - VERSIÓN 2026-07-08- Inicio de Sesión</title>
+  <title>Inicio de Sesión</title>
   <base target="_top" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="styles_login.css" rel="stylesheet">
+  
+  <!-- Librería de Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <style>
     :root {
       --primary: #4361ee;
@@ -26,7 +28,6 @@
       font-size: 80%;
       background-color: var(--blancof);
       height: 80%;
-
     }
 
     *,
@@ -48,7 +49,6 @@
       color: var(--light);
       overflow: hidden;
       height: 100vh;
-
     }
 
     .glass-container {
@@ -71,10 +71,17 @@
         opacity: 0;
         transform: translateY(20px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-20px);
+        pointer-events: none;
       }
     }
 
@@ -104,7 +111,7 @@
 
     label {
       display: block;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       font-weight: 500;
       color: rgba(255, 255, 255, 0.9);
     }
@@ -116,7 +123,7 @@
       border-radius: 10px;
       background: rgba(255, 255, 255, 0.1);
       color: white;
-      font-size: 1.2rem;
+      font-size: 1rem;
       transition: all 0.3s ease;
     }
 
@@ -160,6 +167,12 @@
       transform: translateY(0);
     }
 
+    .btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .loading {
       display: inline-block;
       width: 20px;
@@ -184,39 +197,32 @@
       text-align: center;
       font-weight: 500;
       animation: shake 0.5s ease;
+      min-height: 2rem;
     }
 
     @keyframes shake {
-
       0%,
       100% {
         transform: translateX(0);
       }
-
       20%,
       60% {
         transform: translateX(-5px);
       }
-
       40%,
       80% {
         transform: translateX(5px);
       }
     }
 
-
     .footer {
       text-align: center;
       margin-top: 2rem;
       color: rgba(255, 255, 255, 0.6);
       font-size: 0.9rem;
-      position: absolute;
-      bottom: 1rem;
-      left: 0;
-      width: 100%;
     }
 
-    /* Efecto de partículas */
+    /* Partículas */
     .particles {
       position: fixed;
       top: 0;
@@ -235,37 +241,24 @@
       animation: float linear infinite;
     }
 
-    /* Animaciones */
     @keyframes float {
       0% {
         transform: translateY(0) rotate(0deg);
         opacity: 1;
       }
-
       100% {
         transform: translateY(-1000px) rotate(720deg);
         opacity: 0;
       }
     }
 
-
-    /* Responsive */
     @media (max-width: 992px) {
       .glass-container {
         padding: 2rem;
         width: 90vw;
       }
-
       h2 {
         font-size: 1.5rem;
-      }
-    }
-
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        transform: translateY(-20px);
-        pointer-events: none;
       }
     }
   </style>
@@ -274,27 +267,25 @@
 <body>
   <div class="particles" id="particles"></div>
 
-  <form onsubmit="login(); return false;">
+  <form id="loginForm" onsubmit="login(event);">
     <div class="glass-container">
       <div class="logo">
-        <!-- SVG logo -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="60px" height="60px">
           <path d="M0 0h24v24H0z" fill="none" />
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
         </svg>
       </div>
 
-      <h2>Iniciar Sesión - PRUEBA FINAL 2</h2>
+      <h2>Iniciar Sesión</h2>
 
       <div class="form-group">
-        <label for="mail">mail</label>
-        <input type="text" id="mail" placeholder="Ingresa tu mail" required autocomplete="off" />
+        <label for="email">Correo Electrónico</label>
+        <input type="email" id="email" placeholder="ejemplo@correo.com" required autocomplete="email" />
       </div>
 
       <div class="form-group">
-        <label for="celular">contraseña</label>
-        <input type="password" id="pass" placeholder="Ingresa tu contraseña" required autocomplete="off" />
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" placeholder="Ingresa tu contraseña" required autocomplete="current-password" />
       </div>
 
       <button type="submit" class="btn" id="loginBtn">
@@ -311,10 +302,122 @@
   </form>
 
   <script>
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
-  </script>
+    // ============================================================
+    // CONFIGURACIÓN DE SUPABASE
+    // ============================================================
+    // Reemplaza estos valores con los de tu proyecto
+    /* NEXT_PUBLIC_SUPABASE_URL=https://apsvmojzniglbpmmaugd.supabase.co
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1 */
+    
+    const SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
 
-  <script>
+    // Inicializar cliente de Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ============================================================
+    // FUNCIONES DE AUTENTICACIÓN
+    // ============================================================
+
+    async function login(event) {
+      event.preventDefault(); // Evitar que el formulario se envíe
+
+      // Obtener elementos del DOM
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const errorElement = document.getElementById('error');
+      const btnText = document.getElementById('btnText');
+      const btnLoader = document.getElementById('btnLoader');
+      const loginBtn = document.getElementById('loginBtn');
+
+      // Limpiar error anterior
+      if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.style.display = 'block';
+      }
+
+      // Validar que los campos no estén vacíos
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      if (!email || !password) {
+        if (errorElement) {
+          errorElement.textContent = 'Por favor completa todos los campos';
+        }
+        return;
+      }
+
+      // Mostrar estado de carga
+      if (btnText) btnText.textContent = 'Autenticando...';
+      if (btnLoader) btnLoader.style.display = 'inline-block';
+      if (loginBtn) loginBtn.disabled = true;
+
+      try {
+        // 🔐 Autenticación nativa de Supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        // Manejar errores de autenticación
+        if (error) {
+          throw error;
+        }
+
+        // Si la autenticación es exitosa
+        if (data && data.user) {
+          // Guardar información de la sesión (opcional)
+          localStorage.setItem('supabase_user', JSON.stringify(data.user));
+          localStorage.setItem('supabase_session', JSON.stringify(data.session));
+
+          // Mostrar animación de salida
+          const container = document.querySelector('.glass-container');
+          if (container) {
+            container.style.animation = 'fadeOut 0.5s ease forwards';
+          }
+
+          // Redirigir al dashboard
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 500);
+        }
+
+      } catch (error) {
+        // Restaurar el estado del botón
+        if (btnText) btnText.textContent = 'Ingresar';
+        if (btnLoader) btnLoader.style.display = 'none';
+        if (loginBtn) loginBtn.disabled = false;
+
+        // Mostrar mensaje de error
+        if (errorElement) {
+          let mensaje = 'Error al iniciar sesión';
+          if (error.message) {
+            if (error.message.includes('Invalid login credentials')) {
+              mensaje = 'Correo o contraseña incorrectos';
+            } else if (error.message.includes('Email not confirmed')) {
+              mensaje = 'Tu correo aún no ha sido confirmado. Revisa tu bandeja de entrada.';
+            } else if (error.message.includes('Too many requests')) {
+              mensaje = 'Demasiados intentos. Espera un momento y vuelve a intentarlo.';
+            } else {
+              mensaje = error.message;
+            }
+          }
+          errorElement.textContent = mensaje;
+          errorElement.style.display = 'block';
+        }
+
+        console.error('Error en autenticación:', error);
+      }
+    }
+
+    // ============================================================
+    // FUNCIONES AUXILIARES (Partículas, año, etc.)
+    // ============================================================
+
+    // Año actual en el footer
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Crear partículas de fondo
     function createParticles() {
       const particlesContainer = document.getElementById('particles');
       const particleCount = 15;
@@ -324,152 +427,50 @@
         particle.classList.add('particle');
 
         const size = Math.random() * 10 + 5;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.bottom = `-${size}px`;
-        particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
-        particle.style.animationDelay = `${Math.random() * 5}s`;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.bottom = '-' + size + 'px';
+        particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
         particle.style.opacity = Math.random() * 0.5 + 0.1;
 
         particlesContainer.appendChild(particle);
       }
     }
 
-    // Inicialización
-    window.addEventListener('load', () => {
+    // Inicializar partículas
+    window.addEventListener('load', function() {
       createParticles();
 
-      // Efecto hover para inputs
-      document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('mouseenter', () => {
+      // Efecto hover en inputs
+      document.querySelectorAll('input').forEach(function(input) {
+        input.addEventListener('mouseenter', function() {
           input.style.transform = 'scale(1.02)';
         });
-        input.addEventListener('mouseleave', () => {
+        input.addEventListener('mouseleave', function() {
           input.style.transform = 'scale(1)';
         });
       });
     });
-  </script>
 
+    // ============================================================
+    // FUNCIÓN PARA CERRAR SESIÓN (se usa desde el dashboard)
+    // ============================================================
 
-  <script>
-    // Configuración de Supabase
-    const SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
-
-    /* NEXT_PUBLIC_SUPABASE_URL=https://apsvmojzniglbpmmaugd.supabase.co
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1 */
-
-    // Inicializar cliente de Supabase
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function login() {
-      const curp = document.getElementById('curp').value.trim();
-      const celular = document.getElementById('celular').value.trim();
-      const errorElement = document.getElementById('error');
-      const btnText = document.getElementById('btnText');
-      const btnLoader = document.getElementById('btnLoader');
-      const loginBtn = document.getElementById('loginBtn');
-
-      // Validación de campos
-      if (!curp || !celular) {
-        if (errorElement) errorElement.textContent = 'Por favor completa todos los campos';
-        return;
-      }
-
-      // Mostrar estado de carga
-      if (btnText) btnText.textContent = 'Autenticando...';
-      if (btnLoader) btnLoader.style.display = 'inline-block';
-      if (loginBtn) loginBtn.disabled = true;
-      if (errorElement) errorElement.textContent = '';
-
-      try {
-        // Paso 1: Autenticar con Supabase usando email/contraseña
-        // Nota: Usamos el CURP como email (porque es único)
-        const email = `${curp}@cartillas.salud.gob.mx`;
-        const password = celular; // Usamos el celular como contraseña (cambia esto después)
-
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: email,
-          password: password
-        });
-
-        if (error) throw error;
-
-        // Paso 2: Si la autenticación es exitosa, redirigir
-        if (data && data.user) {
-          // Guardar sesión en localStorage (opcional)
-          localStorage.setItem('supabase_user', JSON.stringify(data.user));
-
-          // Mostrar animación de salida
-          const container = document.querySelector('.glass-container');
-          if (container) container.style.animation = 'fadeOut 0.5s ease forwards';
-
-          // Redirigir al dashboard
-          setTimeout(() => {
-            window.location.href = 'dashboard.html'; // Cambia por tu página principal
-          }, 500);
-        }
-
-      } catch (error) {
-        // Manejar errores de autenticación
-        handleError(error);
+    async function logout() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error al cerrar sesión:', error);
+      } else {
+        localStorage.removeItem('supabase_user');
+        localStorage.removeItem('supabase_session');
+        window.location.href = 'login.html';
       }
     }
 
-    // Manejar éxito en login
-    function handleLoginSuccess(response) {
-      try {
-        if (!response) throw new Error("No se recibió respuesta del servidor");
-
-        if (response.success && response.redirectUrl) {
-          const container = document.querySelector('.glass-container');
-          if (container) container.style.animation = 'fadeOut 0.5s ease forwards';
-
-          setTimeout(() => {
-            window.top.location.href = response.redirectUrl;
-          }, 500);
-        } else {
-          handleError({ message: response.message || "Autenticación fallida" });
-        }
-      } catch (error) {
-        console.error("Error procesando respuesta:", error);
-        handleError({ message: "Error al interpretar la respuesta del servidor" });
-      }
-    }
-
-    // Manejo de errores
-    function handleError(error) {
-      const errorElement = document.getElementById('error');
-      const btnText = document.getElementById('btnText');
-      const btnLoader = document.getElementById('btnLoader');
-      const loginBtn = document.getElementById('loginBtn');
-
-      // Restaurar estado del botón
-      if (btnText) btnText.textContent = 'Ingresar';
-      if (btnLoader) btnLoader.style.display = 'none';
-      if (loginBtn) loginBtn.disabled = false;
-
-      // Mensajes de error personalizados
-      let mensaje = 'Error desconocido';
-      if (error.message) {
-        if (error.message.includes('Invalid login credentials')) {
-          mensaje = 'CURP o número de celular incorrectos';
-        } else if (error.message.includes('Email not confirmed')) {
-          mensaje = 'Tu cuenta aún no ha sido confirmada. Revisa tu correo.';
-        } else {
-          mensaje = error.message;
-        }
-      }
-
-      if (errorElement) {
-        errorElement.textContent = mensaje;
-        errorElement.style.display = 'block';
-      }
-
-      console.error('Error en autenticación:', error);
-    }
+    // Exponer logout globalmente para usarlo desde otros scripts
+    window.logout = logout;
   </script>
 
 </body>
