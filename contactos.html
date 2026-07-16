@@ -804,7 +804,7 @@
         var successElement = document.getElementById('success');
 
         // ============================================================
-        // OBTENER USUARIO ACTUAL
+        // OBTENER USUARIO ACTUAL (VERSIÓN CORREGIDA)
         // ============================================================
         async function getUsuarioActual() {
             try {
@@ -813,16 +813,34 @@
                     window.location.href = 'login.html';
                     return null;
                 }
-                var user = session.data.session.user;
+
+                var authUserId = session.data.session.user.id;
+                var userEmail = session.data.session.user.email;
+
                 var result = await supabaseClient
                     .from('usuario')
                     .select('id_uuid, nombre, paterno, materno, rol, clues_id_uuid')
-                    .eq('auth_user_id', user.id);
+                    .eq('auth_user_id', authUserId);
+
                 if (result.data && result.data.length > 0) {
                     usuarioActual = result.data[0];
+                    usuarioActual.auth_user_id = authUserId; // Guardar también el auth.uid
                     return usuarioActual;
                 }
-                return null;
+
+                // Fallback: si no existe en la tabla usuario, crear uno virtual
+                var userVirtual = {
+                    id_uuid: authUserId,
+                    auth_user_id: authUserId,
+                    nombre: userEmail,
+                    paterno: '',
+                    materno: '',
+                    rol: 'usuario',
+                    clues_id_uuid: null
+                };
+                usuarioActual = userVirtual;
+                return userVirtual;
+
             } catch (error) {
                 console.error('Error al obtener usuario:', error);
                 return null;
@@ -864,22 +882,53 @@
         }
 
         // ============================================================
-        // CARGAR CONTACTOS
+        // CARGAR CONTACTOS (VERSIÓN CORREGIDA)
         // ============================================================
         async function cargarContactos() {
             try {
                 contactosContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="loading-spinner"></div>
-                        Cargando mensajes...
-                    </div>
-                `;
+            <div class="empty-state">
+                <div class="loading-spinner"></div>
+                Cargando mensajes...
+            </div>
+        `;
                 errorElement.textContent = '';
                 successElement.textContent = '';
 
-                var user = await getUsuarioActual();
-                if (!user) return;
+                // Obtener la sesión para el auth.uid()
+                var session = await supabaseClient.auth.getSession();
+                if (!session.data.session) {
+                    window.location.href = 'login.html';
+                    return;
+                }
 
+                var authUserId = session.data.session.user.id;
+                var userEmail = session.data.session.user.email;
+
+                // Obtener datos del usuario desde la tabla usuario
+                var userResult = await supabaseClient
+                    .from('usuario')
+                    .select('id_uuid, nombre, paterno, materno, rol, clues_id_uuid')
+                    .eq('auth_user_id', authUserId);
+
+                var user = null;
+                if (userResult.data && userResult.data.length > 0) {
+                    user = userResult.data[0];
+                    usuarioActual = user;
+                } else {
+                    // Fallback: usar datos de auth
+                    user = {
+                        id_uuid: authUserId,
+                        nombre: userEmail,
+                        paterno: '',
+                        materno: '',
+                        rol: 'usuario',
+                        clues_id_uuid: null
+                    };
+                    usuarioActual = user;
+                }
+
+                // Mostrar info del usuario
                 var infoDiv = document.getElementById('userInfo');
                 var nameDisplay = document.getElementById('userNameDisplay');
                 var rolDisplay = document.getElementById('userRolDisplay');
@@ -890,12 +939,14 @@
                 rolDisplay.textContent = user.rol || 'usuario';
                 infoDiv.style.display = 'block';
 
+                // Cargar destinatarios para el modal
                 await cargarDestinatarios();
 
+                // Cargar mensajes usando auth.uid() para filtrar
                 var query = supabaseClient
                     .from('contactos')
                     .select('*')
-                    .or(`remitente_id.eq.${user.id_uuid},destinatario_id.eq.${user.id_uuid}`)
+                    .or(`remitente_id.eq.${authUserId},destinatario_id.eq.${authUserId}`)
                     .order('created_at', { ascending: false });
 
                 var result = await query;
@@ -908,49 +959,49 @@
 
                 if (contactosData.length === 0) {
                     contactosContainer.innerHTML = `
-                        <div class="empty-state">
-                            📭 No hay mensajes
-                        </div>
-                    `;
+                <div class="empty-state">
+                    📭 No hay mensajes
+                </div>
+            `;
                     return;
                 }
 
-                renderTablaContactos(contactosData, user);
+                renderTablaContactos(contactosData, user, authUserId);
 
             } catch (error) {
                 console.error('Error al cargar contactos:', error);
                 errorElement.textContent = 'Error al cargar mensajes: ' + error.message;
                 contactosContainer.innerHTML = `
-                    <div class="empty-state">
-                        ❌ Error al cargar los datos
-                    </div>
-                `;
+            <div class="empty-state">
+                ❌ Error al cargar los datos
+            </div>
+        `;
             }
         }
 
         // ============================================================
-        // RENDERIZAR TABLA DE CONTACTOS
+        // RENDERIZAR TABLA DE CONTACTOS (VERSIÓN CORREGIDA)
         // ============================================================
-        function renderTablaContactos(data, user) {
+        function renderTablaContactos(data, user, authUserId) {
             var html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Estado</th>
-                            <th>De</th>
-                            <th>Para</th>
-                            <th>Asunto</th>
-                            <th>Tipo</th>
-                            <th>Fecha</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+        <table>
+            <thead>
+                <tr>
+                    <th>Estado</th>
+                    <th>De</th>
+                    <th>Para</th>
+                    <th>Asunto</th>
+                    <th>Tipo</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
             data.forEach(function (contacto) {
-                var esRemitente = contacto.remitente_id === user.id_uuid;
-                var esDestinatario = contacto.destinatario_id === user.id_uuid;
+                var esRemitente = contacto.remitente_id === authUserId;
+                var esDestinatario = contacto.destinatario_id === authUserId;
 
                 var estadoClass = contacto.leido ? 'badge-leido' : 'badge-no-leido';
                 var estadoLabel = contacto.leido ? '✅ Leído' : '🔴 No leído';
@@ -970,27 +1021,27 @@
                 var rowClass = (!contacto.leido && esDestinatario) ? 'style="background:rgba(76,201,240,0.03);"' : '';
 
                 html += `
-                    <tr ${rowClass}>
-                        <td><span class="badge ${estadoClass}">${estadoLabel}</span></td>
-                        <td>${remitenteNombre}</td>
-                        <td>${destinatarioNombre}</td>
-                        <td><strong>${contacto.asunto}</strong></td>
-                        <td><span class="badge-tipo">${tipoLabel}</span></td>
-                        <td style="color:var(--text-muted-light); font-size:0.8rem;">${fecha}</td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-primary btn-sm" onclick="verContacto('${contacto.id_uuid}')">👁️</button>
-                                ${esRemitente ? `<button class="btn btn-danger btn-sm" onclick="eliminarContacto('${contacto.id_uuid}')">🗑️</button>` : ''}
-                            </div>
-                        </td>
-                    </tr>
-                `;
+            <tr ${rowClass}>
+                <td><span class="badge ${estadoClass}">${estadoLabel}</span></td>
+                <td>${remitenteNombre}</td>
+                <td>${destinatarioNombre}</td>
+                <td><strong>${contacto.asunto}</strong></td>
+                <td><span class="badge-tipo">${tipoLabel}</span></td>
+                <td style="color:var(--text-muted-light); font-size:0.8rem;">${fecha}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm" onclick="verContacto('${contacto.id_uuid}')">👁️</button>
+                        ${esRemitente ? `<button class="btn btn-danger btn-sm" onclick="eliminarContacto('${contacto.id_uuid}')">🗑️</button>` : ''}
+                    </div>
+                </td>
+            </tr>
+        `;
             });
 
             html += `
-                    </tbody>
-                </table>
-            `;
+            </tbody>
+        </table>
+    `;
 
             contactosContainer.innerHTML = html;
         }
