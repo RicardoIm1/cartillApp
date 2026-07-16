@@ -125,7 +125,7 @@
         }
 
         /* ============================================================
-           PARTÍCULAS (igual que login y dashboard)
+           PARTÍCULAS
            ============================================================ */
         .particles {
             position: fixed;
@@ -151,7 +151,6 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
-
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -181,7 +180,6 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -189,7 +187,7 @@
         }
 
         /* ============================================================
-           BOTÓN DE TEMA (igual que login y dashboard)
+           BOTÓN DE TEMA
            ============================================================ */
         .theme-toggle {
             position: absolute;
@@ -244,7 +242,7 @@
         }
 
         /* ============================================================
-           BOTONES CLAY
+           BOTONES
            ============================================================ */
         .btn {
             padding: 0.6rem 1.5rem;
@@ -287,17 +285,6 @@
 
         .btn-secondary:hover {
             transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: var(--btn-danger);
-            color: white;
-            box-shadow: 4px 4px 8px rgba(247, 37, 133, 0.2),
-                -4px -4px 8px rgba(255, 255, 255, 0.02);
-        }
-
-        .btn-danger:hover {
-            background: var(--btn-danger-hover);
         }
 
         /* ============================================================
@@ -486,21 +473,17 @@
             body {
                 padding: 1rem;
             }
-
             .container {
                 padding: 1rem;
             }
-
             .row {
                 grid-template-columns: 1fr;
             }
-
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -508,16 +491,13 @@
                 height: 34px;
                 font-size: 1rem;
             }
-
             h1 {
                 font-size: 1.4rem;
             }
-
             .btn {
                 font-size: 0.8rem;
                 padding: 0.5rem 1rem;
             }
-
             .btn-primary {
                 font-size: 0.9rem;
                 padding: 0.75rem;
@@ -528,12 +508,10 @@
             .container {
                 padding: 0.75rem;
             }
-
             .user-badge {
                 font-size: 0.75rem;
                 padding: 0.4rem 0.8rem;
             }
-
             select,
             input {
                 font-size: 0.85rem;
@@ -545,11 +523,11 @@
 
 <body>
 
-    <!-- Partículas (igual que login y dashboard) -->
+    <!-- Partículas -->
     <div class="particles" id="particles"></div>
 
     <div class="container">
-        <!-- Botón de tema (igual que login y dashboard) -->
+        <!-- Botón de tema -->
         <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">
             🌙
         </button>
@@ -625,7 +603,7 @@
 
     <script>
         // ============================================================
-        // FUNCIONALIDAD DIURNO / NOCTURNO (igual que login y dashboard)
+        // FUNCIONALIDAD DIURNO / NOCTURNO
         // ============================================================
 
         (function setupTheme() {
@@ -654,7 +632,7 @@
         })();
 
         // ============================================================
-        // PARTÍCULAS (igual que login y dashboard)
+        // PARTÍCULAS
         // ============================================================
 
         function createParticles() {
@@ -702,18 +680,25 @@
         var usuarioActual = null;
 
         // ============================================================
-        // 1. CARGAR DATOS INICIALES (ACTUALIZADO PARA UUID)
+        // 1. CARGAR DATOS INICIALES (CON LOGS DE DEPURACIÓN)
         // ============================================================
         async function cargarDatos() {
             try {
+                console.log('=== CARGANDO TRASPASOS ===');
+
                 var session = await supabaseClient.auth.getSession();
+                console.log('Sesión obtenida:', session);
 
                 if (!session.data.session) {
+                    console.log('No hay sesión, redirigiendo a login');
                     window.location.href = 'login.html';
                     return;
                 }
 
-                // CONSULTA ACTUALIZADA PARA UUID
+                var user = session.data.session.user;
+                console.log('Usuario autenticado:', user);
+
+                // Buscar usuario en tabla 'usuario'
                 var userResult = await supabaseClient
                     .from('usuario')
                     .select(`
@@ -724,10 +709,13 @@
                         id_clues,
                         clues:clues_id_uuid (id_uuid, clues, nombre)
                     `)
-                    .eq('auth_user_id', session.data.session.user.id);
+                    .eq('auth_user_id', user.id);
+
+                console.log('Resultado usuario:', userResult);
 
                 if (userResult.data && userResult.data.length > 0) {
                     usuarioActual = userResult.data[0];
+                    console.log('Usuario encontrado:', usuarioActual);
 
                     var nombreCompleto = usuarioActual.nombre || 'Usuario';
                     if (usuarioActual.paterno) nombreCompleto += ' ' + usuarioActual.paterno;
@@ -741,104 +729,168 @@
                         </div>
                     `;
                 } else {
-                    // Fallback si no tiene perfil
+                    console.warn('Usuario no encontrado en tabla usuario');
                     userInfo.innerHTML = `
                         <div class="user-badge">
-                            👤 <strong>${session.data.session.user.email}</strong>
+                            👤 <strong>${user.email}</strong>
                             <span class="muted">· Sin perfil completo</span>
                         </div>
                     `;
                 }
 
+                // Cargar datos de los selects
+                console.log('Cargando CLUES...');
                 await cargarClues();
+
+                console.log('Cargando tipos de cartilla...');
                 await cargarTiposCartilla();
+
+                console.log('Cargando motivos...');
                 await cargarMotivos();
 
+                // Eventos de previsualización
                 document.querySelectorAll('#origen, #destino, #tipo_cartilla, #motivo, #cantidad').forEach(function(el) {
                     el.addEventListener('change', previsualizar);
                     el.addEventListener('input', previsualizar);
                 });
 
+                console.log('=== DATOS CARGADOS COMPLETAMENTE ===');
+
             } catch (error) {
                 console.error('Error al cargar datos:', error);
+                mostrarError('Error al cargar datos: ' + error.message);
             }
         }
 
         // ============================================================
-        // 2. CARGAR CLUES (Centros) - ACTUALIZADO PARA UUID
+        // 2. CARGAR CLUES (Centros)
         // ============================================================
         async function cargarClues() {
-            var result = await supabaseClient
-                .from('clues')
-                .select('id_uuid, clues, nombre')
-                .order('nombre');
+            try {
+                console.log('Consultando CLUES...');
+                var result = await supabaseClient
+                    .from('clues')
+                    .select('id_uuid, clues, nombre')
+                    .order('nombre');
 
-            if (result.error) {
-                console.error('Error al cargar CLUES:', result.error);
-                return;
-            }
+                console.log('Resultado CLUES:', result);
 
-            var options = '<option value="">Seleccionar centro...</option>';
-            result.data.forEach(function(item) {
-                var label = item.clues + ' - ' + item.nombre;
-                options += `<option value="${item.id_uuid}">${label}</option>`;
-            });
-
-            selectOrigen.innerHTML = options;
-            selectDestino.innerHTML = options;
-
-            if (usuarioActual && usuarioActual.clues) {
-                selectOrigen.value = usuarioActual.clues.id_uuid;
-                selectOrigen.disabled = true;
-                var origenLabel = document.querySelector('label[for="origen"]');
-                if (origenLabel) {
-                    origenLabel.innerHTML = '🏥 Centro Origen <span style="color:var(--text-muted-light); font-weight:300; font-size:0.75rem;">(tu centro)</span>';
+                if (result.error) {
+                    console.error('Error al cargar CLUES:', result.error);
+                    mostrarError('Error al cargar centros: ' + result.error.message);
+                    return;
                 }
+
+                if (!result.data || result.data.length === 0) {
+                    console.warn('No hay datos de CLUES');
+                    mostrarError('No hay centros de salud registrados');
+                    return;
+                }
+
+                var options = '<option value="">Seleccionar centro...</option>';
+                result.data.forEach(function(item) {
+                    var label = item.clues + ' - ' + item.nombre;
+                    options += `<option value="${item.id_uuid}">${label}</option>`;
+                });
+
+                console.log('Opciones de CLUES generadas:', result.data.length);
+
+                selectOrigen.innerHTML = options;
+                selectDestino.innerHTML = options;
+
+                // Si el usuario tiene un centro asignado, preseleccionarlo
+                if (usuarioActual && usuarioActual.clues && usuarioActual.clues.id_uuid) {
+                    selectOrigen.value = usuarioActual.clues.id_uuid;
+                    selectOrigen.disabled = true;
+                    var origenLabel = document.querySelector('label[for="origen"]');
+                    if (origenLabel) {
+                        origenLabel.innerHTML = '🏥 Centro Origen <span style="color:var(--text-muted-light); font-weight:300; font-size:0.75rem;">(tu centro)</span>';
+                    }
+                    console.log('Origen preseleccionado:', usuarioActual.clues.id_uuid);
+                }
+
+            } catch (error) {
+                console.error('Error en cargarClues:', error);
+                mostrarError('Error al cargar centros: ' + error.message);
             }
         }
 
         // ============================================================
-        // 3. CARGAR TIPOS DE CARTILLA - ACTUALIZADO PARA UUID
+        // 3. CARGAR TIPOS DE CARTILLA
         // ============================================================
         async function cargarTiposCartilla() {
-            var result = await supabaseClient
-                .from('tipo_cartilla')
-                .select('id_uuid, tipo_cartilla')
-                .order('tipo_cartilla');
+            try {
+                console.log('Consultando tipos de cartilla...');
+                var result = await supabaseClient
+                    .from('tipo_cartilla')
+                    .select('id_uuid, tipo_cartilla')
+                    .order('tipo_cartilla');
 
-            if (result.error) {
-                console.error('Error al cargar tipos:', result.error);
-                return;
+                console.log('Resultado Tipos Cartilla:', result);
+
+                if (result.error) {
+                    console.error('Error al cargar tipos:', result.error);
+                    mostrarError('Error al cargar tipos de cartilla: ' + result.error.message);
+                    return;
+                }
+
+                if (!result.data || result.data.length === 0) {
+                    console.warn('No hay datos de tipos de cartilla');
+                    mostrarError('No hay tipos de cartilla registrados');
+                    return;
+                }
+
+                var options = '<option value="">Seleccionar tipo...</option>';
+                result.data.forEach(function(item) {
+                    options += `<option value="${item.id_uuid}">${item.tipo_cartilla}</option>`;
+                });
+
+                console.log('Opciones de tipos generadas:', result.data.length);
+                selectTipo.innerHTML = options;
+
+            } catch (error) {
+                console.error('Error en cargarTiposCartilla:', error);
+                mostrarError('Error al cargar tipos de cartilla: ' + error.message);
             }
-
-            var options = '<option value="">Seleccionar tipo...</option>';
-            result.data.forEach(function(item) {
-                options += `<option value="${item.id_uuid}">${item.tipo_cartilla}</option>`;
-            });
-
-            selectTipo.innerHTML = options;
         }
 
         // ============================================================
-        // 4. CARGAR MOTIVOS - ACTUALIZADO PARA UUID
+        // 4. CARGAR MOTIVOS
         // ============================================================
         async function cargarMotivos() {
-            var result = await supabaseClient
-                .from('motivo_entrega')
-                .select('id_uuid, motivo')
-                .order('motivo');
+            try {
+                console.log('Consultando motivos...');
+                var result = await supabaseClient
+                    .from('motivo_entrega')
+                    .select('id_uuid, motivo')
+                    .order('motivo');
 
-            if (result.error) {
-                console.error('Error al cargar motivos:', result.error);
-                return;
+                console.log('Resultado Motivos:', result);
+
+                if (result.error) {
+                    console.error('Error al cargar motivos:', result.error);
+                    mostrarError('Error al cargar motivos: ' + result.error.message);
+                    return;
+                }
+
+                if (!result.data || result.data.length === 0) {
+                    console.warn('No hay datos de motivos');
+                    mostrarError('No hay motivos registrados');
+                    return;
+                }
+
+                var options = '<option value="">Seleccionar motivo...</option>';
+                result.data.forEach(function(item) {
+                    options += `<option value="${item.id_uuid}">${item.motivo}</option>`;
+                });
+
+                console.log('Opciones de motivos generadas:', result.data.length);
+                selectMotivo.innerHTML = options;
+
+            } catch (error) {
+                console.error('Error en cargarMotivos:', error);
+                mostrarError('Error al cargar motivos: ' + error.message);
             }
-
-            var options = '<option value="">Seleccionar motivo...</option>';
-            result.data.forEach(function(item) {
-                options += `<option value="${item.id_uuid}">${item.motivo}</option>`;
-            });
-
-            selectMotivo.innerHTML = options;
         }
 
         // ============================================================
@@ -870,7 +922,7 @@
         }
 
         // ============================================================
-        // 6. REGISTRAR TRASPASO - ACTUALIZADO PARA UUID
+        // 6. REGISTRAR TRASPASO
         // ============================================================
         async function registrarTraspaso(event) {
             event.preventDefault();
@@ -892,7 +944,7 @@
             }
 
             try {
-                // Verificar stock en origen - ACTUALIZADO PARA UUID
+                // Verificar stock en origen
                 var stockResult = await supabaseClient
                     .from('inventario')
                     .select('cantidad')
@@ -953,7 +1005,7 @@
                 }
 
                 // ============================================================
-                // ACTUALIZAR INVENTARIO - ORIGEN (UUID)
+                // ACTUALIZAR INVENTARIO - ORIGEN
                 // ============================================================
                 if (stockActual - cantidad <= 0) {
                     await supabaseClient
@@ -973,7 +1025,7 @@
                 }
 
                 // ============================================================
-                // ACTUALIZAR INVENTARIO - DESTINO (UUID)
+                // ACTUALIZAR INVENTARIO - DESTINO
                 // ============================================================
                 var stockDestinoResult = await supabaseClient
                     .from('inventario')
@@ -1050,7 +1102,7 @@
             createParticles();
             cargarDatos();
 
-            // Efecto hover en inputs (igual que login)
+            // Efecto hover en inputs
             document.querySelectorAll('input, select').forEach(function(el) {
                 el.addEventListener('mouseenter', function() {
                     this.style.transform = 'scale(1.02)';
