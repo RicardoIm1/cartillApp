@@ -350,7 +350,8 @@
         </button>
 
         <h1>Panel de Control</h1>
-        <p style="text-align:center; color:var(--text-muted-light); font-size:0.9rem; margin-bottom:1.5rem; transition: color 0.3s ease;">
+        <p
+            style="text-align:center; color:var(--text-muted-light); font-size:0.9rem; margin-bottom:1.5rem; transition: color 0.3s ease;">
             Sistema de Cartillas de Salud
         </p>
 
@@ -524,6 +525,48 @@
         });
 
         window.logout = logout;
+    </script>
+
+    <script>
+        // ============================================================
+        // FUNCIONES AUXILIARES (Partículas, año, etc.)
+        // ============================================================
+
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 15;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                const size = Math.random() * 10 + 5;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '-' + size + 'px';
+                particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particle.style.opacity = Math.random() * 0.5 + 0.1;
+
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        window.addEventListener('load', function () {
+            createParticles();
+
+            document.querySelectorAll('input').forEach(function (input) {
+                input.addEventListener('mouseenter', function () {
+                    input.style.transform = 'scale(1.02)';
+                });
+                input.addEventListener('mouseleave', function () {
+                    input.style.transform = 'scale(1)';
+                });
+            });
+        });
     </script>
 
 </body>
