@@ -940,157 +940,27 @@
         var submitBtn = document.getElementById('submitBtn');
 
         // ============================================================
-        // 1. CARGAR CATÁLOGOS
+        // 1. CARGAR CATÁLOGOS (VERSIÓN OPTIMIZADA)
         // ============================================================
-        var catalogos = {};
+        var catalogos = { cargados: false };
 
         async function cargarCatalogos() {
             try {
-                // Entidades
-                var entidades = await supabaseClient
-                    .from('entidad')
-                    .select('id_uuid, entidad')
-                    .order('entidad');
-                if (entidades.data) {
-                    var entidadSelect = document.getElementById('entidad');
-                    entidadSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    entidades.data.forEach(function (e) {
-                        entidadSelect.innerHTML += `<option value="${e.id_uuid}">${e.entidad}</option>`;
-                    });
-                }
-
-                // Pais
-                var paises = await supabaseClient
-                    .from('pais')
-                    .select('id_uuid, pais')
-                    .order('pais');
-                if (paises.data) {
-                    var paisSelect = document.getElementById('pais');
-                    paisSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    paises.data.forEach(function (p) {
-                        paisSelect.innerHTML += `<option value="${p.id_uuid}">${p.pais}</option>`;
-                    });
-                }
-
-                // CLUES
-                var clues = await supabaseClient
-                    .from('clues')
-                    .select('id_uuid, clues, nombre')
-                    .order('nombre');
-                if (clues.data) {
-                    var cluesSelect = document.getElementById('clues');
-                    cluesSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    clues.data.forEach(function (c) {
-                        cluesSelect.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
-                    });
-                }
-
-                // Tipo Cartilla
-                var tipos = await supabaseClient
-                    .from('tipo_cartilla')
-                    .select('id_uuid, tipo_cartilla')
-                    .order('tipo_cartilla');
-                if (tipos.data) {
-                    var tipoSelect = document.getElementById('tipo_cartilla');
-                    tipoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    tipos.data.forEach(function (t) {
-                        tipoSelect.innerHTML += `<option value="${t.id_uuid}">${t.tipo_cartilla}</option>`;
-                    });
-                }
-
-                // Motivo Entrega
-                var motivos = await supabaseClient
-                    .from('motivo_entrega')
-                    .select('id_uuid, motivo')
-                    .order('motivo');
-                if (motivos.data) {
-                    var motivoSelect = document.getElementById('motivo_entrega');
-                    motivoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    motivos.data.forEach(function (m) {
-                        motivoSelect.innerHTML += `<option value="${m.id_uuid}">${m.motivo}</option>`;
-                    });
-                }
-
-                // Año Edición - CORREGIDO
-                var agnos = await supabaseClient
-                    .from('agno_edicion')
-                    .select('id_uuid, agno_edicion')
-                    .order('agno_edicion', { ascending: false });
-                if (agnos.data) {
-                    var agnoSelect = document.getElementById('agno_edicion');
-                    agnoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    agnos.data.forEach(function (a) {
-                        agnoSelect.innerHTML += `<option value="${a.id_uuid}">${a.agno_edicion}</option>`;
-                    });
-                }
-
-                // Servicio Entrega
-                var servicios = await supabaseClient
-                    .from('servicio_entrega')
-                    .select('id_uuid, servicio_entrega')
-                    .order('servicio_entrega');
-                if (servicios.data) {
-                    var servicioSelect = document.getElementById('servicio_entrega');
-                    servicioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    servicios.data.forEach(function (s) {
-                        servicioSelect.innerHTML += `<option value="${s.id_uuid}">${s.servicio_entrega}</option>`;
-                    });
-                }
-
-                // Si/No
-                var si_no = await supabaseClient
-                    .from('si_no')
-                    .select('id_uuid, sino')
-                    .order('sino');
-                if (si_no.data) {
-                    var siNoSelect = document.getElementById('se_proporciono_info');
-                    siNoSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    si_no.data.forEach(function (s) {
-                        siNoSelect.innerHTML += `<option value="${s.id_uuid}">${s.sino}</option>`;
-                    });
-                }
-
-                // Discapacidad
-                var discapacidades = await supabaseClient
-                    .from('discapacidad')
-                    .select('id_uuid, discapacidad')
-                    .order('discapacidad');
-                if (discapacidades.data) {
-                    var discSelect = document.getElementById('discapacidad');
-                    discSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    discapacidades.data.forEach(function (d) {
-                        discSelect.innerHTML += `<option value="${d.id_uuid}">${d.discapacidad}</option>`;
-                    });
-                }
-
-                // Embarazo
-                var embarazos = await supabaseClient
-                    .from('embarazo')
-                    .select('id_uuid, embarazo')
-                    .order('embarazo');
-                if (embarazos.data) {
-                    var embSelect = document.getElementById('embarazo');
-                    embSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    embarazos.data.forEach(function (e) {
-                        embSelect.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
-                    });
-                }
-
-                // Tipo Migración
-                var migraciones = await supabaseClient
-                    .from('tipo_migracion')
-                    .select('id_uuid, migracion')
-                    .order('migracion');
-                if (migraciones.data) {
-                    var migSelect = document.getElementById('tipo_migracion');
-                    migSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                    migraciones.data.forEach(function (m) {
-                        migSelect.innerHTML += `<option value="${m.id_uuid}">${m.migracion}</option>`;
-                    });
-                }
-
+                await Promise.all([
+                    cargarEntidades(),
+                    cargarPaises(),
+                    cargarClues(),
+                    cargarTiposCartilla(),
+                    cargarMotivos(),
+                    cargarAnios(),
+                    cargarServicios(),
+                    cargarSiNo(),
+                    cargarDiscapacidades(),
+                    cargarEmbarazos(),
+                    cargarMigraciones()
+                ]);
                 catalogos.cargados = true;
-                console.log('Catálogos cargados correctamente');
+                console.log('✅ Catálogos cargados correctamente');
             } catch (error) {
                 console.error('Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
@@ -1302,51 +1172,10 @@
             // Asegurar que los catálogos estén cargados antes de abrir
             if (!catalogos.cargados) {
                 cargarCatalogos().then(function () {
-                    // Después de cargar, establecer valores por defecto
-                    establecerValoresPorDefecto();
                     modalOverlay.classList.add('active');
                 });
             } else {
-                establecerValoresPorDefecto();
                 modalOverlay.classList.add('active');
-            }
-        }
-
-        function establecerValoresPorDefecto() {
-            // No preseleccionamos nada para nuevo registro
-            // Solo aseguramos que los selects tengan opciones
-            if (document.getElementById('entidad').options.length <= 1) {
-                cargarEntidades();
-            }
-            if (document.getElementById('pais').options.length <= 1) {
-                cargarPaises();
-            }
-            if (document.getElementById('clues').options.length <= 1) {
-                cargarClues();
-            }
-            if (document.getElementById('tipo_cartilla').options.length <= 1) {
-                cargarTiposCartilla();
-            }
-            if (document.getElementById('motivo_entrega').options.length <= 1) {
-                cargarMotivos();
-            }
-            if (document.getElementById('agno_edicion').options.length <= 1) {
-                cargarAnios();
-            }
-            if (document.getElementById('servicio_entrega').options.length <= 1) {
-                cargarServicios();
-            }
-            if (document.getElementById('se_proporciono_info').options.length <= 1) {
-                cargarSiNo();
-            }
-            if (document.getElementById('discapacidad').options.length <= 1) {
-                cargarDiscapacidades();
-            }
-            if (document.getElementById('embarazo').options.length <= 1) {
-                cargarEmbarazos();
-            }
-            if (document.getElementById('tipo_migracion').options.length <= 1) {
-                cargarMigraciones();
             }
         }
 
