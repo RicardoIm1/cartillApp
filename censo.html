@@ -1128,6 +1128,36 @@
         }
 
         // ============================================================
+        // 2.1 CARGAR MUNICIPIOS CON VALOR PRESELECCIONADO
+        // ============================================================
+        async function cargarMunicipiosConValor(entidadId, valorSeleccionado) {
+            var municipioSelect = document.getElementById('municipio');
+
+            if (!entidadId) {
+                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                return;
+            }
+
+            try {
+                var result = await supabaseClient
+                    .from('municipio')
+                    .select('id_uuid, municipio')
+                    .eq('entidad_id_uuid', entidadId)
+                    .order('municipio');
+
+                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (m) {
+                        var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
+                        municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar municipios:', error);
+            }
+        }
+
+        // ============================================================
         // 3. CALCULAR EDAD
         // ============================================================
         function calcularEdad() {
@@ -1258,14 +1288,66 @@
         // 6. ABRIR MODAL PARA NUEVO REGISTRO
         // ============================================================
         function abrirModal() {
+            // Resetear el formulario
             document.getElementById('censoForm').reset();
             document.getElementById('editId').value = '';
             document.getElementById('modalTitle').textContent = '📝 Nuevo Registro de Censo';
             document.getElementById('submitBtn').textContent = 'Guardar Registro';
             document.getElementById('edad').value = '';
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
-            modalOverlay.classList.add('active');
-            cargarMunicipios();
+
+            // Limpiar selects dependientes
+            document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
+
+            // Asegurar que los catálogos estén cargados antes de abrir
+            if (!catalogos.cargados) {
+                cargarCatalogos().then(function () {
+                    // Después de cargar, establecer valores por defecto
+                    establecerValoresPorDefecto();
+                    modalOverlay.classList.add('active');
+                });
+            } else {
+                establecerValoresPorDefecto();
+                modalOverlay.classList.add('active');
+            }
+        }
+
+        function establecerValoresPorDefecto() {
+            // No preseleccionamos nada para nuevo registro
+            // Solo aseguramos que los selects tengan opciones
+            if (document.getElementById('entidad').options.length <= 1) {
+                cargarEntidades();
+            }
+            if (document.getElementById('pais').options.length <= 1) {
+                cargarPaises();
+            }
+            if (document.getElementById('clues').options.length <= 1) {
+                cargarClues();
+            }
+            if (document.getElementById('tipo_cartilla').options.length <= 1) {
+                cargarTiposCartilla();
+            }
+            if (document.getElementById('motivo_entrega').options.length <= 1) {
+                cargarMotivos();
+            }
+            if (document.getElementById('agno_edicion').options.length <= 1) {
+                cargarAnios();
+            }
+            if (document.getElementById('servicio_entrega').options.length <= 1) {
+                cargarServicios();
+            }
+            if (document.getElementById('se_proporciono_info').options.length <= 1) {
+                cargarSiNo();
+            }
+            if (document.getElementById('discapacidad').options.length <= 1) {
+                cargarDiscapacidades();
+            }
+            if (document.getElementById('embarazo').options.length <= 1) {
+                cargarEmbarazos();
+            }
+            if (document.getElementById('tipo_migracion').options.length <= 1) {
+                cargarMigraciones();
+            }
         }
 
         // ============================================================
@@ -1276,10 +1358,15 @@
         }
 
         // ============================================================
-        // 8. EDITAR REGISTRO
+        // 8. EDITAR REGISTRO (MEJORADO)
         // ============================================================
         async function editarCenso(id) {
             try {
+                // Asegurar que los catálogos estén cargados
+                if (!catalogos.cargados) {
+                    await cargarCatalogos();
+                }
+
                 var result = await supabaseClient
                     .from('vista_censo')
                     .select('*')
@@ -1292,6 +1379,7 @@
 
                 var row = result.data;
 
+                // Llenar campos básicos
                 document.getElementById('editId').value = row.id_uuid;
                 document.getElementById('modalTitle').textContent = '✏️ Editar Registro de Censo';
                 document.getElementById('submitBtn').textContent = 'Actualizar Registro';
@@ -1304,21 +1392,28 @@
                 document.getElementById('edad').value = row.edad || '';
                 document.getElementById('sexo').value = row.sexo || '';
                 document.getElementById('fecha_entrega').value = row.fecha_entrega || '';
+                document.getElementById('especificar_otro').value = row.especificar_otro || '';
 
-                // Poblar select de entidad
-                if (row.entidad_id_uuid) {
-                    document.getElementById('entidad').value = row.entidad_id_uuid;
-                    await cargarMunicipios();
-                    document.getElementById('municipio').value = row.municipio_id_uuid || '';
-                }
-
-                document.getElementById('clues').value = row.clues_id_uuid || '';
-                document.getElementById('pais').value = row.pais_id_uuid || '';
-
+                // Checkboxes
                 document.getElementById('pob_indigena').checked = row.pob_indigena || false;
                 document.getElementById('pob_afromex').checked = row.pob_afromex || false;
                 document.getElementById('pob_migrante').checked = row.pob_migrante || false;
 
+                // === CARGAR SELECTS CON VALORES ===
+
+                // 1. Entidad
+                document.getElementById('entidad').value = row.entidad_id_uuid || '';
+
+                // 2. Cargar municipios basados en la entidad
+                if (row.entidad_id_uuid) {
+                    await cargarMunicipiosConValor(row.entidad_id_uuid, row.municipio_id_uuid);
+                } else {
+                    document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
+                }
+
+                // 3. Cargar el resto de selects con sus valores
+                document.getElementById('clues').value = row.clues_id_uuid || '';
+                document.getElementById('pais').value = row.pais_id_uuid || '';
                 document.getElementById('tipo_cartilla').value = row.tipo_cartilla_id_uuid || '';
                 document.getElementById('motivo_entrega').value = row.motivo_entrega_id_uuid || '';
                 document.getElementById('agno_edicion').value = row.agno_edicion_id_uuid || '';
@@ -1327,7 +1422,6 @@
                 document.getElementById('discapacidad').value = row.discapacidad_id_uuid || '';
                 document.getElementById('embarazo').value = row.embarazo_id_uuid || '';
                 document.getElementById('tipo_migracion').value = row.migracion_id_uuid || '';
-                document.getElementById('especificar_otro').value = row.especificar_otro || '';
 
                 modalOverlay.classList.add('active');
 
@@ -1497,6 +1591,175 @@
                 }
             });
         });
+
+        // ============================================================
+        // FUNCIONES SEPARADAS PARA CADA CATÁLOGO
+        // ============================================================
+
+        async function cargarEntidades() {
+            try {
+                var result = await supabaseClient.from('entidad').select('id_uuid, entidad').order('entidad');
+                var select = document.getElementById('entidad');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (e) {
+                        select.innerHTML += `<option value="${e.id_uuid}">${e.entidad}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando entidades:', error);
+            }
+        }
+
+        async function cargarPaises() {
+            try {
+                var result = await supabaseClient.from('pais').select('id_uuid, pais').order('pais');
+                var select = document.getElementById('pais');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (p) {
+                        select.innerHTML += `<option value="${p.id_uuid}">${p.pais}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando paises:', error);
+            }
+        }
+
+        async function cargarClues() {
+            try {
+                var result = await supabaseClient.from('clues').select('id_uuid, clues, nombre').order('nombre');
+                var select = document.getElementById('clues');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (c) {
+                        select.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando clues:', error);
+            }
+        }
+
+        async function cargarTiposCartilla() {
+            try {
+                var result = await supabaseClient.from('tipo_cartilla').select('id_uuid, tipo_cartilla').order('tipo_cartilla');
+                var select = document.getElementById('tipo_cartilla');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (t) {
+                        select.innerHTML += `<option value="${t.id_uuid}">${t.tipo_cartilla}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando tipos de cartilla:', error);
+            }
+        }
+
+        async function cargarMotivos() {
+            try {
+                var result = await supabaseClient.from('motivo_entrega').select('id_uuid, motivo').order('motivo');
+                var select = document.getElementById('motivo_entrega');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (m) {
+                        select.innerHTML += `<option value="${m.id_uuid}">${m.motivo}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando motivos:', error);
+            }
+        }
+
+        async function cargarAnios() {
+            try {
+                var result = await supabaseClient.from('agno_edicion').select('id_uuid, agno_edicion').order('agno_edicion', { ascending: false });
+                var select = document.getElementById('agno_edicion');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (a) {
+                        select.innerHTML += `<option value="${a.id_uuid}">${a.agno_edicion}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando años de edición:', error);
+            }
+        }
+
+        async function cargarServicios() {
+            try {
+                var result = await supabaseClient.from('servicio_entrega').select('id_uuid, servicio_entrega').order('servicio_entrega');
+                var select = document.getElementById('servicio_entrega');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (s) {
+                        select.innerHTML += `<option value="${s.id_uuid}">${s.servicio_entrega}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando servicios:', error);
+            }
+        }
+
+        async function cargarSiNo() {
+            try {
+                var result = await supabaseClient.from('si_no').select('id_uuid, sino').order('sino');
+                var select = document.getElementById('se_proporciono_info');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (s) {
+                        select.innerHTML += `<option value="${s.id_uuid}">${s.sino}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando si/no:', error);
+            }
+        }
+
+        async function cargarDiscapacidades() {
+            try {
+                var result = await supabaseClient.from('discapacidad').select('id_uuid, discapacidad').order('discapacidad');
+                var select = document.getElementById('discapacidad');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (d) {
+                        select.innerHTML += `<option value="${d.id_uuid}">${d.discapacidad}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando discapacidades:', error);
+            }
+        }
+
+        async function cargarEmbarazos() {
+            try {
+                var result = await supabaseClient.from('embarazo').select('id_uuid, embarazo').order('embarazo');
+                var select = document.getElementById('embarazo');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (e) {
+                        select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando embarazos:', error);
+            }
+        }
+
+        async function cargarMigraciones() {
+            try {
+                var result = await supabaseClient.from('tipo_migracion').select('id_uuid, migracion').order('migracion');
+                var select = document.getElementById('tipo_migracion');
+                select.innerHTML = '<option value="">Seleccionar...</option>';
+                if (result.data) {
+                    result.data.forEach(function (m) {
+                        select.innerHTML += `<option value="${m.id_uuid}">${m.migracion}</option>`;
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando migraciones:', error);
+            }
+        }
     </script>
 
 </body>
