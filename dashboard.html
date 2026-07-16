@@ -15,7 +15,6 @@
            CSS VARIABLES PARA TEMA DIURNO / NOCTURNO
            ============================================================ */
         :root {
-            /* Modo nocturno (por defecto) */
             --bg-gradient-start: #141E30;
             --bg-gradient-end: #243B55;
             --container-bg: #1c2541;
@@ -29,14 +28,14 @@
             --input-bg: #1c2541;
             --input-shadow-1: #0d1320;
             --input-shadow-2: #2b3f60;
-            --input-focus-bg: #243b55;
-            --input-placeholder: rgba(255, 255, 255, 0.5);
             --btn-bg: #4361ee;
             --btn-shadow-1: #2b3f60;
             --btn-shadow-2: #3a56d4;
             --btn-hover: #3a56d4;
             --btn-danger: #f72585;
             --btn-danger-hover: #d91a6e;
+            --btn-success: #4cc9f0;
+            --btn-success-hover: #3ab8dd;
             --error-color: #f72585;
             --footer-color: rgba(255, 255, 255, 0.5);
             --particle-color: rgba(255, 255, 255, 0.4);
@@ -47,9 +46,10 @@
             --cantidad-media: #f8961e;
             --cantidad-baja: #f72585;
             --table-hover: rgba(255, 255, 255, 0.03);
+            --menu-item-hover: rgba(255, 255, 255, 0.04);
+            --menu-item-active: rgba(67, 97, 238, 0.2);
         }
 
-        /* Modo diurno */
         body.light-mode {
             --bg-gradient-start: #e0e5ec;
             --bg-gradient-end: #f0f2f8;
@@ -64,14 +64,14 @@
             --input-bg: #e8ecf4;
             --input-shadow-1: #b8bcc8;
             --input-shadow-2: #ffffff;
-            --input-focus-bg: #d5dbe8;
-            --input-placeholder: rgba(0, 0, 0, 0.4);
             --btn-bg: #4361ee;
             --btn-shadow-1: #2a3f8a;
             --btn-shadow-2: #6b8aff;
             --btn-hover: #3a56d4;
             --btn-danger: #e63946;
             --btn-danger-hover: #c62828;
+            --btn-success: #0ea5e9;
+            --btn-success-hover: #0284c7;
             --error-color: #e63946;
             --footer-color: rgba(0, 0, 0, 0.5);
             --particle-color: rgba(0, 0, 0, 0.10);
@@ -82,6 +82,8 @@
             --cantidad-media: #f59e0b;
             --cantidad-baja: #e63946;
             --table-hover: rgba(0, 0, 0, 0.02);
+            --menu-item-hover: rgba(0, 0, 0, 0.04);
+            --menu-item-active: rgba(67, 97, 238, 0.15);
         }
 
         /* ============================================================
@@ -133,7 +135,6 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
-
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -141,14 +142,14 @@
         }
 
         /* ============================================================
-           CLAYMORPHISM CONTAINER
+           LAYOUT PRINCIPAL
            ============================================================ */
         .dashboard-container {
-            max-width: 1200px;
+            max-width: 1400px;
             width: 100%;
             margin: 0 auto;
             background: var(--container-bg);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 2rem;
             position: relative;
             z-index: 1;
@@ -156,6 +157,8 @@
                 -9px -9px 18px var(--container-shadow-2);
             transition: background 0.4s ease, box-shadow 0.4s ease;
             animation: fadeIn 0.6s ease-out 0.4s both;
+            display: flex;
+            gap: 2rem;
         }
 
         @keyframes fadeIn {
@@ -163,11 +166,111 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+
+        /* ============================================================
+           MENÚ LATERAL
+           ============================================================ */
+        .sidebar {
+            min-width: 220px;
+            max-width: 220px;
+            flex-shrink: 0;
+            padding-right: 1rem;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 0 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-brand .logo-icon {
+            font-size: 1.8rem;
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: color 0.3s ease;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand h2 small {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 400;
+            color: var(--text-muted-light);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.7rem 1rem;
+            border-radius: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: transparent;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .menu-item:hover {
+            background: var(--menu-item-hover);
+            color: var(--text-primary);
+        }
+
+        .menu-item.active {
+            background: var(--menu-item-active);
+            color: var(--text-primary);
+            box-shadow: inset 3px 0 0 var(--btn-bg);
+        }
+
+        .menu-item .icon {
+            font-size: 1.3rem;
+            width: 28px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .menu-item .badge-menu {
+            margin-left: auto;
+            background: var(--badge-bg);
+            color: var(--badge-color);
+            font-size: 0.6rem;
+            padding: 0.1rem 0.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 0.75rem 0;
+            opacity: 0.5;
+        }
+
+        /* ============================================================
+           CONTENIDO PRINCIPAL
+           ============================================================ */
+        .main-content {
+            flex: 1;
+            min-width: 0;
         }
 
         /* ============================================================
@@ -191,7 +294,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            z-index: 2;
+            z-index: 10;
         }
 
         .theme-toggle:hover {
@@ -226,7 +329,7 @@
         }
 
         /* ============================================================
-           BOTONES CLAY
+           BOTONES
            ============================================================ */
         .btn {
             padding: 0.6rem 1.5rem;
@@ -249,8 +352,7 @@
 
         .btn-danger {
             background: var(--btn-danger);
-            box-shadow: 4px 4px 8px rgba(247, 37, 133, 0.2),
-                -4px -4px 8px rgba(255, 255, 255, 0.02);
+            box-shadow: 4px 4px 8px rgba(247, 37, 133, 0.2);
         }
 
         .btn-danger:hover {
@@ -300,7 +402,7 @@
            ============================================================ */
         .table-container {
             border-radius: 16px;
-            overflow: hidden;
+            overflow: auto;
             margin-top: 1rem;
             background: var(--container-bg);
             box-shadow: inset 4px 4px 8px var(--container-shadow-1),
@@ -312,6 +414,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.9rem;
+            min-width: 600px;
         }
 
         thead {
@@ -347,11 +450,9 @@
         .cantidad-alta {
             color: var(--cantidad-alta);
         }
-
         .cantidad-media {
             color: var(--cantidad-media);
         }
-
         .cantidad-baja {
             color: var(--cantidad-baja);
         }
@@ -367,9 +468,6 @@
             transition: background 0.3s ease, color 0.3s ease;
         }
 
-        /* ============================================================
-           HEADER ACTIONS
-           ============================================================ */
         .header-actions {
             display: flex;
             justify-content: space-between;
@@ -385,9 +483,6 @@
             transition: color 0.3s ease;
         }
 
-        /* ============================================================
-           LOADING / EMPTY / ERROR
-           ============================================================ */
         .loading-spinner {
             display: inline-block;
             width: 16px;
@@ -421,9 +516,6 @@
             transition: color 0.3s ease;
         }
 
-        /* ============================================================
-           FOOTER
-           ============================================================ */
         .footer {
             text-align: center;
             margin-top: 2rem;
@@ -435,19 +527,43 @@
         /* ============================================================
            RESPONSIVE
            ============================================================ */
-        @media (max-width: 768px) {
-            body {
-                padding: 1rem;
-            }
-
+        @media (max-width: 992px) {
             .dashboard-container {
-                padding: 1rem;
+                flex-direction: column;
+                padding: 1.5rem;
             }
-
+            .sidebar {
+                min-width: 100%;
+                max-width: 100%;
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+                padding-bottom: 1rem;
+                margin-bottom: 1rem;
+            }
+            .sidebar-brand {
+                padding: 0 0 0.75rem 0;
+                margin-bottom: 0.75rem;
+            }
+            .menu-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 0.25rem;
+            }
+            .menu-item {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.8rem;
+            }
+            .menu-item .icon {
+                font-size: 1.1rem;
+                width: 24px;
+            }
+            .menu-divider {
+                display: none;
+            }
             .dashboard-header {
                 padding-right: 0;
             }
-
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -455,47 +571,42 @@
                 height: 34px;
                 font-size: 1rem;
             }
-
-            table {
-                font-size: 0.75rem;
-            }
-
-            th,
-            td {
-                padding: 0.5rem;
-            }
-
-            .header-actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .btn-group {
-                justify-content: center;
-            }
-
             h1 {
                 font-size: 1.4rem;
             }
         }
 
-        @media (max-width: 480px) {
-            .dashboard-container {
-                padding: 0.75rem;
+        @media (max-width: 600px) {
+            .menu-grid {
+                grid-template-columns: 1fr 1fr;
             }
-
+            .menu-item {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.6rem;
+            }
+            .menu-item .icon {
+                font-size: 1rem;
+                width: 20px;
+            }
             table {
-                font-size: 0.65rem;
+                font-size: 0.75rem;
             }
-
             th,
             td {
-                padding: 0.3rem 0.5rem;
+                padding: 0.5rem;
             }
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-group {
+                justify-content: center;
+            }
+        }
 
-            .btn {
-                font-size: 0.75rem;
-                padding: 0.4rem 1rem;
+        @media (max-width: 400px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -512,51 +623,91 @@
             🌙
         </button>
 
-        <!-- HEADER -->
-        <div class="dashboard-header">
-            <div>
-                <h1>📋 Panel de Control</h1>
-                <p class="subtitle">Sistema de Control de Cartillas</p>
+        <!-- ============================================================
+        MENÚ LATERAL
+        ============================================================ -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span class="logo-icon">📋</span>
+                <h2>Cartillas <small>Control de Salud</small></h2>
             </div>
-            <button class="btn btn-danger" onclick="logout()">
-                Cerrar Sesión
+
+            <nav class="menu-grid">
+                <a href="dashboard.html" class="menu-item active">
+                    <span class="icon">📊</span> Dashboard
+                </a>
+                <a href="traspasos.html" class="menu-item">
+                    <span class="icon">🔄</span> Traspasos
+                </a>
+                <a href="censo.html" class="menu-item">
+                    <span class="icon">📝</span> Censo
+                </a>
+                <a href="reportes.html" class="menu-item">
+                    <span class="icon">📄</span> Reportes
+                </a>
+                <a href="usuarios.html" class="menu-item">
+                    <span class="icon">👥</span> Usuarios
+                </a>
+                <a href="registro_usuarios.html" class="menu-item">
+                    <span class="icon">➕</span> Registrar
+                </a>
+                <a href="tickets.html" class="menu-item">
+                    <span class="icon">🎫</span> Tickets
+                </a>
+                <a href="contactos.html" class="menu-item">
+                    <span class="icon">📬</span> Contactos
+                </a>
+            </nav>
+
+            <div class="menu-divider"></div>
+
+            <button class="menu-item" onclick="logout()" style="color:var(--btn-danger);">
+                <span class="icon">🚪</span> Cerrar Sesión
             </button>
-        </div>
+        </aside>
 
-        <!-- INFO USUARIO -->
-        <div id="userInfo">
-            <div class="user-badge">
-                <span id="userName">Cargando...</span> ·
-                <span id="userRole" style="color:var(--text-muted-light);"></span>
+        <!-- ============================================================
+        CONTENIDO PRINCIPAL
+        ============================================================ -->
+        <main class="main-content">
+            <!-- HEADER -->
+            <div class="dashboard-header">
+                <div>
+                    <h1>📋 Panel de Control</h1>
+                    <p class="subtitle">Sistema de Control de Cartillas</p>
+                </div>
             </div>
-        </div>
-        <a href="registro_usuarios.html" class="menu-card">
-            <div class="icon">👤</div>
-            <div class="title">Registrar Usuario</div>
-            <div class="desc">Crear nuevos usuarios</div>
-        </a>
 
-        <!-- TABLA INVENTARIO -->
-        <div class="header-actions">
-            <span class="info">
-                <span id="totalRegistros">0</span> registros encontrados
-            </span>
-            <div class="btn-group">
-                <button class="btn btn-secondary" onclick="loadDashboard()">🔄 Actualizar</button>
+            <!-- INFO USUARIO -->
+            <div id="userInfo">
+                <div class="user-badge">
+                    <span id="userName">Cargando...</span> ·
+                    <span id="userRole" style="color:var(--text-muted-light);"></span>
+                </div>
             </div>
-        </div>
 
-        <div class="table-container" id="inventarioContainer">
-            <div class="empty-state">
-                <div class="loading-spinner"></div>
-                Cargando inventario...
+            <!-- TABLA INVENTARIO -->
+            <div class="header-actions">
+                <span class="info">
+                    <span id="totalRegistros">0</span> registros encontrados
+                </span>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="loadDashboard()">🔄 Actualizar</button>
+                </div>
             </div>
-        </div>
 
-        <div id="error" class="error"></div>
-        <div class="footer">
-            Sistema de Cartillas de Salud © <span id="currentYear"></span>
-        </div>
+            <div class="table-container" id="inventarioContainer">
+                <div class="empty-state">
+                    <div class="loading-spinner"></div>
+                    Cargando inventario...
+                </div>
+            </div>
+
+            <div id="error" class="error"></div>
+            <div class="footer">
+                Sistema de Cartillas de Salud © <span id="currentYear"></span>
+            </div>
+        </main>
     </div>
 
     <script>
@@ -577,7 +728,7 @@
                 icon.textContent = '🌙';
             }
 
-            themeToggle.addEventListener('click', function () {
+            themeToggle.addEventListener('click', function() {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -759,7 +910,7 @@
                     <tbody>
             `;
 
-            data.forEach(function (item) {
+            data.forEach(function(item) {
                 var clues = item.clues || {};
                 var tipoCartilla = item.tipo_cartilla || {};
 
@@ -814,7 +965,7 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         window.logout = logout;
 
-        window.addEventListener('load', function () {
+        window.addEventListener('load', function() {
             createParticles();
             loadDashboard();
         });
