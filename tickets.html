@@ -145,6 +145,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -171,6 +172,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -638,14 +640,17 @@
             body {
                 padding: 1rem;
             }
+
             .container {
                 padding: 1rem;
             }
+
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -653,12 +658,15 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
             .modal-content {
                 padding: 1rem;
             }
@@ -688,7 +696,8 @@
             </div>
         </div>
 
-        <div id="userInfo" style="margin-bottom:1rem; padding:0.5rem 1rem; background:var(--table-header-bg); border-radius:8px; display:none;">
+        <div id="userInfo"
+            style="margin-bottom:1rem; padding:0.5rem 1rem; background:var(--table-header-bg); border-radius:8px; display:none;">
             <span id="userNameDisplay"></span>
             <span class="badge" id="userRolDisplay" style="margin-left:0.5rem;"></span>
         </div>
@@ -722,7 +731,8 @@
                     </div>
                     <div class="form-group full-width">
                         <label for="ticket_descripcion">Descripción *</label>
-                        <textarea id="ticket_descripcion" rows="4" placeholder="Explica detalladamente la situación" required></textarea>
+                        <textarea id="ticket_descripcion" rows="4" placeholder="Explica detalladamente la situación"
+                            required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="ticket_urgencia">Urgencia *</label>
@@ -747,7 +757,8 @@
                             <div class="file-label" id="fileLabel">
                                 📎 Haz clic para seleccionar una imagen
                             </div>
-                            <input type="file" id="ticket_imagen" accept="image/*" onchange="previsualizarImagen(event)" />
+                            <input type="file" id="ticket_imagen" accept="image/*"
+                                onchange="previsualizarImagen(event)" />
                         </div>
                         <div class="file-preview" id="filePreview">
                             <img id="previewImg" src="#" alt="Vista previa" />
@@ -792,7 +803,7 @@
             } else {
                 icon.textContent = '🌙';
             }
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -951,20 +962,20 @@
                     <tbody>
             `;
 
-            data.forEach(function(ticket, index) {
+            data.forEach(function (ticket, index) {
                 var urgenciaClass = 'badge-urgencia-' + ticket.urgencia;
                 var urgenciaLabel = {
                     'baja': '🟢 Baja',
                     'media': '🟡 Media',
                     'alta': '🔴 Alta'
-                } [ticket.urgencia] || ticket.urgencia;
+                }[ticket.urgencia] || ticket.urgencia;
 
                 var estadoClass = 'badge-estado ' + (ticket.estado || 'abierto');
                 var estadoLabel = {
                     'abierto': '📂 Abierto',
                     'en-proceso': '🔄 En proceso',
                     'cerrado': '✅ Cerrado'
-                } [ticket.estado] || ticket.estado;
+                }[ticket.estado] || ticket.estado;
 
                 var fecha = ticket.created_at ? new Date(ticket.created_at).toLocaleDateString('es-MX') : 'N/A';
                 var usuarioNombre = ticket.usuario_nombre || 'Usuario';
@@ -1026,7 +1037,7 @@
             if (!file) return;
 
             var reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 document.getElementById('previewImg').src = e.target.result;
                 document.getElementById('previewName').textContent = file.name;
                 document.getElementById('filePreview').style.display = 'flex';
@@ -1042,7 +1053,7 @@
         }
 
         // ============================================================
-        // GUARDAR TICKET
+        // GUARDAR TICKET (VERSIÓN CORREGIDA)
         // ============================================================
         async function guardarTicket(event) {
             event.preventDefault();
@@ -1068,9 +1079,28 @@
             submitBtn.textContent = '⏳ Enviando...';
 
             try {
-                var user = await getUsuarioActual();
-                if (!user) {
-                    throw new Error('Usuario no autenticado');
+                // Obtener la sesión para el auth.uid()
+                var session = await supabaseClient.auth.getSession();
+                if (!session.data.session) {
+                    throw new Error('No hay sesión activa');
+                }
+
+                var authUserId = session.data.session.user.id;
+                var userEmail = session.data.session.user.email;
+
+                // Obtener el nombre del usuario desde la tabla usuario (opcional)
+                var userResult = await supabaseClient
+                    .from('usuario')
+                    .select('nombre, paterno, materno')
+                    .eq('auth_user_id', authUserId)
+                    .single();
+
+                var nombreCompleto = userEmail || 'Usuario';
+                if (userResult.data) {
+                    nombreCompleto = userResult.data.nombre || '';
+                    if (userResult.data.paterno) nombreCompleto += ' ' + userResult.data.paterno;
+                    if (userResult.data.materno) nombreCompleto += ' ' + userResult.data.materno;
+                    nombreCompleto = nombreCompleto.trim() || userEmail || 'Usuario';
                 }
 
                 var imagenUrl = null;
@@ -1078,7 +1108,7 @@
                 // Subir imagen si existe
                 if (imagenSeleccionada) {
                     var fileExt = imagenSeleccionada.name.split('.').pop();
-                    var fileName = `tickets/${user.id_uuid}/${Date.now()}.${fileExt}`;
+                    var fileName = `tickets/${authUserId}/${Date.now()}.${fileExt}`;
 
                     var uploadResult = await supabaseClient.storage
                         .from('tickets')
@@ -1092,6 +1122,7 @@
                     }
                 }
 
+                // Ticket data con auth.uid() como usuario_id
                 var ticketData = {
                     id_uuid: crypto.randomUUID ? crypto.randomUUID() : self.crypto.randomUUID(),
                     asunto: asunto,
@@ -1099,16 +1130,19 @@
                     urgencia: urgencia,
                     categoria: categoria,
                     estado: 'abierto',
-                    usuario_id: user.id_uuid,
-                    usuario_nombre: (user.nombre || '') + ' ' + (user.paterno || '') + ' ' + (user.materno || ''),
+                    usuario_id: authUserId,  // <-- Usar auth.uid() en lugar de user.id_uuid
+                    usuario_nombre: nombreCompleto,
                     imagen_url: imagenUrl,
                     created_at: new Date().toISOString(),
                     updated_at: new Date().toISOString()
                 };
 
+                console.log('Enviando ticket:', ticketData);
+
                 var result = await supabaseClient.from('tickets').insert(ticketData);
 
                 if (result.error) {
+                    console.error('Error de Supabase:', result.error);
                     throw result.error;
                 }
 
@@ -1149,13 +1183,13 @@
                     'baja': '🟢 Baja',
                     'media': '🟡 Media',
                     'alta': '🔴 Alta'
-                } [ticket.urgencia] || ticket.urgencia;
+                }[ticket.urgencia] || ticket.urgencia;
 
                 var estadoLabel = {
                     'abierto': '📂 Abierto',
                     'en-proceso': '🔄 En proceso',
                     'cerrado': '✅ Cerrado'
-                } [ticket.estado] || ticket.estado;
+                }[ticket.estado] || ticket.estado;
 
                 var fecha = ticket.created_at ? new Date(ticket.created_at).toLocaleString('es-MX') : 'N/A';
 
@@ -1222,7 +1256,7 @@
                 }
 
                 successElement.textContent = '✅ Estado actualizado a: ' + nuevoEstado;
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1239,12 +1273,12 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
             cargarTickets();
 
             // Cerrar modales con ESC
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     cerrarModalTicket();
                     cerrarVerTicket();
@@ -1252,12 +1286,12 @@
             });
 
             // Cerrar modales al hacer clic fuera
-            document.getElementById('modalTicket').addEventListener('click', function(e) {
+            document.getElementById('modalTicket').addEventListener('click', function (e) {
                 if (e.target === this) {
                     cerrarModalTicket();
                 }
             });
-            document.getElementById('modalVerTicket').addEventListener('click', function(e) {
+            document.getElementById('modalVerTicket').addEventListener('click', function (e) {
                 if (e.target === this) {
                     cerrarVerTicket();
                 }
