@@ -21,28 +21,28 @@
         }
 
         body {
-            background: #141E30;
+            background: linear-gradient(145deg, #141E30, #243B55);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 1rem;
         }
 
+        /* Claymorphism container */
         .dashboard-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: #1c2541;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            padding: 3rem;
+            padding: 2rem;
             width: 600px;
             max-width: 100%;
-            animation: fadeIn 0.6s ease-out;
             color: white;
+            box-shadow: 9px 9px 18px #0d1320,
+                -9px -9px 18px #2b3f60;
+            animation: fadeIn 0.6s ease-out;
         }
 
+        /* Animación */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -59,16 +59,19 @@
             text-align: center;
             margin-bottom: 1rem;
             font-weight: 600;
-            font-size: 2rem;
+            font-size: 1.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
         }
 
+        /* Claymorphism cards */
         .user-info {
-            background: rgba(255, 255, 255, 0.1);
+            background: #1c2541;
             padding: 1rem;
-            border-radius: 10px;
+            border-radius: 15px;
             margin: 1.5rem 0;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 4px 4px 8px #0d1320,
+                inset -4px -4px 8px #2b3f60;
         }
 
         .user-info p {
@@ -82,11 +85,12 @@
             font-size: 0.85rem;
         }
 
+        /* Claymorphism button */
         .btn {
             width: 100%;
             padding: 1rem;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             background: #f72585;
             color: white;
             font-size: 1rem;
@@ -95,14 +99,16 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
+            box-shadow: 6px 6px 12px #c71c6a,
+                -6px -6px 12px #ff2a9f;
         }
 
         .btn:hover {
             background: #d91a6e;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(247, 37, 133, 0.3);
         }
 
+        /* Footer */
         .footer {
             text-align: center;
             margin-top: 2rem;
@@ -110,6 +116,7 @@
             font-size: 0.8rem;
         }
 
+        /* Error */
         .error {
             color: #f72585;
             text-align: center;
@@ -117,6 +124,7 @@
             font-weight: 500;
         }
 
+        /* Spinner */
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -135,6 +143,7 @@
             }
         }
 
+        /* Status badge */
         .status-badge {
             display: inline-block;
             padding: 0.25rem 1rem;
@@ -142,20 +151,21 @@
             font-size: 0.8rem;
             font-weight: 500;
             margin-top: 0.5rem;
+            box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.3),
+                inset -2px -2px 5px rgba(255, 255, 255, 0.1);
         }
 
         .status-badge.active {
-            background: rgba(76, 201, 240, 0.2);
+            background: #1c2541;
             color: #4cc9f0;
-            border: 1px solid rgba(76, 201, 240, 0.3);
         }
 
         .status-badge.inactive {
-            background: rgba(247, 37, 133, 0.2);
+            background: #1c2541;
             color: #f72585;
-            border: 1px solid rgba(247, 37, 133, 0.3);
         }
 
+        /* Menu grid */
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -164,21 +174,19 @@
         }
 
         .menu-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: #1c2541;
             padding: 1.5rem;
-            border-radius: 12px;
+            border-radius: 15px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
             transition: all 0.3s ease;
             cursor: pointer;
-            text-decoration: none;
             color: white;
+            box-shadow: 6px 6px 12px #0d1320,
+                -6px -6px 12px #2b3f60;
         }
 
         .menu-card:hover {
-            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-3px);
-            border-color: rgba(67, 97, 238, 0.3);
         }
 
         .menu-card .icon {
@@ -196,7 +204,32 @@
             color: rgba(255, 255, 255, 0.5);
             margin-top: 0.25rem;
         }
-    </style>
+
+        /* Responsividad ultrapequeña */
+        @media (max-width: 360px) {
+            .dashboard-container {
+                padding: 1rem;
+                border-radius: 15px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .btn {
+                font-size: 0.85rem;
+                padding: 0.75rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-card {
+                padding: 1rem;
+            }
+        }
+    </style>>
 </head>
 
 <body>
@@ -254,11 +287,11 @@
         // CONFIGURACIÓN DE SUPABASE
         // ============================================================
         // Reemplaza estos valores con los de tu proyecto
-            var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
-            var SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
+        var SUPABASE_URL = 'https://apsvmojzniglbpmmaugd.supabase.co';
+        var SUPABASE_ANON_KEY = 'sb_publishable_m9qYl2tQZMAou80wO2g66Q_VUzkf3n1';
 
         // Inicializar cliente de Supabase
-            var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ============================================================
         // VERIFICAR SESIÓN
