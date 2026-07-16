@@ -1,0 +1,85 @@
+:root {
+  /* Variables comunes */
+  --radius: 15px;
+  --shadow-light: -6px -6px 12px rgba(255,255,255,0.1);
+  --shadow-dark: 6px 6px 12px rgba(0,0,0,0.4);
+}
+
+/* Tema nocturno */
+.dark-theme {
+  --bg: #141E30;
+  --container: #1c2541;
+  --text: #f8f9fa;
+  --primary: #4361ee;
+  --primary-dark: #3a56d4;
+  --danger: #f72585;
+}
+
+/* Tema diurno */
+.light-theme {
+  --bg: #f0f0f3;
+  --container: #ffffff;
+  --text: #1a1a2e;
+  --primary: #3f37c9;
+  --primary-dark: #2d2aa8;
+  --danger: #d91a6e;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+/* Contenedor clay */
+.glass-container {
+  background: var(--container);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 400px;
+  max-width: 100%;
+  box-shadow: var(--shadow-dark), var(--shadow-light);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Inputs clay */
+input {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--container);
+  color: var(--text);
+  box-shadow: inset var(--shadow-dark), inset var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.3),
+              inset -2px -2px 5px rgba(255,255,255,0.1),
+              0 0 0 3px rgba(67,97,238,0.3);
+}
+
+/* Botón clay */
+.btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-dark), var(--shadow-light);
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
