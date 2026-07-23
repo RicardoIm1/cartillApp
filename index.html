@@ -39,8 +39,8 @@
             --shadow-outer: #070a10;
             --shadow-inner: #212b3f;
             --text-main: #eef2f6;
-            --text-soft: rgba(255, 255, 255, 0.75);
-            --text-muted: rgba(255, 255, 255, 0.45);
+            --text-soft: rgba(255, 255, 255, 0.82);
+            --text-muted: rgba(255, 255, 255, 0.55);
             --border-subtle: rgba(255, 255, 255, 0.04);
             --accent-neon: #4fc3ff;
             --accent-glow: rgba(79, 195, 255, 0.15);
@@ -52,24 +52,24 @@
         }
 
         /* ============================================================
-       MODO CLARO (mínimo, sin brillo excesivo, contraste suave)
+       MODO CLARO – contraste fuerte, sin brillo excesivo
        ============================================================ */
         body.light-mode {
-            --bg-body: #d5dbe8;
-            --bg-card: #e6ecf5;
-            --shadow-outer: #b6c0d0;
-            --shadow-inner: #f8fcff;
-            --text-main: #1a1f2b;
-            --text-soft: #2d3442;
-            --text-muted: #565e72;
-            --border-subtle: rgba(0, 0, 0, 0.04);
-            --accent-neon: #1a73e8;
-            --accent-glow: rgba(26, 115, 232, 0.10);
-            --btn-plastic: #d0d8e6;
-            --btn-plastic-shadow: #b6c0d0;
-            --btn-plastic-highlight: #eaeeff;
-            --btn-text: #1a1f2b;
-            --icon-filter: brightness(0.8);
+            --bg-body: #dde3ed;
+            --bg-card: #edf2fa;
+            --shadow-outer: #c2ccdb;
+            --shadow-inner: #ffffff;
+            --text-main: #121824;
+            --text-soft: #1e2638;
+            --text-muted: #3e4a60;
+            --border-subtle: rgba(0, 0, 0, 0.06);
+            --accent-neon: #1a6bc4;
+            --accent-glow: rgba(26, 107, 196, 0.12);
+            --btn-plastic: #d5def0;
+            --btn-plastic-shadow: #bcc6d8;
+            --btn-plastic-highlight: #f2f8ff;
+            --btn-text: #121824;
+            --icon-filter: brightness(0.85);
         }
 
         /* ============================================================
@@ -210,6 +210,7 @@
             font-weight: 800;
             line-height: 1.05;
             letter-spacing: -1px;
+            color: var(--text-main);
         }
 
         .hero h1 span {
@@ -273,6 +274,7 @@
             font-size: clamp(1.8rem, 5vw, 2.8rem);
             font-weight: 700;
             letter-spacing: -0.5px;
+            color: var(--text-main);
         }
 
         .section-header p {
@@ -328,6 +330,7 @@
         .card-clay h3 {
             font-weight: 600;
             font-size: 1.2rem;
+            color: var(--text-main);
         }
 
         .card-clay p {
@@ -735,7 +738,7 @@
     <script>
         (function () {
             // ============================================================
-            // TEMA (diurno reducido, contraste suave)
+            // TEMA (diurno con contraste mejorado)
             // ============================================================
             const body = document.body;
             const toggleBtn = document.getElementById('themeToggle');
@@ -766,7 +769,7 @@
             document.getElementById('currentYear').textContent = new Date().getFullYear();
 
             // ============================================================
-            // (OPCIONAL) PEQUEÑA ANIMACIÓN DE ENTRADA
+            // ANIMACIÓN DE ENTRADA
             // ============================================================
             document.querySelectorAll('.card-clay, .stat-clay, .module-pill').forEach((el, i) => {
                 el.style.opacity = '0';
