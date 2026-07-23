@@ -4,852 +4,847 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cartillas · Salud Digital</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+    <title>Sistema de Control de Cartillas - Salud Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
+
     <style>
         /* ============================================================
-       RESET + BASE
-       ============================================================ */
+           VARIABLES Y TEMAS
+           ============================================================ */
+        :root {
+            --bg-gradient-start: #141E30;
+            --bg-gradient-end: #243B55;
+            --container-bg: #1c2541;
+            --container-shadow-1: #0d1320;
+            --container-shadow-2: #2b3f60;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --text-muted-light: rgba(255, 255, 255, 0.4);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-success: #4cc9f0;
+            --btn-success-hover: #3ab8dd;
+            --footer-color: rgba(255, 255, 255, 0.5);
+            --particle-color: rgba(255, 255, 255, 0.4);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --badge-bg: rgba(76, 201, 240, 0.15);
+            --badge-text: #4cc9f0;
+        }
+
+        /* ============================================================
+           MODO CLARO – CLAYMORPHISM ELEGANTE
+           ============================================================ */
+        body.light-mode {
+            --bg-gradient-start: #e8e4de;
+            --bg-gradient-end: #f5f2ed;
+            --container-bg: #f0ece6;
+            --container-shadow-1: #c8c2b8;
+            --container-shadow-2: #ffffff;
+            --text-primary: #2c2420;
+            --text-secondary: #4a3f3a;
+            --text-muted: rgba(44, 36, 32, 0.65);
+            --text-muted-light: rgba(44, 36, 32, 0.4);
+            --btn-primary: #7c5c4a;
+            --btn-primary-hover: #6b4e3e;
+            --btn-success: #b8865c;
+            --btn-success-hover: #a67850;
+            --footer-color: rgba(44, 36, 32, 0.5);
+            --particle-color: rgba(44, 36, 32, 0.08);
+            --border-color: rgba(44, 36, 32, 0.06);
+            --card-bg: rgba(255, 250, 245, 0.45);
+            --badge-bg: rgba(184, 134, 92, 0.12);
+            --badge-text: #b8865c;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #0b0e17;
-            color: #eef2f6;
-            transition: background 0.5s ease, color 0.4s ease;
+            background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 1.5rem;
-            position: relative;
+            color: var(--text-primary);
+            transition: background 0.6s ease, color 0.4s ease;
             overflow-x: hidden;
         }
 
         /* ============================================================
-       PARTÍCULAS DECORATIVAS
-       ============================================================ */
+           PARTÍCULAS
+           ============================================================ */
         .particles {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            width: 100vw;
+            height: 100vh;
             z-index: 0;
             overflow: hidden;
+            pointer-events: none;
         }
 
         .particle {
             position: absolute;
+            background: var(--particle-color);
             border-radius: 50%;
-            opacity: 0.3;
-            transition: background 0.5s ease, opacity 0.5s ease;
             animation: float linear infinite;
+            transition: background 0.6s ease;
         }
 
         @keyframes float {
             0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
             }
-            10% {
-                opacity: 0.3;
-            }
-            90% {
-                opacity: 0.3;
-            }
+
             100% {
-                transform: translateY(-100vh) rotate(720deg);
+                transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
             }
         }
 
         /* ============================================================
-       TEMA OSCURO (default)
-       ============================================================ */
-        :root {
-            --bg-body: #0b0e17;
-            --bg-card: #141924;
-            --shadow-outer: #070a10;
-            --shadow-inner: #212b3f;
-            --text-main: #eef2f6;
-            --text-soft: rgba(255, 255, 255, 0.82);
-            --text-muted: rgba(255, 255, 255, 0.55);
-            --border-subtle: rgba(255, 255, 255, 0.04);
-            --accent-neon: #4fc3ff;
-            --accent-glow: rgba(79, 195, 255, 0.15);
-            --btn-plastic: #1a1f2b;
-            --btn-plastic-shadow: #0b0f16;
-            --btn-plastic-highlight: #2a3448;
-            --btn-text: #eef2f6;
-            --icon-filter: none;
-            --card-hover-transform: translateY(-4px);
-            --particle-color: rgba(79, 195, 255, 0.2);
-        }
-
-        /* ============================================================
-       MODO CLARO – LIMPIO Y PROFESIONAL CON PARTÍCULAS
-       ============================================================ */
-        body.light-mode {
-            --bg-body: #f0f4fb;
-            --bg-card: #ffffff;
-            --shadow-outer: #d0d9e8;
-            --shadow-inner: #f8fcff;
-            --text-main: #1a2634;
-            --text-soft: #3d4a5c;
-            --text-muted: #7a889c;
-            --border-subtle: rgba(26, 38, 52, 0.06);
-            --accent-neon: #2c7be0;
-            --accent-glow: rgba(44, 123, 224, 0.10);
-            --btn-plastic: #e6edf8;
-            --btn-plastic-shadow: #cbd3e3;
-            --btn-plastic-highlight: #f5faff;
-            --btn-text: #1a2634;
-            --icon-filter: brightness(0.9);
-            --card-hover-transform: translateY(-4px) scale(1.01);
-            --particle-color: rgba(44, 123, 224, 0.15);
-        }
-
-        /* ============================================================
-       CLAYMORPHISM GLOBAL
-       ============================================================ */
-        .app-wrapper {
-            max-width: 1360px;
+           CLAYMORPHISM CONTAINER
+           ============================================================ */
+        .container {
+            max-width: 1200px;
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
+            margin: 0 auto;
+            padding: 2rem;
             position: relative;
             z-index: 1;
         }
 
-        .clay {
-            background: var(--bg-card);
-            border-radius: 2rem;
-            box-shadow: 8px 8px 18px var(--shadow-outer),
-                -6px -6px 14px var(--shadow-inner);
-            border: 1px solid var(--border-subtle);
-            transition: box-shadow 0.3s ease, background 0.4s ease, transform 0.2s ease;
-        }
-
-        .clay-flat {
-            background: var(--bg-card);
-            border-radius: 1.6rem;
-            box-shadow: 6px 6px 14px var(--shadow-outer),
-                -4px -4px 12px var(--shadow-inner);
-            border: 1px solid var(--border-subtle);
-        }
-
         /* ============================================================
-       BOTÓN PLÁSTICO
-       ============================================================ */
-        .btn-plastic {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            padding: 0.7rem 1.8rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-            font-family: 'Inter', sans-serif;
+           BOTÓN DE TEMA – CLAY
+           ============================================================ */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: var(--container-bg);
             border: none;
-            border-radius: 3rem;
-            background: var(--btn-plastic);
-            color: var(--btn-text);
-            box-shadow: 5px 5px 12px var(--btn-plastic-shadow),
-                -3px -3px 10px var(--btn-plastic-highlight);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            letter-spacing: 0.3px;
-            text-decoration: none;
-            white-space: nowrap;
-        }
-
-        .btn-plastic:active {
-            box-shadow: inset 3px 3px 8px var(--btn-plastic-shadow),
-                inset -2px -2px 6px var(--btn-plastic-highlight);
-            transform: scale(0.97);
-        }
-
-        .btn-plastic:hover {
-            transform: translateY(-2px);
-            box-shadow: 6px 6px 16px var(--btn-plastic-shadow),
-                -4px -4px 14px var(--btn-plastic-highlight);
-        }
-
-        .btn-plastic-accent {
-            color: var(--accent-neon);
-        }
-
-        /* ============================================================
-       HEADER / THEME TOGGLE
-       ============================================================ */
-        .top-bar {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0.2rem 0;
-        }
-
-        #themeToggle {
+            border-radius: 50%;
             width: 48px;
             height: 48px;
-            border-radius: 50%;
             font-size: 1.3rem;
-            padding: 0;
-            justify-content: center;
-            background: var(--btn-plastic);
-            color: var(--btn-text);
-            box-shadow: 5px 5px 12px var(--btn-plastic-shadow),
-                -3px -3px 10px var(--btn-plastic-highlight);
-            border: none;
-            transition: all 0.2s ease;
             cursor: pointer;
+            box-shadow: 6px 6px 14px var(--container-shadow-1),
+                -6px -6px 14px var(--container-shadow-2);
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
-        #themeToggle:active {
-            box-shadow: inset 3px 3px 8px var(--btn-plastic-shadow),
-                inset -2px -2px 6px var(--btn-plastic-highlight);
-            transform: scale(0.94);
+        .theme-toggle:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 8px 8px 18px var(--container-shadow-1),
+                -8px -8px 18px var(--container-shadow-2);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+            box-shadow: inset 4px 4px 10px var(--container-shadow-1),
+                inset -4px -4px 10px var(--container-shadow-2);
         }
 
         /* ============================================================
-       HERO
-       ============================================================ */
-        .hero-clay {
-            padding: 3rem 2.5rem;
+           HERO
+           ============================================================ */
+        .hero {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             text-align: center;
-            gap: 1.2rem;
+            padding: 4rem 2rem;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .hero-badge {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            padding: 0.35rem 1.2rem;
-            border-radius: 40px;
-            background: var(--accent-glow);
-            color: var(--accent-neon);
-            border: 1px solid var(--border-subtle);
+            display: inline-block;
+            padding: 0.4rem 1.4rem;
+            border-radius: 30px;
+            background: var(--badge-bg);
+            color: var(--badge-text);
+            font-size: 0.75rem;
             font-weight: 600;
-            transition: background 0.3s ease, color 0.3s ease;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
         }
 
         .hero h1 {
-            font-size: clamp(2.2rem, 10vw, 4.6rem);
+            font-size: 4rem;
             font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: -1px;
-            color: var(--text-main);
-            transition: color 0.3s ease;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            background: linear-gradient(145deg, var(--text-primary), var(--btn-success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .hero h1 span {
-            color: var(--accent-neon);
-            text-shadow: 0 0 20px var(--accent-glow);
-            transition: color 0.3s ease;
+            -webkit-text-fill-color: var(--text-primary);
+            background: none;
         }
 
         .hero p {
-            max-width: 680px;
-            color: var(--text-soft);
-            font-size: 1.1rem;
-            line-height: 1.6;
-            font-weight: 400;
-            transition: color 0.3s ease;
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 1rem auto 2rem;
+            line-height: 1.8;
+            font-weight: 300;
         }
 
-        .hero-actions {
+        .hero-buttons {
             display: flex;
+            gap: 1rem;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.8rem 1.2rem;
-            margin-top: 0.5rem;
         }
 
         /* ============================================================
-       ICONOS PLANOS
-       ============================================================ */
-        .icon-set {
+           BOTONES CLAYMORPHISM
+           ============================================================ */
+        .btn {
+            padding: 0.85rem 2.2rem;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 0.2rem;
-            font-weight: 300;
-            letter-spacing: 1px;
-            color: var(--text-soft);
-            filter: var(--icon-filter);
-            transition: color 0.3s ease, filter 0.3s ease;
+            gap: 0.6rem;
+            background: var(--container-bg);
+            color: var(--text-primary);
+            box-shadow: 6px 6px 14px var(--container-shadow-1),
+                -6px -6px 14px var(--container-shadow-2);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
         }
 
-        .icon-set svg {
-            width: 1.4rem;
-            height: 1.4rem;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            border-radius: 14px;
+            background: linear-gradient(145deg,
+                    rgba(255, 255, 255, 0.03) 0%,
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.02) 100%);
+            pointer-events: none;
+        }
+
+        .btn-primary {
+            background: var(--btn-primary);
+            color: white;
+            box-shadow: 6px 6px 14px rgba(67, 97, 238, 0.25),
+                -6px -6px 14px rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-primary:hover {
+            background: var(--btn-primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 8px 8px 20px rgba(67, 97, 238, 0.35),
+                -4px -4px 12px rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-success {
+            background: var(--btn-success);
+            color: white;
+            box-shadow: 6px 6px 14px rgba(76, 201, 240, 0.25),
+                -6px -6px 14px rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-success:hover {
+            background: var(--btn-success-hover);
+            transform: translateY(-3px);
+            box-shadow: 8px 8px 20px rgba(76, 201, 240, 0.35),
+                -4px -4px 12px rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-outline {
+            background: var(--container-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: 4px 4px 10px var(--container-shadow-1),
+                -4px -4px 10px var(--container-shadow-2);
+        }
+
+        .btn-outline:hover {
+            transform: translateY(-3px);
+            box-shadow: 8px 8px 18px var(--container-shadow-1),
+                -8px -8px 18px var(--container-shadow-2);
+            border-color: var(--text-muted);
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+            box-shadow: inset 4px 4px 10px var(--container-shadow-1),
+                inset -4px -4px 10px var(--container-shadow-2);
         }
 
         /* ============================================================
-       SECCIONES
-       ============================================================ */
+           SECCIONES
+           ============================================================ */
         .section {
-            padding: 1rem 0 0.5rem;
+            padding: 4rem 0;
+            border-top: 1px solid var(--border-color);
         }
 
-        .section-header {
+        .section-title {
             text-align: center;
-            margin-bottom: 2.5rem;
-        }
-
-        .section-header h2 {
-            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-size: 2.5rem;
             font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--text-main);
-            transition: color 0.3s ease;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
 
-        .section-header p {
+        .section-subtitle {
+            text-align: center;
             color: var(--text-muted);
+            font-size: 1.05rem;
             max-width: 600px;
-            margin: 0.4rem auto 0;
-            font-size: 1rem;
-            line-height: 1.6;
-            transition: color 0.3s ease;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+            font-weight: 300;
         }
 
         /* ============================================================
-       CARDS
-       ============================================================ */
-        .grid-2col {
+           CARDS (Claymorphism mejorado)
+           ============================================================ */
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
         }
 
-        .grid-3col {
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 2rem 1.8rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 8px 8px 20px var(--container-shadow-1),
+                -6px -6px 16px var(--container-shadow-2);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(145deg,
+                    rgba(255, 255, 255, 0.02) 0%,
+                    rgba(255, 255, 255, 0) 50%,
+                    rgba(0, 0, 0, 0.01) 100%);
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 12px 12px 28px var(--container-shadow-1),
+                -10px -10px 24px var(--container-shadow-2);
+        }
+
+        .card:active {
+            transform: translateY(-4px);
+            box-shadow: 6px 6px 14px var(--container-shadow-1),
+                -4px -4px 10px var(--container-shadow-2);
+        }
+
+        .card .icon {
+            font-size: 2.4rem;
+            margin-bottom: 1rem;
+            display: block;
+            opacity: 0.9;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* ============================================================
+           ESTADÍSTICAS
+           ============================================================ */
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.2rem;
+            gap: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
         }
 
-        .card-clay {
-            padding: 1.8rem 1.6rem;
-            background: var(--bg-card);
-            border-radius: 2rem;
-            box-shadow: 8px 8px 18px var(--shadow-outer),
-                -6px -6px 14px var(--shadow-inner);
-            border: 1px solid var(--border-subtle);
+        .stat-item {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 1.8rem 1.2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 6px 6px 14px var(--container-shadow-1),
+                -4px -4px 12px var(--container-shadow-2);
             transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
         }
 
-        .card-clay:hover {
-            transform: var(--card-hover-transform);
-            box-shadow: 10px 10px 22px var(--shadow-outer),
-                -8px -8px 18px var(--shadow-inner);
+        .stat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 10px 10px 22px var(--container-shadow-1),
+                -6px -6px 16px var(--container-shadow-2);
         }
 
-        .card-clay .icon-line {
-            font-size: 2rem;
-            line-height: 1;
-            color: var(--accent-neon);
-            opacity: 0.8;
-            margin-bottom: 0.2rem;
-            transition: color 0.3s ease;
+        .stat-item .number {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(145deg, var(--btn-success), var(--btn-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
-        .card-clay h3 {
-            font-weight: 600;
-            font-size: 1.2rem;
-            color: var(--text-main);
-            transition: color 0.3s ease;
-        }
-
-        .card-clay p {
-            color: var(--text-soft);
-            font-size: 0.92rem;
-            line-height: 1.5;
-            transition: color 0.3s ease;
+        .stat-item .label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            font-weight: 300;
         }
 
         /* ============================================================
-       MÓDULOS
-       ============================================================ */
-        .module-grid {
+           MÓDULOS
+           ============================================================ */
+        .modules-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 0.9rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
         }
 
-        .module-pill {
+        .module-item {
+            background: var(--card-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 16px;
+            padding: 1.2rem 1.5rem;
+            border: 1px solid var(--border-color);
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.8rem 1.2rem;
-            border-radius: 3rem;
-            background: var(--bg-card);
-            box-shadow: 5px 5px 12px var(--shadow-outer),
-                -3px -3px 10px var(--shadow-inner);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-soft);
-            font-weight: 500;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 10px var(--container-shadow-1),
+                -3px -3px 8px var(--container-shadow-2);
+        }
+
+        .module-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 8px 8px 18px var(--container-shadow-1),
+                -6px -6px 14px var(--container-shadow-2);
+            border-color: var(--badge-text);
+        }
+
+        .module-item:active {
+            transform: translateY(-1px);
+            box-shadow: inset 3px 3px 8px var(--container-shadow-1),
+                inset -3px -3px 8px var(--container-shadow-2);
+        }
+
+        .module-item .icon {
+            font-size: 1.4rem;
+            opacity: 0.8;
+        }
+
+        .module-item span {
             font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .module-pill:hover {
-            transform: translateY(-2px);
-            box-shadow: 6px 6px 16px var(--shadow-outer),
-                -4px -4px 14px var(--shadow-inner);
-        }
-
-        .module-pill .icon-line {
-            color: var(--accent-neon);
-            opacity: 0.7;
-            transition: color 0.3s ease;
-        }
-
-        /* ============================================================
-       ESTADÍSTICAS
-       ============================================================ */
-        .stat-clay {
-            padding: 1.5rem 1rem;
-            text-align: center;
-            background: var(--bg-card);
-            border-radius: 1.8rem;
-            box-shadow: 6px 6px 14px var(--shadow-outer),
-                -4px -4px 12px var(--shadow-inner);
-            border: 1px solid var(--border-subtle);
-            transition: all 0.3s ease;
-        }
-
-        .stat-clay:hover {
-            transform: var(--card-hover-transform);
-        }
-
-        .stat-clay .number {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--accent-neon);
-            text-shadow: 0 0 16px var(--accent-glow);
-            line-height: 1;
-            transition: color 0.3s ease;
-        }
-
-        .stat-clay .label {
-            color: var(--text-muted);
-            font-size: 0.85rem;
             font-weight: 500;
-            margin-top: 0.3rem;
-            transition: color 0.3s ease;
         }
 
         /* ============================================================
-       FOOTER
-       ============================================================ */
-        .footer-clay {
-            padding: 1.8rem 2rem;
+           FOOTER
+           ============================================================ */
+        .footer {
             text-align: center;
-            color: var(--text-muted);
+            padding: 2.5rem 0 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--footer-color);
             font-size: 0.85rem;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.8rem 2rem;
-            background: var(--bg-card);
-            border-radius: 3rem;
-            box-shadow: 6px 6px 14px var(--shadow-outer),
-                -4px -4px 12px var(--shadow-inner);
-            border: 1px solid var(--border-subtle);
-            margin-top: 1rem;
-            transition: all 0.3s ease;
+            margin-top: 2rem;
         }
 
-        .footer-clay a {
-            color: var(--accent-neon);
+        .footer a {
+            color: var(--badge-text);
             text-decoration: none;
-            font-weight: 500;
             transition: color 0.3s ease;
         }
 
-        .footer-clay a:hover {
+        .footer a:hover {
             text-decoration: underline;
+            opacity: 0.8;
         }
 
         /* ============================================================
-       RESPONSIVE
-       ============================================================ */
-        @media (max-width: 600px) {
-            body {
-                padding: 0.8rem;
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
             }
 
-            .hero-clay {
-                padding: 2rem 1.2rem;
+            .hero p {
+                font-size: 1rem;
             }
 
-            .hero-actions {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hero-buttons {
                 flex-direction: column;
                 align-items: center;
                 width: 100%;
             }
 
-            .btn-plastic {
+            .btn {
                 width: 100%;
                 justify-content: center;
-                padding: 0.8rem 1.2rem;
+                padding: 0.8rem 1.5rem;
             }
 
-            .grid-2col {
+            .theme-toggle {
+                top: 0.5rem;
+                right: 0.5rem;
+                width: 42px;
+                height: 42px;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .grid-3col {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .module-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .grid-3col {
+            .modules-grid {
                 grid-template-columns: 1fr;
             }
 
-            .module-grid {
-                grid-template-columns: 1fr;
+            .container {
+                padding: 1rem;
             }
-
-            .stat-clay .number {
-                font-size: 2.2rem;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .hero-clay {
-                padding: 4.5rem 5rem;
-            }
-
-            .grid-2col {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* ============================================================
-       UTILERÍAS
-       ============================================================ */
-        .mt-2 {
-            margin-top: 1.5rem;
-        }
-
-        .mb-1 {
-            margin-bottom: 0.8rem;
-        }
-
-        .gap-1 {
-            gap: 1rem;
-        }
-
-        .flex-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .text-accent {
-            color: var(--accent-neon);
         }
     </style>
 </head>
 
 <body>
 
-    <!-- ============================================================
-   PARTÍCULAS DECORATIVAS
-   ============================================================ -->
     <div class="particles" id="particles"></div>
 
-    <div class="app-wrapper">
+    <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">🌙</button>
+
+    <div class="container">
 
         <!-- ============================================================
-       TOP BAR — TEMA
-       ============================================================ -->
-        <div class="top-bar">
-            <button class="btn-plastic" id="themeToggle" type="button"
-                style="width:48px;height:48px;border-radius:50%;padding:0;font-size:1.4rem;">
-                🌙
-            </button>
-        </div>
-
-        <!-- ============================================================
-       HERO
-       ============================================================ -->
-        <section class="hero-clay clay">
-            <div class="hero-badge">◆ sistema en producción</div>
-            <h1>Control de Cartillas<br /><span>Salud Digital</span></h1>
+        HERO
+        ============================================================ -->
+        <section class="hero">
+            <div class="hero-badge">🚀 Sistema en Producción</div>
+            <h1>Control de Cartillas <br /><span>Salud Digital</span></h1>
             <p>
-                Plataforma profesional para inventario, censo, traspasos y reportes.
-                Escalable de 50 a 2,540 centros.
+                Plataforma profesional para el control de inventario, censo, traspasos y reportes de cartillas
+                en centros de salud. Diseñada para escalar desde 50 hasta 2,540 centros.
             </p>
-            <div class="hero-actions">
-                <a href="#" class="btn-plastic btn-plastic-accent">
-                    <span class="icon-set">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M12 2v4M12 22v-4M4 12H2M22 12h-2M19.07 4.93l-2.83 2.83M6.34 17.66l-2.83 2.83M17.66 6.34l2.83-2.83M4.93 19.07l2.83-2.83" />
-                            <circle cx="12" cy="12" r="4" />
-                        </svg>
-                    </span>
-                    Iniciar Sesión
-                </a>
-                <a href="#info" class="btn-plastic">
-                    <span class="icon-set">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-                            <path d="M12 16v-4M12 8h.01" />
-                        </svg>
-                    </span>
-                    Conocer más
-                </a>
+            <div class="hero-buttons">
+                <a href="login.html" class="btn btn-primary">🔐 Iniciar Sesión</a>
+                <a href="#info" class="btn btn-outline">📖 Conocer más</a>
             </div>
         </section>
 
         <!-- ============================================================
-       INFO: ¿QUÉ ES?
-       ============================================================ -->
+        SECCIÓN: ¿QUÉ ES?
+        ============================================================ -->
         <section class="section" id="info">
-            <div class="section-header">
-                <h2>¿Qué es este sistema?</h2>
-                <p>Reemplaza hojas de cálculo por datos en tiempo real, con acceso seguro y roles.</p>
-            </div>
-            <div class="grid-2col">
-                <div class="card-clay">
-                    <div class="icon-line">◈</div>
+            <h2 class="section-title">¿Qué es este sistema?</h2>
+            <p class="section-subtitle">
+                Una herramienta digital que reemplaza las hojas de cálculo por una base de datos en tiempo real,
+                con acceso seguro desde cualquier lugar y roles para cada usuario.
+            </p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="icon">📊</div>
                     <h3>Inventario en Tiempo Real</h3>
-                    <p>Stock de cartillas por centro, actualizaciones automáticas al instante.</p>
+                    <p>Consulta el stock de cartillas por centro de salud, con actualizaciones automáticas al instante.
+                    </p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">⟳</div>
+                <div class="card">
+                    <div class="icon">🔄</div>
                     <h3>Traspasos entre Centros</h3>
-                    <p>Movimientos con validación de stock y auditoría completa.</p>
+                    <p>Registra movimientos de cartillas entre unidades médicas con validación de stock y auditoría.</p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">▦</div>
+                <div class="card">
+                    <div class="icon">📝</div>
                     <h3>Censo de Beneficiarios</h3>
-                    <p>Registro de personas: datos, tipo de cartilla y entrega.</p>
+                    <p>Registro completo de personas que reciben cartillas: datos personales, tipo de cartilla y
+                        entrega.</p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">◻</div>
+                <div class="card">
+                    <div class="icon">📄</div>
                     <h3>Reportes Automáticos</h3>
-                    <p>PDF con formato oficial, listos para presentar.</p>
+                    <p>Genera reportes mensuales en PDF con formato oficial, listos para presentar a superiores.</p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">◉</div>
+                <div class="card">
+                    <div class="icon">👥</div>
                     <h3>Roles y Permisos</h3>
-                    <p>Admin, Coordinador, Usuario. Cada uno ve lo que necesita.</p>
+                    <p>Admin, Coordinador y Usuario. Cada uno ve solo lo que le corresponde.</p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">⌂</div>
+                <div class="card">
+                    <div class="icon">☁️</div>
                     <h3>Acceso desde Cualquier Lugar</h3>
-                    <p>Vercel + Supabase. Solo internet y navegador.</p>
+                    <p>Desplegado en la nube con Vercel + Supabase. Solo necesitas internet y un navegador.</p>
                 </div>
             </div>
         </section>
 
         <!-- ============================================================
-       PARA QUIÉN
-       ============================================================ -->
+        SECCIÓN: ¿PARA QUIÉN?
+        ============================================================ -->
         <section class="section">
-            <div class="section-header">
-                <h2>¿Para quién está dirigido?</h2>
-                <p>Sector salud, pero escalable a cualquier industria con inventario y censo.</p>
-            </div>
-            <div class="grid-2col">
-                <div class="card-clay">
-                    <div class="icon-line">◙</div>
+            <h2 class="section-title">¿Para quién está dirigido?</h2>
+            <p class="section-subtitle">
+                Diseñado específicamente para el sector salud, pero escalable a cualquier industria con inventario y
+                censo.
+            </p>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="icon">🏥</div>
                     <h3>Centros de Salud Públicos</h3>
-                    <p>SSA, IMSS, ISSSTE, SEDENA. Control de cartillas en unidades médicas.</p>
+                    <p>Secretaría de Salud, IMSS, ISSSTE, SEDENA y más. Ideal para control de cartillas en unidades
+                        médicas.</p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">◘</div>
+                <div class="card">
+                    <div class="icon">🏛️</div>
                     <h3>Jurisdicciones Sanitarias</h3>
-                    <p>Coordinadores regionales con visibilidad global.</p>
+                    <p>Coordinadores regionales que supervisan múltiples centros y necesitan visibilidad global.</p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">◗</div>
+                <div class="card">
+                    <div class="icon">💼</div>
                     <h3>Sector Privado</h3>
-                    <p>Clínicas, hospitales, farmacias: insumos y trazabilidad.</p>
+                    <p>Clínicas, hospitales privados y farmacias que necesitan control de insumos y trazabilidad.</p>
                 </div>
-                <div class="card-clay">
-                    <div class="icon-line">◖</div>
+                <div class="card">
+                    <div class="icon">📋</div>
                     <h3>Programas Sociales</h3>
-                    <p>DIF, Cruz Roja, organizaciones que entregan cartillas.</p>
+                    <p>DIF, Cruz Roja y otras organizaciones que entregan cartillas o insumos a la población.</p>
                 </div>
             </div>
         </section>
 
         <!-- ============================================================
-       ESTADÍSTICAS
-       ============================================================ -->
+        SECCIÓN: ESTADÍSTICAS
+        ============================================================ -->
         <section class="section">
-            <div class="section-header">
-                <h2>El sistema en números</h2>
-                <p>Datos reales del alcance y capacidad en Jalisco.</p>
-            </div>
-            <div class="grid-3col">
-                <div class="stat-clay">
+            <h2 class="section-title">El sistema en números</h2>
+            <p class="section-subtitle">
+                Datos reales del alcance y capacidad del sistema en Jalisco.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-item">
                     <div class="number">2,540</div>
                     <div class="label">Centros de Salud en Jalisco</div>
                 </div>
-                <div class="stat-clay">
+                <div class="stat-item">
                     <div class="number">47</div>
-                    <div class="label">Centros ya operando</div>
+                    <div class="label">Centros ya operando con el sistema</div>
                 </div>
-                <div class="stat-clay">
+                <div class="stat-item">
                     <div class="number">6 hrs</div>
-                    <div class="label">de trabajo manual ELIMINADAS</div>
+                    <div class="label">de trabajo manual <span
+                            style="color:var(--badge-text); font-weight:400;">ELIMINADAS</span> cada
+                        mes</div>
                 </div>
-                <div class="stat-clay">
+                <div class="stat-item">
                     <div class="number">100%</div>
-                    <div class="label">reducción de errores en reportes</div>
+                    <div class="label">reducción de errores <span style="color:var(--badge-text); font-weight:400;">en
+                            reportes</span>
+                    </div>
                 </div>
-                <div class="stat-clay">
+                <div class="stat-item">
                     <div class="number">0</div>
-                    <div class="label">fórmulas rotas · más</div>
+                    <div class="label">fórmulas rotas <span style="color:var(--badge-text); font-weight:400;">más</span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- ============================================================
-       MÓDULOS
-       ============================================================ -->
+        SECCIÓN: MÓDULOS
+        ============================================================ -->
         <section class="section">
-            <div class="section-header">
-                <h2>Módulos del Sistema</h2>
-                <p>Todo lo que necesitas para gestionar cartillas.</p>
-            </div>
-            <div class="module-grid">
-                <div class="module-pill"><span class="icon-line">◈</span> Login con Supabase</div>
-                <div class="module-pill"><span class="icon-line">◉</span> Dashboard en Vivo</div>
-                <div class="module-pill"><span class="icon-line">⟳</span> Traspasos</div>
-                <div class="module-pill"><span class="icon-line">▦</span> Censo de Beneficiarios</div>
-                <div class="module-pill"><span class="icon-line">◻</span> Reportes en PDF</div>
-                <div class="module-pill"><span class="icon-line">◙</span> Roles y Permisos</div>
-                <div class="module-pill"><span class="icon-line">◘</span> Registro de Usuarios</div>
-                <div class="module-pill"><span class="icon-line">⌂</span> Desplegado en Vercel</div>
-                <div class="module-pill"><span class="icon-line">◗</span> Tema Diurno/Nocturno</div>
-                <div class="module-pill"><span class="icon-line">◖</span> Claymorphism UI</div>
+            <h2 class="section-title">Módulos del Sistema</h2>
+            <p class="section-subtitle">
+                Todo lo que necesitas para gestionar cartillas de forma profesional.
+            </p>
+
+            <div class="modules-grid">
+                <div class="module-item">
+                    <span class="icon">🔐</span>
+                    <span>Login con Supabase</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard en Vivo</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">🔄</span>
+                    <span>Traspasos</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">📝</span>
+                    <span>Censo de Beneficiarios</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">📄</span>
+                    <span>Reportes en PDF</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">👥</span>
+                    <span>Roles y Permisos</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">📋</span>
+                    <span>Registro de Usuarios</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">☁️</span>
+                    <span>Desplegado en Vercel</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">🌓</span>
+                    <span>Tema Diurno/Nocturno</span>
+                </div>
+                <div class="module-item">
+                    <span class="icon">🎨</span>
+                    <span>Claymorphism UI</span>
+                </div>
             </div>
         </section>
 
         <!-- ============================================================
-       CTA FINAL
-       ============================================================ -->
+        SECCIÓN: CTA FINAL
+        ============================================================ -->
         <section class="section" style="text-align:center;">
-            <div class="section-header">
-                <h2>¿Listo para empezar?</h2>
-                <p>El sistema ya funciona en producción. Solo necesita usuarios y datos reales.</p>
-            </div>
-            <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:0.5rem;">
-                <a href="#" class="btn-plastic btn-plastic-accent">
-                    <span class="icon-set"><svg viewBox="0 0 24 24">
-                            <path
-                                d="M12 2v4M12 22v-4M4 12H2M22 12h-2M19.07 4.93l-2.83 2.83M6.34 17.66l-2.83 2.83M17.66 6.34l2.83-2.83M4.93 19.07l2.83-2.83" />
-                            <circle cx="12" cy="12" r="4" />
-                        </svg></span>
-                    Iniciar Sesión
-                </a>
-                <a href="#info" class="btn-plastic">
-                    <span class="icon-set"><svg viewBox="0 0 24 24">
-                            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
-                            <path d="M12 16v-4M12 8h.01" />
-                        </svg></span>
-                    Conocer más
-                </a>
+            <h2 class="section-title">¿Listo para empezar?</h2>
+            <p class="section-subtitle" style="margin-bottom:2rem;">
+                El sistema ya está funcionando en producción. Solo necesita usuarios y datos reales.
+            </p>
+            <div class="hero-buttons" style="justify-content:center;">
+                <a href="login.html" class="btn btn-success">🔐 Iniciar Sesión</a>
+                <a href="#info" class="btn btn-outline">📖 Conocer más</a>
             </div>
         </section>
 
         <!-- ============================================================
-       FOOTER
-       ============================================================ -->
-        <footer class="footer-clay">
-            <span>Sistema de Control de Cartillas © <span id="currentYear"></span></span>
-            <a href="#">Iniciar Sesión</a>
-            <a href="mailto:contacto@cartillas.com">Contacto</a>
-            <span style="opacity:0.6;">· Jalisco, México</span>
+        FOOTER
+        ============================================================ -->
+        <footer class="footer">
+            <p>
+                Sistema de Control de Cartillas © <span id="currentYear"></span> ·
+                <a href="login.html">Iniciar Sesión</a> ·
+                <a href="mailto:contacto@cartillas.com">Contacto</a>
+            </p>
+            <p style="margin-top:0.5rem; font-size:0.75rem;">
+                Desarrollado con ❤️ para el sector salud · Jalisco, México
+            </p>
         </footer>
 
     </div>
 
     <script>
-        (function () {
-            // ============================================================
-            // PARTÍCULAS
-            // ============================================================
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 30;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                const size = Math.random() * 6 + 3;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDuration = (Math.random() * 20 + 15) + 's';
-                particle.style.animationDelay = (Math.random() * 20) + 's';
-                particle.style.background = 'var(--particle-color)';
-                particlesContainer.appendChild(particle);
-            }
-
-            // Actualizar color de partículas al cambiar tema
-            function updateParticles() {
-                const isLight = document.body.classList.contains('light-mode');
-                const color = isLight ? 'rgba(44, 123, 224, 0.15)' : 'rgba(79, 195, 255, 0.2)';
-                document.querySelectorAll('.particle').forEach(p => {
-                    p.style.background = color;
-                });
-            }
-
-            // ============================================================
-            // TEMA
-            // ============================================================
-            const body = document.body;
-            const toggleBtn = document.getElementById('themeToggle');
-            const icon = toggleBtn;
-
-            const saved = localStorage.getItem('theme') || 'dark';
-            if (saved === 'light') {
+        // ============================================================
+        // TEMA DIURNO / NOCTURNO
+        // ============================================================
+        (function setupTheme() {
+            var body = document.body;
+            var themeToggle = document.getElementById('themeToggle');
+            var icon = themeToggle;
+            var savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
                 body.classList.add('light-mode');
                 icon.textContent = '☀️';
             } else {
                 icon.textContent = '🌙';
             }
-            updateParticles();
-
-            toggleBtn.addEventListener('click', function () {
-                const isLight = body.classList.toggle('light-mode');
+            themeToggle.addEventListener('click', function () {
+                var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
                     localStorage.setItem('theme', 'light');
@@ -857,27 +852,40 @@
                     icon.textContent = '🌙';
                     localStorage.setItem('theme', 'dark');
                 }
-                updateParticles();
-            });
-
-            // ============================================================
-            // AÑO AUTOMÁTICO
-            // ============================================================
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
-
-            // ============================================================
-            // ANIMACIÓN DE ENTRADA
-            // ============================================================
-            document.querySelectorAll('.card-clay, .stat-clay, .module-pill').forEach((el, i) => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(12px)';
-                el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                setTimeout(() => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, 80 + i * 40);
             });
         })();
+
+        // ============================================================
+        // PARTÍCULAS
+        // ============================================================
+        function createParticles() {
+            var container = document.getElementById('particles');
+            for (var i = 0; i < 20; i++) {
+                var p = document.createElement('div');
+                p.classList.add('particle');
+                var size = Math.random() * 12 + 4;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.bottom = '-' + size + 'px';
+                p.style.animationDuration = Math.random() * 25 + 15 + 's';
+                p.style.animationDelay = Math.random() * 8 + 's';
+                p.style.opacity = Math.random() * 0.5 + 0.05;
+                container.appendChild(p);
+            }
+        }
+
+        // ============================================================
+        // AÑO
+        // ============================================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // ============================================================
+        // INICIALIZACIÓN
+        // ============================================================
+        window.addEventListener('load', function () {
+            createParticles();
+        });
     </script>
 
 </body>
