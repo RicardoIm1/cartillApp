@@ -35,28 +35,28 @@
         }
 
         /* ============================================================
-           MODO CLARO – CLAYMORPHISM ELEGANTE
+           MODO CLARO – RETRO PREMIUM (Radiocassetteras)
            ============================================================ */
         body.light-mode {
-            --bg-gradient-start: #e8e4de;
-            --bg-gradient-end: #f5f2ed;
-            --container-bg: #f0ece6;
-            --container-shadow-1: #c8c2b8;
-            --container-shadow-2: #ffffff;
-            --text-primary: #2c2420;
+            --bg-gradient-start: #d4c9b8;
+            --bg-gradient-end: #e8dfd0;
+            --container-bg: #e8ddd0;
+            --container-shadow-1: #b8ab9a;
+            --container-shadow-2: #fff8ed;
+            --text-primary: #2c241e;
             --text-secondary: #4a3f3a;
             --text-muted: rgba(44, 36, 32, 0.65);
             --text-muted-light: rgba(44, 36, 32, 0.4);
-            --btn-primary: #7c5c4a;
-            --btn-primary-hover: #6b4e3e;
+            --btn-primary: #8b6b4d;
+            --btn-primary-hover: #7a5d42;
             --btn-success: #b8865c;
             --btn-success-hover: #a67850;
             --footer-color: rgba(44, 36, 32, 0.5);
-            --particle-color: rgba(44, 36, 32, 0.08);
-            --border-color: rgba(44, 36, 32, 0.06);
-            --card-bg: rgba(255, 250, 245, 0.45);
-            --badge-bg: rgba(184, 134, 92, 0.12);
-            --badge-text: #b8865c;
+            --particle-color: rgba(44, 36, 32, 0.06);
+            --border-color: rgba(44, 36, 32, 0.08);
+            --card-bg: rgba(255, 248, 240, 0.5);
+            --badge-bg: rgba(184, 134, 92, 0.15);
+            --badge-text: #8b6b4d;
         }
 
         * {
@@ -125,7 +125,7 @@
         }
 
         /* ============================================================
-           BOTÓN DE TEMA – CLAY
+           BOTÓN DE TEMA – ESTILO RADIOCASSETTEA
            ============================================================ */
         .theme-toggle {
             position: fixed;
@@ -133,33 +133,39 @@
             right: 1rem;
             background: var(--container-bg);
             border: none;
-            border-radius: 50%;
+            border-radius: 12px;
             width: 48px;
             height: 48px;
             font-size: 1.3rem;
             cursor: pointer;
-            box-shadow: 6px 6px 14px var(--container-shadow-1),
-                -6px -6px 14px var(--container-shadow-2);
+            box-shadow:
+                4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
             color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 100;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
         }
 
         .theme-toggle:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 8px 8px 18px var(--container-shadow-1),
-                -8px -8px 18px var(--container-shadow-2);
+            transform: scale(1.04) translateY(-2px);
+            box-shadow:
+                6px 6px 12px var(--container-shadow-1),
+                -6px -6px 12px var(--container-shadow-2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
 
         .theme-toggle:active {
-            transform: scale(0.95);
-            box-shadow: inset 4px 4px 10px var(--container-shadow-1),
-                inset -4px -4px 10px var(--container-shadow-2);
+            transform: scale(0.94);
+            box-shadow:
+                inset 3px 3px 6px var(--container-shadow-1),
+                inset -3px -3px 6px var(--container-shadow-2),
+                0 0 0 1px rgba(255, 255, 255, 0.02);
         }
 
         /* ============================================================
@@ -232,96 +238,155 @@
 
         .hero-buttons {
             display: flex;
-            gap: 1rem;
+            gap: 1.2rem;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         /* ============================================================
-           BOTONES CLAYMORPHISM
+           BOTONES – ESTILO RADIOCASSETTERA PREMIUM
            ============================================================ */
         .btn {
-            padding: 0.85rem 2.2rem;
+            padding: 0.9rem 2.4rem;
             border: none;
-            border-radius: 16px;
+            border-radius: 14px;
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
             background: var(--container-bg);
             color: var(--text-primary);
-            box-shadow: 6px 6px 14px var(--container-shadow-1),
-                -6px -6px 14px var(--container-shadow-2);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1px solid var(--border-color);
             position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            /* Estilo radiocassettera: múltiples capas de sombras */
+            box-shadow:
+                0 4px 0 var(--container-shadow-1),
+                4px 6px 12px rgba(0, 0, 0, 0.15),
+                -2px -2px 8px rgba(255, 255, 255, 0.02),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                inset 0 -2px 0 var(--container-shadow-1);
+            transform: translateY(0);
+            letter-spacing: 0.3px;
         }
 
-        .btn::after {
+        /* Efecto "presa" o "grabando" de radiocassetteras */
+        .btn::before {
             content: '';
             position: absolute;
             inset: 2px;
-            border-radius: 14px;
+            border-radius: 11px;
             background: linear-gradient(145deg,
                     rgba(255, 255, 255, 0.03) 0%,
-                    rgba(255, 255, 255, 0) 50%,
+                    rgba(255, 255, 255, 0) 40%,
                     rgba(0, 0, 0, 0.02) 100%);
             pointer-events: none;
+        }
+
+        /* Textura de botón físico */
+        .btn::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            border-radius: 10px;
+            background:
+                repeating-linear-gradient(45deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 255, 255, 0.01) 2px,
+                    rgba(255, 255, 255, 0.01) 4px);
+            pointer-events: none;
+            opacity: 0.3;
         }
 
         .btn-primary {
             background: var(--btn-primary);
             color: white;
-            box-shadow: 6px 6px 14px rgba(67, 97, 238, 0.25),
-                -6px -6px 14px rgba(255, 255, 255, 0.02);
+            box-shadow:
+                0 4px 0 rgba(67, 97, 238, 0.4),
+                4px 6px 16px rgba(67, 97, 238, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
         }
 
         .btn-primary:hover {
             background: var(--btn-primary-hover);
-            transform: translateY(-3px);
-            box-shadow: 8px 8px 20px rgba(67, 97, 238, 0.35),
-                -4px -4px 12px rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+            box-shadow:
+                0 6px 0 rgba(67, 97, 238, 0.4),
+                6px 8px 20px rgba(67, 97, 238, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
         }
 
         .btn-success {
             background: var(--btn-success);
             color: white;
-            box-shadow: 6px 6px 14px rgba(76, 201, 240, 0.25),
-                -6px -6px 14px rgba(255, 255, 255, 0.02);
+            box-shadow:
+                0 4px 0 rgba(76, 201, 240, 0.4),
+                4px 6px 16px rgba(76, 201, 240, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
         }
 
         .btn-success:hover {
             background: var(--btn-success-hover);
-            transform: translateY(-3px);
-            box-shadow: 8px 8px 20px rgba(76, 201, 240, 0.35),
-                -4px -4px 12px rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+            box-shadow:
+                0 6px 0 rgba(76, 201, 240, 0.4),
+                6px 8px 20px rgba(76, 201, 240, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
         }
 
         .btn-outline {
             background: var(--container-bg);
             color: var(--text-primary);
             border: 1px solid var(--border-color);
-            box-shadow: 4px 4px 10px var(--container-shadow-1),
-                -4px -4px 10px var(--container-shadow-2);
+            box-shadow:
+                0 4px 0 var(--container-shadow-1),
+                4px 6px 12px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05),
+                inset 0 -2px 0 var(--container-shadow-1);
         }
 
         .btn-outline:hover {
-            transform: translateY(-3px);
-            box-shadow: 8px 8px 18px var(--container-shadow-1),
-                -8px -8px 18px var(--container-shadow-2);
+            transform: translateY(-2px);
+            box-shadow:
+                0 6px 0 var(--container-shadow-1),
+                6px 8px 16px rgba(0, 0, 0, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                inset 0 -2px 0 var(--container-shadow-1);
             border-color: var(--text-muted);
         }
 
+        /* EFECTO "PRESIONADO" - Como pulsar un botón de cassette */
         .btn:active {
-            transform: scale(0.96);
-            box-shadow: inset 4px 4px 10px var(--container-shadow-1),
-                inset -4px -4px 10px var(--container-shadow-2);
+            transform: translateY(4px) scale(0.98);
+            box-shadow:
+                0 1px 0 var(--container-shadow-1),
+                2px 3px 8px rgba(0, 0, 0, 0.08),
+                inset 0 2px 4px var(--container-shadow-1),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-primary:active {
+            box-shadow:
+                0 1px 0 rgba(67, 97, 238, 0.4),
+                2px 3px 8px rgba(67, 97, 238, 0.1),
+                inset 0 2px 4px rgba(0, 0, 0, 0.15),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-success:active {
+            box-shadow:
+                0 1px 0 rgba(76, 201, 240, 0.4),
+                2px 3px 8px rgba(76, 201, 240, 0.1),
+                inset 0 2px 4px rgba(0, 0, 0, 0.15),
+                inset 0 -1px 0 rgba(255, 255, 255, 0.02);
         }
 
         /* ============================================================
@@ -366,8 +431,10 @@
             border-radius: 24px;
             padding: 2rem 1.8rem;
             border: 1px solid var(--border-color);
-            box-shadow: 8px 8px 20px var(--container-shadow-1),
-                -6px -6px 16px var(--container-shadow-2);
+            box-shadow:
+                8px 8px 20px var(--container-shadow-1),
+                -6px -6px 16px var(--container-shadow-2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.02);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
@@ -387,13 +454,16 @@
 
         .card:hover {
             transform: translateY(-8px);
-            box-shadow: 12px 12px 28px var(--container-shadow-1),
-                -10px -10px 24px var(--container-shadow-2);
+            box-shadow:
+                12px 12px 28px var(--container-shadow-1),
+                -10px -10px 24px var(--container-shadow-2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
 
         .card:active {
             transform: translateY(-4px);
-            box-shadow: 6px 6px 14px var(--container-shadow-1),
+            box-shadow:
+                6px 6px 14px var(--container-shadow-1),
                 -4px -4px 10px var(--container-shadow-2);
         }
 
@@ -436,15 +506,19 @@
             border-radius: 20px;
             padding: 1.8rem 1.2rem;
             border: 1px solid var(--border-color);
-            box-shadow: 6px 6px 14px var(--container-shadow-1),
-                -4px -4px 12px var(--container-shadow-2);
+            box-shadow:
+                6px 6px 14px var(--container-shadow-1),
+                -4px -4px 12px var(--container-shadow-2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.02);
             transition: all 0.3s ease;
         }
 
         .stat-item:hover {
             transform: translateY(-4px);
-            box-shadow: 10px 10px 22px var(--container-shadow-1),
-                -6px -6px 16px var(--container-shadow-2);
+            box-shadow:
+                10px 10px 22px var(--container-shadow-1),
+                -6px -6px 16px var(--container-shadow-2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
 
         .stat-item .number {
@@ -483,20 +557,25 @@
             align-items: center;
             gap: 0.75rem;
             transition: all 0.3s ease;
-            box-shadow: 4px 4px 10px var(--container-shadow-1),
-                -3px -3px 8px var(--container-shadow-2);
+            box-shadow:
+                4px 4px 10px var(--container-shadow-1),
+                -3px -3px 8px var(--container-shadow-2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.02);
         }
 
         .module-item:hover {
             transform: translateY(-3px);
-            box-shadow: 8px 8px 18px var(--container-shadow-1),
-                -6px -6px 14px var(--container-shadow-2);
+            box-shadow:
+                8px 8px 18px var(--container-shadow-1),
+                -6px -6px 14px var(--container-shadow-2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.04);
             border-color: var(--badge-text);
         }
 
         .module-item:active {
             transform: translateY(-1px);
-            box-shadow: inset 3px 3px 8px var(--container-shadow-1),
+            box-shadow:
+                inset 3px 3px 8px var(--container-shadow-1),
                 inset -3px -3px 8px var(--container-shadow-2);
         }
 
