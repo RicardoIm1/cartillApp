@@ -28,6 +28,47 @@
             flex-direction: column;
             align-items: center;
             padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ============================================================
+       PARTÍCULAS DECORATIVAS
+       ============================================================ */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            transition: background 0.5s ease, opacity 0.5s ease;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
         }
 
         /* ============================================================
@@ -50,23 +91,22 @@
             --btn-text: #eef2f6;
             --icon-filter: none;
             --card-hover-transform: translateY(-4px);
+            --particle-color: rgba(79, 195, 255, 0.2);
         }
 
         /* ============================================================
-       MODO CLARO – LIMPIO Y PROFESIONAL
+       MODO CLARO – LIMPIO Y PROFESIONAL CON PARTÍCULAS
        ============================================================ */
         body.light-mode {
-            --bg-body: #eef2f7;
-            /* Fondo claro y suave */
+            --bg-body: #f0f4fb;
             --bg-card: #ffffff;
-            --shadow-outer: #d0d7e6;
-            --shadow-inner: #f8faff;
+            --shadow-outer: #d0d9e8;
+            --shadow-inner: #f8fcff;
             --text-main: #1a2634;
             --text-soft: #3d4a5c;
             --text-muted: #7a889c;
             --border-subtle: rgba(26, 38, 52, 0.06);
             --accent-neon: #2c7be0;
-            /* Azul profesional */
             --accent-glow: rgba(44, 123, 224, 0.10);
             --btn-plastic: #e6edf8;
             --btn-plastic-shadow: #cbd3e3;
@@ -74,11 +114,22 @@
             --btn-text: #1a2634;
             --icon-filter: brightness(0.9);
             --card-hover-transform: translateY(-4px) scale(1.01);
+            --particle-color: rgba(44, 123, 224, 0.15);
         }
 
         /* ============================================================
        CLAYMORPHISM GLOBAL
        ============================================================ */
+        .app-wrapper {
+            max-width: 1360px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
         .clay {
             background: var(--bg-card);
             border-radius: 2rem;
@@ -135,17 +186,6 @@
 
         .btn-plastic-accent {
             color: var(--accent-neon);
-        }
-
-        /* ============================================================
-       LAYOUT
-       ============================================================ */
-        .app-wrapper {
-            max-width: 1360px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
         }
 
         /* ============================================================
@@ -545,6 +585,11 @@
 
 <body>
 
+    <!-- ============================================================
+   PARTÍCULAS DECORATIVAS
+   ============================================================ -->
+    <div class="particles" id="particles"></div>
+
     <div class="app-wrapper">
 
         <!-- ============================================================
@@ -760,6 +805,34 @@
     <script>
         (function () {
             // ============================================================
+            // PARTÍCULAS
+            // ============================================================
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 6 + 3;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 20 + 15) + 's';
+                particle.style.animationDelay = (Math.random() * 20) + 's';
+                particle.style.background = 'var(--particle-color)';
+                particlesContainer.appendChild(particle);
+            }
+
+            // Actualizar color de partículas al cambiar tema
+            function updateParticles() {
+                const isLight = document.body.classList.contains('light-mode');
+                const color = isLight ? 'rgba(44, 123, 224, 0.15)' : 'rgba(79, 195, 255, 0.2)';
+                document.querySelectorAll('.particle').forEach(p => {
+                    p.style.background = color;
+                });
+            }
+
+            // ============================================================
             // TEMA
             // ============================================================
             const body = document.body;
@@ -773,6 +846,7 @@
             } else {
                 icon.textContent = '🌙';
             }
+            updateParticles();
 
             toggleBtn.addEventListener('click', function () {
                 const isLight = body.classList.toggle('light-mode');
@@ -783,6 +857,7 @@
                     icon.textContent = '🌙';
                     localStorage.setItem('theme', 'dark');
                 }
+                updateParticles();
             });
 
             // ============================================================
