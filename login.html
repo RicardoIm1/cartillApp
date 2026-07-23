@@ -14,91 +14,19 @@
 
     <style>
         /* ============================================================
-               CSS VARIABLES PARA TEMA DIURNO / NOCTURNO
-               ============================================================ */
-        :root {
-            /* Modo nocturno (por defecto) */
-            --bg-gradient-start: #141E30;
-            --bg-gradient-end: #243B55;
-            --container-bg: #1c2541;
-            --container-shadow-1: #0d1320;
-            --container-shadow-2: #2b3f60;
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.9);
-            --text-muted: rgba(255, 255, 255, 0.6);
-            --text-muted-light: rgba(255, 255, 255, 0.5);
-            --input-bg: #1c2541;
-            --input-shadow-1: #0d1320;
-            --input-shadow-2: #2b3f60;
-            --input-focus-bg: #243b55;
-            --input-placeholder: rgba(255, 255, 255, 0.5);
-            --btn-bg: #4361ee;
-            --btn-shadow-1: #2b3f60;
-            --btn-shadow-2: #3a56d4;
-            --btn-hover: #3a56d4;
-            --error-color: #f72585;
-            --footer-color: rgba(255, 255, 255, 0.6);
-            --particle-color: rgba(255, 255, 255, 0.5);
-            --label-color: rgba(255, 255, 255, 0.9);
-        }
+           ESTILOS ESPECÍFICOS DEL LOGIN
+           ============================================================ */
 
-        /* Modo diurno */
-        body.light-mode {
-            --bg-gradient-start: #e0e5ec;
-            --bg-gradient-end: #f0f2f8;
-            --container-bg: #e8ecf4;
-            --container-shadow-1: #b8bcc8;
-            --container-shadow-2: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #2d2d44;
-            --text-muted: rgba(0, 0, 0, 0.7);
-            --text-muted-light: rgba(0, 0, 0, 0.5);
-            --input-bg: #e8ecf4;
-            --input-shadow-1: #b8bcc8;
-            --input-shadow-2: #ffffff;
-            --input-focus-bg: #d5dbe8;
-            --input-placeholder: rgba(0, 0, 0, 0.4);
-            --btn-bg: #4361ee;
-            --btn-shadow-1: #2a3f8a;
-            --btn-shadow-2: #6b8aff;
-            --btn-hover: #3a56d4;
-            --error-color: #e63946;
-            --footer-color: rgba(0, 0, 0, 0.5);
-            --particle-color: rgba(0, 0, 0, 0.15);
-            --label-color: rgba(0, 0, 0, 0.8);
-        }
-
-        /* ============================================================
-               ESTILOS GENERALES
-               ============================================================ */
-        html {
-            box-sizing: border-box;
-            font-size: 80%;
-            height: 100%;
-        }
-
-        *,
-        *:before,
-        *:after {
-            box-sizing: inherit;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-
+        /* Reset de body para centrar el login */
         body {
-            background: linear-gradient(145deg, var(--bg-gradient-start), var(--bg-gradient-end));
-            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem;
-            color: var(--text-primary);
             overflow: hidden;
-            transition: background 0.5s ease, color 0.3s ease;
         }
 
-        /* Claymorphism container */
+        /* Claymorphism container - específico para login */
         .glass-container {
             background: var(--container-bg);
             border-radius: 20px;
@@ -113,53 +41,7 @@
             transition: background 0.4s ease, box-shadow 0.4s ease;
         }
 
-        /* Botón de cambio de tema */
-        .theme-toggle {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--container-bg);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.3rem;
-            cursor: pointer;
-            box-shadow: 4px 4px 8px var(--container-shadow-1),
-                -4px -4px 8px var(--container-shadow-2);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 2;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.05);
-        }
-
-        /* Animaciones */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateY(-20px);
-                pointer-events: none;
-            }
-        }
-
+        /* Logo */
         .logo {
             text-align: center;
             margin-bottom: 2rem;
@@ -170,7 +52,8 @@
             filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
         }
 
-        h2 {
+        /* Título del login */
+        .login-title {
             text-align: center;
             margin-bottom: 2rem;
             font-weight: 600;
@@ -186,75 +69,53 @@
             position: relative;
         }
 
-        label {
+        .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: var(--label-color);
+            color: var(--text-secondary);
             transition: color 0.3s ease;
         }
 
-        input {
+        .form-group input {
             width: 100%;
             padding: 1rem;
             border: none;
             border-radius: 12px;
-            background: var(--input-bg);
+            background: var(--container-bg);
             color: var(--text-primary);
             font-size: 1rem;
             transition: all 0.3s ease;
-            box-shadow: inset 4px 4px 8px var(--input-shadow-1),
-                inset -4px -4px 8px var(--input-shadow-2);
+            box-shadow: inset 4px 4px 8px var(--container-shadow-1),
+                inset -4px -4px 8px var(--container-shadow-2);
         }
 
-        input:focus {
+        .form-group input:focus {
             outline: none;
-            background: var(--input-focus-bg);
-            box-shadow: inset 2px 2px 5px var(--input-shadow-1),
-                inset -2px -2px 5px var(--input-shadow-2),
+            background: var(--input-focus-bg, var(--container-bg));
+            box-shadow: inset 2px 2px 5px var(--container-shadow-1),
+                inset -2px -2px 5px var(--container-shadow-2),
                 0 0 0 3px rgba(67, 97, 238, 0.3);
         }
 
-        input::placeholder {
-            color: var(--input-placeholder);
+        .form-group input::placeholder {
+            color: var(--text-muted-light);
             transition: color 0.3s ease;
         }
 
-        /* Botón clay */
-        .btn {
+        /* Botón de login - usa .btn-primary de styles.css */
+        .btn-login {
             width: 100%;
             padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            background: var(--btn-bg);
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
             margin-top: 1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 6px 6px 12px var(--btn-shadow-1),
-                -6px -6px 12px var(--btn-shadow-2);
         }
 
-        .btn:hover {
-            background: var(--btn-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
+        .btn-login:disabled {
             opacity: 0.7;
             cursor: not-allowed;
-            transform: none;
+            transform: none !important;
         }
 
         /* Loading spinner */
@@ -278,7 +139,7 @@
 
         /* Error */
         .error {
-            color: var(--error-color);
+            color: var(--error-color, #f72585);
             margin-top: 1rem;
             text-align: center;
             font-weight: 500;
@@ -305,8 +166,8 @@
             }
         }
 
-        /* Footer */
-        .footer {
+        /* Footer dentro del login */
+        .login-footer {
             text-align: center;
             margin-top: 2rem;
             color: var(--footer-color);
@@ -314,46 +175,14 @@
             transition: color 0.3s ease;
         }
 
-        /* Partículas */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background: var(--particle-color);
-            border-radius: 50%;
-            animation: float linear infinite;
-            transition: background 0.5s ease;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(-1000px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        /* Responsividad */
+        /* Responsividad específica del login */
         @media (max-width: 992px) {
             .glass-container {
                 padding: 1.5rem;
                 width: 90vw;
             }
 
-            h2 {
+            .login-title {
                 font-size: 1.5rem;
             }
         }
@@ -364,16 +193,16 @@
                 border-radius: 15px;
             }
 
-            h2 {
+            .login-title {
                 font-size: 1.3rem;
             }
 
-            .btn {
+            .btn-login {
                 font-size: 0.85rem;
                 padding: 0.75rem;
             }
 
-            input {
+            .form-group input {
                 padding: 0.75rem;
                 font-size: 0.9rem;
             }
