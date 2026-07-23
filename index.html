@@ -31,7 +31,7 @@
         }
 
         /* ============================================================
-       TEMA OSCURO (default) – todo táctil, claymorphism
+       TEMA OSCURO (default)
        ============================================================ */
         :root {
             --bg-body: #0b0e17;
@@ -52,23 +52,23 @@
         }
 
         /* ============================================================
-       MODO CLARO – contraste fuerte, sin brillo excesivo
+       MODO CLARO – ALTO CONTRASTE
        ============================================================ */
         body.light-mode {
-            --bg-body: #dde3ed;
-            --bg-card: #edf2fa;
-            --shadow-outer: #c2ccdb;
-            --shadow-inner: #ffffff;
-            --text-main: #121824;
-            --text-soft: #1e2638;
-            --text-muted: #3e4a60;
+            --bg-body: #eef2f7;
+            --bg-card: #ffffff;
+            --shadow-outer: #b0bccf;
+            --shadow-inner: #f4f8ff;
+            --text-main: #0c1422;
+            --text-soft: #1c2842;
+            --text-muted: #3f4d6b;
             --border-subtle: rgba(0, 0, 0, 0.06);
-            --accent-neon: #1a6bc4;
-            --accent-glow: rgba(26, 107, 196, 0.12);
-            --btn-plastic: #d5def0;
-            --btn-plastic-shadow: #bcc6d8;
+            --accent-neon: #0a5d9e;
+            --accent-glow: rgba(10, 93, 158, 0.12);
+            --btn-plastic: #dae2f0;
+            --btn-plastic-shadow: #bfcadd;
             --btn-plastic-highlight: #f2f8ff;
-            --btn-text: #121824;
+            --btn-text: #0c1422;
             --icon-filter: brightness(0.85);
         }
 
@@ -93,7 +93,7 @@
         }
 
         /* ============================================================
-       BOTÓN PLÁSTICO NEGRO (unificado)
+       BOTÓN PLÁSTICO
        ============================================================ */
         .btn-plastic {
             display: inline-flex;
@@ -129,12 +129,6 @@
                 -4px -4px 14px var(--btn-plastic-highlight);
         }
 
-        /* variante con acento neón en el texto */
-        .btn-plastic-neon {
-            color: var(--accent-neon);
-            text-shadow: 0 0 6px var(--accent-glow);
-        }
-
         /* ============================================================
        LAYOUT
        ============================================================ */
@@ -147,7 +141,7 @@
         }
 
         /* ============================================================
-       HEADER / THEME TOGGLE (botón plástico)
+       HEADER / THEME TOGGLE
        ============================================================ */
         .top-bar {
             display: flex;
@@ -235,7 +229,7 @@
         }
 
         /* ============================================================
-       ICONOS PLANOS (línea simple)
+       ICONOS PLANOS
        ============================================================ */
         .icon-set {
             display: inline-flex;
@@ -286,7 +280,7 @@
         }
 
         /* ============================================================
-       CARDS (claymorphism)
+       CARDS
        ============================================================ */
         .grid-2col {
             display: grid;
@@ -340,7 +334,7 @@
         }
 
         /* ============================================================
-       MÓDULOS (botones plástico)
+       MÓDULOS
        ============================================================ */
         .module-grid {
             display: grid;
@@ -434,7 +428,7 @@
         }
 
         /* ============================================================
-       RESPONSIVE EXTREMO
+       RESPONSIVE
        ============================================================ */
         @media (max-width: 600px) {
             body {
@@ -546,7 +540,7 @@
                 Escalable de 50 a 2,540 centros.
             </p>
             <div class="hero-actions">
-                <a href="#" class="btn-plastic btn-plastic-neon">
+                <a href="#" class="btn-plastic">
                     <span class="icon-set">
                         <svg viewBox="0 0 24 24">
                             <path
@@ -675,7 +669,7 @@
         </section>
 
         <!-- ============================================================
-       MÓDULOS (botones plástico)
+       MÓDULOS
        ============================================================ -->
         <section class="section">
             <div class="section-header">
@@ -705,7 +699,7 @@
                 <p>El sistema ya funciona en producción. Solo necesita usuarios y datos reales.</p>
             </div>
             <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:0.5rem;">
-                <a href="#" class="btn-plastic btn-plastic-neon">
+                <a href="#" class="btn-plastic">
                     <span class="icon-set"><svg viewBox="0 0 24 24">
                             <path
                                 d="M12 2v4M12 22v-4M4 12H2M22 12h-2M19.07 4.93l-2.83 2.83M6.34 17.66l-2.83 2.83M17.66 6.34l2.83-2.83M4.93 19.07l2.83-2.83" />
