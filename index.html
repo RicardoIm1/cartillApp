@@ -22,7 +22,7 @@
             font-family: 'Inter', sans-serif;
             background: #0b0e17;
             color: #eef2f6;
-            transition: background 0.4s ease, color 0.3s ease;
+            transition: background 0.5s ease, color 0.4s ease;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -53,31 +53,26 @@
         }
 
         /* ============================================================
-       MODO CLARO – PALETA CÁLIDA Y MODERNA
+       MODO CLARO – LIMPIO Y PROFESIONAL
        ============================================================ */
         body.light-mode {
-            --bg-body: #f7f2eb;
-            /* Fondo crema cálido */
+            --bg-body: #eef2f7;
+            /* Fondo claro y suave */
             --bg-card: #ffffff;
-            --shadow-outer: #d4c9bc;
-            /* Sombra más cálida */
-            --shadow-inner: #fffbf7;
-            /* Reflejo más cálido */
-            --text-main: #2c241e;
-            /* Texto principal en marrón oscuro */
-            --text-soft: #4f453c;
-            /* Texto suave en marrón */
-            --text-muted: #8a7d72;
-            /* Texto más apagado */
-            --border-subtle: rgba(44, 36, 30, 0.06);
-            --accent-neon: #c97d4a;
-            /* Acento en tono cobre/cálido */
-            --accent-glow: rgba(201, 125, 74, 0.15);
-            --btn-plastic: #e8dfd6;
-            --btn-plastic-shadow: #cbbfb4;
-            --btn-plastic-highlight: #fcf6f0;
-            --btn-text: #2c241e;
-            --icon-filter: brightness(0.9) saturate(0.8);
+            --shadow-outer: #d0d7e6;
+            --shadow-inner: #f8faff;
+            --text-main: #1a2634;
+            --text-soft: #3d4a5c;
+            --text-muted: #7a889c;
+            --border-subtle: rgba(26, 38, 52, 0.06);
+            --accent-neon: #2c7be0;
+            /* Azul profesional */
+            --accent-glow: rgba(44, 123, 224, 0.10);
+            --btn-plastic: #e6edf8;
+            --btn-plastic-shadow: #cbd3e3;
+            --btn-plastic-highlight: #f5faff;
+            --btn-text: #1a2634;
+            --icon-filter: brightness(0.9);
             --card-hover-transform: translateY(-4px) scale(1.01);
         }
 
@@ -90,7 +85,7 @@
             box-shadow: 8px 8px 18px var(--shadow-outer),
                 -6px -6px 14px var(--shadow-inner);
             border: 1px solid var(--border-subtle);
-            transition: box-shadow 0.2s ease, background 0.3s ease;
+            transition: box-shadow 0.3s ease, background 0.4s ease, transform 0.2s ease;
         }
 
         .clay-flat {
@@ -119,7 +114,7 @@
             color: var(--btn-text);
             box-shadow: 5px 5px 12px var(--btn-plastic-shadow),
                 -3px -3px 10px var(--btn-plastic-highlight);
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
             cursor: pointer;
             letter-spacing: 0.3px;
             text-decoration: none;
@@ -138,7 +133,6 @@
                 -4px -4px 14px var(--btn-plastic-highlight);
         }
 
-        /* variante con acento */
         .btn-plastic-accent {
             color: var(--accent-neon);
         }
@@ -176,7 +170,7 @@
             box-shadow: 5px 5px 12px var(--btn-plastic-shadow),
                 -3px -3px 10px var(--btn-plastic-highlight);
             border: none;
-            transition: all 0.15s ease;
+            transition: all 0.2s ease;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -209,8 +203,9 @@
             border-radius: 40px;
             background: var(--accent-glow);
             color: var(--accent-neon);
-            border: 1px solid rgba(79, 195, 255, 0.08);
+            border: 1px solid var(--border-subtle);
             font-weight: 600;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .hero h1 {
@@ -219,11 +214,13 @@
             line-height: 1.05;
             letter-spacing: -1px;
             color: var(--text-main);
+            transition: color 0.3s ease;
         }
 
         .hero h1 span {
             color: var(--accent-neon);
             text-shadow: 0 0 20px var(--accent-glow);
+            transition: color 0.3s ease;
         }
 
         .hero p {
@@ -232,6 +229,7 @@
             font-size: 1.1rem;
             line-height: 1.6;
             font-weight: 400;
+            transition: color 0.3s ease;
         }
 
         .hero-actions {
@@ -254,6 +252,7 @@
             letter-spacing: 1px;
             color: var(--text-soft);
             filter: var(--icon-filter);
+            transition: color 0.3s ease, filter 0.3s ease;
         }
 
         .icon-set svg {
@@ -283,6 +282,7 @@
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--text-main);
+            transition: color 0.3s ease;
         }
 
         .section-header p {
@@ -291,6 +291,7 @@
             margin: 0.4rem auto 0;
             font-size: 1rem;
             line-height: 1.6;
+            transition: color 0.3s ease;
         }
 
         /* ============================================================
@@ -315,7 +316,7 @@
             box-shadow: 8px 8px 18px var(--shadow-outer),
                 -6px -6px 14px var(--shadow-inner);
             border: 1px solid var(--border-subtle);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             gap: 0.6rem;
@@ -333,18 +334,21 @@
             color: var(--accent-neon);
             opacity: 0.8;
             margin-bottom: 0.2rem;
+            transition: color 0.3s ease;
         }
 
         .card-clay h3 {
             font-weight: 600;
             font-size: 1.2rem;
             color: var(--text-main);
+            transition: color 0.3s ease;
         }
 
         .card-clay p {
             color: var(--text-soft);
             font-size: 0.92rem;
             line-height: 1.5;
+            transition: color 0.3s ease;
         }
 
         /* ============================================================
@@ -369,7 +373,7 @@
             color: var(--text-soft);
             font-weight: 500;
             font-size: 0.9rem;
-            transition: all 0.15s ease;
+            transition: all 0.3s ease;
         }
 
         .module-pill:hover {
@@ -381,6 +385,7 @@
         .module-pill .icon-line {
             color: var(--accent-neon);
             opacity: 0.7;
+            transition: color 0.3s ease;
         }
 
         /* ============================================================
@@ -394,7 +399,7 @@
             box-shadow: 6px 6px 14px var(--shadow-outer),
                 -4px -4px 12px var(--shadow-inner);
             border: 1px solid var(--border-subtle);
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
 
         .stat-clay:hover {
@@ -407,6 +412,7 @@
             color: var(--accent-neon);
             text-shadow: 0 0 16px var(--accent-glow);
             line-height: 1;
+            transition: color 0.3s ease;
         }
 
         .stat-clay .label {
@@ -414,6 +420,7 @@
             font-size: 0.85rem;
             font-weight: 500;
             margin-top: 0.3rem;
+            transition: color 0.3s ease;
         }
 
         /* ============================================================
@@ -434,12 +441,14 @@
                 -4px -4px 12px var(--shadow-inner);
             border: 1px solid var(--border-subtle);
             margin-top: 1rem;
+            transition: all 0.3s ease;
         }
 
         .footer-clay a {
             color: var(--accent-neon);
             text-decoration: none;
             font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .footer-clay a:hover {
