@@ -49,27 +49,29 @@
             --btn-plastic-highlight: #2a3448;
             --btn-text: #eef2f6;
             --icon-filter: none;
+            --card-hover-transform: translateY(-4px);
         }
 
         /* ============================================================
-       MODO CLARO – ALTO CONTRASTE
+       MODO CLARO – VIBRANTE CON PERSONALIDAD
        ============================================================ */
         body.light-mode {
-            --bg-body: #eef2f7;
+            --bg-body: #f0f4fd;
             --bg-card: #ffffff;
-            --shadow-outer: #b0bccf;
-            --shadow-inner: #f4f8ff;
-            --text-main: #0c1422;
-            --text-soft: #1c2842;
-            --text-muted: #3f4d6b;
-            --border-subtle: rgba(0, 0, 0, 0.06);
-            --accent-neon: #0a5d9e;
-            --accent-glow: rgba(10, 93, 158, 0.12);
-            --btn-plastic: #dae2f0;
-            --btn-plastic-shadow: #bfcadd;
-            --btn-plastic-highlight: #f2f8ff;
-            --btn-text: #0c1422;
-            --icon-filter: brightness(0.85);
+            --shadow-outer: #c8d4e8;
+            --shadow-inner: #f8fcff;
+            --text-main: #0c1a2b;
+            --text-soft: #1f3147;
+            --text-muted: #5a6f8a;
+            --border-subtle: rgba(0, 0, 0, 0.04);
+            --accent-neon: #0f6bae;
+            --accent-glow: rgba(15, 107, 174, 0.10);
+            --btn-plastic: #e2ecfa;
+            --btn-plastic-shadow: #c2d1e8;
+            --btn-plastic-highlight: #f2faff;
+            --btn-text: #0c1a2b;
+            --icon-filter: brightness(0.9);
+            --card-hover-transform: translateY(-4px) scale(1.01);
         }
 
         /* ============================================================
@@ -127,6 +129,11 @@
             transform: translateY(-2px);
             box-shadow: 6px 6px 16px var(--btn-plastic-shadow),
                 -4px -4px 14px var(--btn-plastic-highlight);
+        }
+
+        /* variante con acento */
+        .btn-plastic-accent {
+            color: var(--accent-neon);
         }
 
         /* ============================================================
@@ -308,7 +315,7 @@
         }
 
         .card-clay:hover {
-            transform: translateY(-4px);
+            transform: var(--card-hover-transform);
             box-shadow: 10px 10px 22px var(--shadow-outer),
                 -8px -8px 18px var(--shadow-inner);
         }
@@ -380,6 +387,11 @@
             box-shadow: 6px 6px 14px var(--shadow-outer),
                 -4px -4px 12px var(--shadow-inner);
             border: 1px solid var(--border-subtle);
+            transition: all 0.2s ease;
+        }
+
+        .stat-clay:hover {
+            transform: var(--card-hover-transform);
         }
 
         .stat-clay .number {
@@ -509,7 +521,7 @@
             justify-content: center;
         }
 
-        .text-neon {
+        .text-accent {
             color: var(--accent-neon);
         }
     </style>
@@ -540,7 +552,7 @@
                 Escalable de 50 a 2,540 centros.
             </p>
             <div class="hero-actions">
-                <a href="#" class="btn-plastic">
+                <a href="#" class="btn-plastic btn-plastic-accent">
                     <span class="icon-set">
                         <svg viewBox="0 0 24 24">
                             <path
@@ -699,7 +711,7 @@
                 <p>El sistema ya funciona en producción. Solo necesita usuarios y datos reales.</p>
             </div>
             <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:0.5rem;">
-                <a href="#" class="btn-plastic">
+                <a href="#" class="btn-plastic btn-plastic-accent">
                     <span class="icon-set"><svg viewBox="0 0 24 24">
                             <path
                                 d="M12 2v4M12 22v-4M4 12H2M22 12h-2M19.07 4.93l-2.83 2.83M6.34 17.66l-2.83 2.83M17.66 6.34l2.83-2.83M4.93 19.07l2.83-2.83" />
@@ -732,7 +744,7 @@
     <script>
         (function () {
             // ============================================================
-            // TEMA (diurno con contraste mejorado)
+            // TEMA
             // ============================================================
             const body = document.body;
             const toggleBtn = document.getElementById('themeToggle');
