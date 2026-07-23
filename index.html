@@ -245,11 +245,12 @@
 
         /* ============================================================
            BOTONES – ESTILO RADIOCASSETTERA PREMIUM
+           (Mismo estilo que el botón día/noche)
            ============================================================ */
         .btn {
             padding: 0.9rem 2.4rem;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
@@ -261,29 +262,14 @@
             background: var(--container-bg);
             color: var(--text-primary);
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            /* Estilo radiocassettera: múltiples capas de sombras */
             box-shadow:
-                0 4px 0 var(--container-shadow-1),
-                4px 6px 12px rgba(0, 0, 0, 0.15),
-                -2px -2px 8px rgba(255, 255, 255, 0.02),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                inset 0 -2px 0 var(--container-shadow-1);
+                4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
             transform: translateY(0);
             letter-spacing: 0.3px;
-        }
-
-        /* Efecto "presa" o "grabando" de radiocassetteras */
-        .btn::before {
-            content: '';
-            position: absolute;
-            inset: 2px;
-            border-radius: 11px;
-            background: linear-gradient(145deg,
-                    rgba(255, 255, 255, 0.03) 0%,
-                    rgba(255, 255, 255, 0) 40%,
-                    rgba(0, 0, 0, 0.02) 100%);
-            pointer-events: none;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
         /* Textura de botón físico */
@@ -291,7 +277,7 @@
             content: '';
             position: absolute;
             inset: 3px;
-            border-radius: 10px;
+            border-radius: 9px;
             background:
                 repeating-linear-gradient(45deg,
                     transparent,
@@ -306,40 +292,36 @@
             background: var(--btn-primary);
             color: white;
             box-shadow:
-                0 4px 0 rgba(67, 97, 238, 0.4),
-                4px 6px 16px rgba(67, 97, 238, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+                4px 4px 8px rgba(67, 97, 238, 0.25),
+                -4px -4px 8px rgba(255, 255, 255, 0.02),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
 
         .btn-primary:hover {
             background: var(--btn-primary-hover);
-            transform: translateY(-2px);
+            transform: scale(1.02) translateY(-2px);
             box-shadow:
-                0 6px 0 rgba(67, 97, 238, 0.4),
-                6px 8px 20px rgba(67, 97, 238, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+                6px 6px 12px rgba(67, 97, 238, 0.3),
+                -4px -4px 8px rgba(255, 255, 255, 0.04),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.12);
         }
 
         .btn-success {
             background: var(--btn-success);
             color: white;
             box-shadow:
-                0 4px 0 rgba(76, 201, 240, 0.4),
-                4px 6px 16px rgba(76, 201, 240, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+                4px 4px 8px rgba(76, 201, 240, 0.25),
+                -4px -4px 8px rgba(255, 255, 255, 0.02),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
 
         .btn-success:hover {
             background: var(--btn-success-hover);
-            transform: translateY(-2px);
+            transform: scale(1.02) translateY(-2px);
             box-shadow:
-                0 6px 0 rgba(76, 201, 240, 0.4),
-                6px 8px 20px rgba(76, 201, 240, 0.25),
-                inset 0 1px 0 rgba(255, 255, 255, 0.15),
-                inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+                6px 6px 12px rgba(76, 201, 240, 0.3),
+                -4px -4px 8px rgba(255, 255, 255, 0.04),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.12);
         }
 
         .btn-outline {
@@ -347,46 +329,41 @@
             color: var(--text-primary);
             border: 1px solid var(--border-color);
             box-shadow:
-                0 4px 0 var(--container-shadow-1),
-                4px 6px 12px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                inset 0 -2px 0 var(--container-shadow-1);
+                4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.03);
         }
 
         .btn-outline:hover {
-            transform: translateY(-2px);
+            transform: scale(1.02) translateY(-2px);
             box-shadow:
-                0 6px 0 var(--container-shadow-1),
-                6px 8px 16px rgba(0, 0, 0, 0.12),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08),
-                inset 0 -2px 0 var(--container-shadow-1);
+                6px 6px 12px var(--container-shadow-1),
+                -6px -6px 12px var(--container-shadow-2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.06);
             border-color: var(--text-muted);
         }
 
         /* EFECTO "PRESIONADO" - Como pulsar un botón de cassette */
         .btn:active {
-            transform: translateY(4px) scale(0.98);
+            transform: scale(0.94);
             box-shadow:
-                0 1px 0 var(--container-shadow-1),
-                2px 3px 8px rgba(0, 0, 0, 0.08),
-                inset 0 2px 4px var(--container-shadow-1),
-                inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+                inset 3px 3px 6px var(--container-shadow-1),
+                inset -3px -3px 6px var(--container-shadow-2),
+                0 0 0 1px rgba(255, 255, 255, 0.02);
         }
 
         .btn-primary:active {
             box-shadow:
-                0 1px 0 rgba(67, 97, 238, 0.4),
-                2px 3px 8px rgba(67, 97, 238, 0.1),
-                inset 0 2px 4px rgba(0, 0, 0, 0.15),
-                inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+                inset 3px 3px 6px rgba(67, 97, 238, 0.3),
+                inset -3px -3px 6px rgba(255, 255, 255, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.02);
         }
 
         .btn-success:active {
             box-shadow:
-                0 1px 0 rgba(76, 201, 240, 0.4),
-                2px 3px 8px rgba(76, 201, 240, 0.1),
-                inset 0 2px 4px rgba(0, 0, 0, 0.15),
-                inset 0 -1px 0 rgba(255, 255, 255, 0.02);
+                inset 3px 3px 6px rgba(76, 201, 240, 0.3),
+                inset -3px -3px 6px rgba(255, 255, 255, 0.05),
+                0 0 0 1px rgba(255, 255, 255, 0.02);
         }
 
         /* ============================================================
