@@ -5,8 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reportes - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
+
+    <!-- CSS Principal - TODOS los estilos base -->
+    <link rel="stylesheet" href="common/styles.css" />
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
     <!-- Librerías para PDF -->
@@ -818,7 +823,7 @@
             var opt = {
                 margin: [10, 10, 10, 10],
                 filename: 'reporte_mensual.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
+                image: {type: 'jpeg', quality: 0.98},
                 html2canvas: {
                     scale: 2,
                     useCORS: true,
@@ -830,7 +835,7 @@
                     format: 'letter',
                     orientation: 'portrait'
                 },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak: {mode: ['avoid-all', 'css', 'legacy']}
             };
 
             html2pdf().set(opt).from(element).save().then(function () {

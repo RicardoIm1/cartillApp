@@ -5,8 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registro de Usuarios - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
+
+    <!-- CSS Principal - TODOS los estilos base -->
+    <link rel="stylesheet" href="common/styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -119,6 +123,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -144,6 +149,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -357,17 +363,21 @@
             body {
                 padding: 1rem;
             }
+
             .container {
                 padding: 1rem;
             }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -375,6 +385,7 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
@@ -405,7 +416,8 @@
         </div>
 
         <!-- Información del usuario actual -->
-        <div id="userInfo" style="margin-bottom:1rem; padding:0.5rem 1rem; background:rgba(255,255,255,0.02); border-radius:8px; display:none;">
+        <div id="userInfo"
+            style="margin-bottom:1rem; padding:0.5rem 1rem; background:rgba(255,255,255,0.02); border-radius:8px; display:none;">
             <span id="userNameDisplay"></span>
             <span class="badge-rol" id="userRolDisplay" style="margin-left:0.5rem;"></span>
         </div>
@@ -493,7 +505,7 @@
             } else {
                 icon.textContent = '🌙';
             }
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -579,7 +591,7 @@
                 var select = document.getElementById('clues');
                 select.innerHTML = '<option value="">Seleccionar centro...</option>';
                 if (result.data) {
-                    result.data.forEach(function(c) {
+                    result.data.forEach(function (c) {
                         select.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
                     });
                 }
@@ -668,12 +680,12 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
             cargarClues();
 
             // Verificar usuario actual
-            getUsuarioActual().then(function(user) {
+            getUsuarioActual().then(function (user) {
                 var infoDiv = document.getElementById('userInfo');
                 var nameDisplay = document.getElementById('userNameDisplay');
                 var rolDisplay = document.getElementById('userRolDisplay');
@@ -697,11 +709,11 @@
                 }
             });
 
-            document.querySelectorAll('input, select').forEach(function(el) {
-                el.addEventListener('mouseenter', function() {
+            document.querySelectorAll('input, select').forEach(function (el) {
+                el.addEventListener('mouseenter', function () {
                     this.style.transform = 'scale(1.02)';
                 });
-                el.addEventListener('mouseleave', function() {
+                el.addEventListener('mouseleave', function () {
                     this.style.transform = 'scale(1)';
                 });
             });

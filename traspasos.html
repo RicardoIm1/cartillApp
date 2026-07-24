@@ -5,8 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Traspasos - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
+
+    <!-- CSS Principal - TODOS los estilos base -->
+    <link rel="stylesheet" href="common/styles.css" />
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -960,7 +965,7 @@
             var motivoId = selectMotivo.value;
             var cantidad = parseInt(inputCantidad.value);
 
-            console.log('Datos del traspaso:', { origenId, destinoId, tipoId, motivoId, cantidad });
+            console.log('Datos del traspaso:', {origenId, destinoId, tipoId, motivoId, cantidad});
 
             if (!origenId || !destinoId || !tipoId || !motivoId || !cantidad || cantidad < 1) {
                 mostrarError('Por favor completa todos los campos correctamente.');
@@ -976,13 +981,13 @@
             const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
             if (!uuidRegex.test(origenId) || !uuidRegex.test(destinoId) || !uuidRegex.test(tipoId) || !uuidRegex.test(motivoId)) {
                 mostrarError('Error: Los datos seleccionados no son válidos.');
-                console.error('UUID inválido:', { origenId, destinoId, tipoId, motivoId });
+                console.error('UUID inválido:', {origenId, destinoId, tipoId, motivoId});
                 return;
             }
 
             try {
                 // Verificar stock en origen - USANDO UUID DIRECTAMENTE (sin parseInt)
-                console.log('Verificando stock para:', { clues_id_uuid: origenId, tipo_cartilla_id_uuid: tipoId });
+                console.log('Verificando stock para:', {clues_id_uuid: origenId, tipo_cartilla_id_uuid: tipoId});
 
                 var stockResult = await supabaseClient
                     .from('inventario')

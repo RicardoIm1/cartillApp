@@ -5,8 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- CSS Principal - TODOS los estilos base -->
+    <link rel="stylesheet" href="common/styles.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -135,6 +139,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -166,6 +171,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -450,9 +456,11 @@
         .cantidad-alta {
             color: var(--cantidad-alta);
         }
+
         .cantidad-media {
             color: var(--cantidad-media);
         }
+
         .cantidad-baja {
             color: var(--cantidad-baja);
         }
@@ -532,6 +540,7 @@
                 flex-direction: column;
                 padding: 1.5rem;
             }
+
             .sidebar {
                 min-width: 100%;
                 max-width: 100%;
@@ -541,29 +550,36 @@
                 padding-bottom: 1rem;
                 margin-bottom: 1rem;
             }
+
             .sidebar-brand {
                 padding: 0 0 0.75rem 0;
                 margin-bottom: 0.75rem;
             }
+
             .menu-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
                 gap: 0.25rem;
             }
+
             .menu-item {
                 padding: 0.5rem 0.75rem;
                 font-size: 0.8rem;
             }
+
             .menu-item .icon {
                 font-size: 1.1rem;
                 width: 24px;
             }
+
             .menu-divider {
                 display: none;
             }
+
             .dashboard-header {
                 padding-right: 0;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -571,6 +587,7 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
@@ -580,25 +597,31 @@
             .menu-grid {
                 grid-template-columns: 1fr 1fr;
             }
+
             .menu-item {
                 font-size: 0.75rem;
                 padding: 0.4rem 0.6rem;
             }
+
             .menu-item .icon {
                 font-size: 1rem;
                 width: 20px;
             }
+
             table {
                 font-size: 0.75rem;
             }
+
             th,
             td {
                 padding: 0.5rem;
             }
+
             .header-actions {
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .btn-group {
                 justify-content: center;
             }
@@ -728,7 +751,7 @@
                 icon.textContent = '🌙';
             }
 
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -910,7 +933,7 @@
                     <tbody>
             `;
 
-            data.forEach(function(item) {
+            data.forEach(function (item) {
                 var clues = item.clues || {};
                 var tipoCartilla = item.tipo_cartilla || {};
 
@@ -965,7 +988,7 @@
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         window.logout = logout;
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
             loadDashboard();
         });

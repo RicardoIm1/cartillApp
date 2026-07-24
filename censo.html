@@ -5,8 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Censo - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
+
+    <!-- CSS Principal - TODOS los estilos base -->
+    <link rel="stylesheet" href="common/styles.css" />
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -141,6 +146,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -167,6 +173,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -588,14 +595,17 @@
             body {
                 padding: 1rem;
             }
+
             .container {
                 padding: 1rem;
             }
+
             .header-actions {
                 padding-right: 0;
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
@@ -603,20 +613,25 @@
                 height: 34px;
                 font-size: 1rem;
             }
+
             h1 {
                 font-size: 1.4rem;
             }
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
             .modal-content {
                 padding: 1rem;
                 margin: 1rem;
             }
+
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .search-bar input {
                 max-width: 100%;
             }
@@ -626,9 +641,11 @@
             .container {
                 padding: 0.75rem;
             }
+
             .form-section {
                 padding: 0.75rem;
             }
+
             .checkbox-group {
                 gap: 0.75rem;
             }
@@ -667,7 +684,8 @@
         </div>
 
         <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Buscar por nombre, CURP o folio..." oninput="cargarCenso()" />
+            <input type="text" id="searchInput" placeholder="Buscar por nombre, CURP o folio..."
+                oninput="cargarCenso()" />
             <span class="info" id="totalRegistros">0 registros</span>
         </div>
 
@@ -859,7 +877,7 @@
                 icon.textContent = '🌙';
             }
 
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -983,7 +1001,7 @@
         // ============================================================
         // CATÁLOGOS
         // ============================================================
-        var catalogos = { cargados: false };
+        var catalogos = {cargados: false};
 
         async function cargarCatalogos() {
             try {
@@ -1026,7 +1044,7 @@
 
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(m) {
+                    result.data.forEach(function (m) {
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                     });
                 }
@@ -1052,7 +1070,7 @@
 
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(m) {
+                    result.data.forEach(function (m) {
                         var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
                     });
@@ -1309,7 +1327,7 @@
                 var query = supabaseClient
                     .from('vista_censo')
                     .select('*')
-                    .order('fecha_entrega', { ascending: false });
+                    .order('fecha_entrega', {ascending: false});
 
                 if (search.length > 0) {
                     query = query.or(
@@ -1365,7 +1383,7 @@
                     <tbody>
             `;
 
-            data.forEach(function(row) {
+            data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
                 var tipoCartilla = row.tipo_cartilla || 'N/A';
@@ -1416,7 +1434,7 @@
             }
 
             if (!catalogos.cargados) {
-                cargarCatalogos().then(function() {
+                cargarCatalogos().then(function () {
                     modalOverlay.classList.add('active');
                 });
             } else {
@@ -1572,7 +1590,7 @@
 
                 successElement.textContent = isEdit ? '✅ Registro actualizado correctamente' :
                     '✅ Registro guardado correctamente';
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1607,7 +1625,7 @@
                 }
 
                 successElement.textContent = '✅ Registro eliminado correctamente';
-                setTimeout(function() {
+                setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
 
@@ -1628,7 +1646,7 @@
                 var select = document.getElementById('entidad');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(e) {
+                    result.data.forEach(function (e) {
                         select.innerHTML += `<option value="${e.id_uuid}">${e.entidad}</option>`;
                     });
                 }
@@ -1643,7 +1661,7 @@
                 var select = document.getElementById('pais');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(p) {
+                    result.data.forEach(function (p) {
                         select.innerHTML += `<option value="${p.id_uuid}">${p.pais}</option>`;
                     });
                 }
@@ -1658,7 +1676,7 @@
                 var select = document.getElementById('clues');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(c) {
+                    result.data.forEach(function (c) {
                         select.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
                     });
                 }
@@ -1673,7 +1691,7 @@
                 var select = document.getElementById('tipo_cartilla');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(t) {
+                    result.data.forEach(function (t) {
                         select.innerHTML += `<option value="${t.id_uuid}">${t.tipo_cartilla}</option>`;
                     });
                 }
@@ -1688,7 +1706,7 @@
                 var select = document.getElementById('motivo_entrega');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(m) {
+                    result.data.forEach(function (m) {
                         select.innerHTML += `<option value="${m.id_uuid}">${m.motivo}</option>`;
                     });
                 }
@@ -1699,11 +1717,11 @@
 
         async function cargarAnios() {
             try {
-                var result = await supabaseClient.from('agno_edicion').select('id_uuid, agno_edicion').order('agno_edicion', { ascending: false });
+                var result = await supabaseClient.from('agno_edicion').select('id_uuid, agno_edicion').order('agno_edicion', {ascending: false});
                 var select = document.getElementById('agno_edicion');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(a) {
+                    result.data.forEach(function (a) {
                         select.innerHTML += `<option value="${a.id_uuid}">${a.agno_edicion}</option>`;
                     });
                 }
@@ -1718,7 +1736,7 @@
                 var select = document.getElementById('servicio_entrega');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(s) {
+                    result.data.forEach(function (s) {
                         select.innerHTML += `<option value="${s.id_uuid}">${s.servicio_entrega}</option>`;
                     });
                 }
@@ -1733,7 +1751,7 @@
                 var select = document.getElementById('se_proporciono_info');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(s) {
+                    result.data.forEach(function (s) {
                         select.innerHTML += `<option value="${s.id_uuid}">${s.sino}</option>`;
                     });
                 }
@@ -1748,7 +1766,7 @@
                 var select = document.getElementById('discapacidad');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(d) {
+                    result.data.forEach(function (d) {
                         select.innerHTML += `<option value="${d.id_uuid}">${d.discapacidad}</option>`;
                     });
                 }
@@ -1763,7 +1781,7 @@
                 var select = document.getElementById('embarazo');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(e) {
+                    result.data.forEach(function (e) {
                         select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
                     });
                 }
@@ -1778,7 +1796,7 @@
                 var select = document.getElementById('tipo_migracion');
                 select.innerHTML = '<option value="">Seleccionar...</option>';
                 if (result.data) {
-                    result.data.forEach(function(m) {
+                    result.data.forEach(function (m) {
                         select.innerHTML += `<option value="${m.id_uuid}">${m.migracion}</option>`;
                     });
                 }
@@ -1792,14 +1810,14 @@
         // ============================================================
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
             mostrarUsuario();
 
             // Evento para cambios en sexo
             var sexoSelect = document.getElementById('sexo');
             if (sexoSelect) {
-                sexoSelect.addEventListener('change', function() {
+                sexoSelect.addEventListener('change', function () {
                     var sexo = this.value;
                     actualizarRestriccionesPorSexo(sexo);
 
@@ -1822,26 +1840,26 @@
                 });
             }
 
-            cargarCatalogos().then(function() {
+            cargarCatalogos().then(function () {
                 cargarCenso();
             });
 
-            document.querySelectorAll('input, select').forEach(function(el) {
-                el.addEventListener('mouseenter', function() {
+            document.querySelectorAll('input, select').forEach(function (el) {
+                el.addEventListener('mouseenter', function () {
                     this.style.transform = 'scale(1.02)';
                 });
-                el.addEventListener('mouseleave', function() {
+                el.addEventListener('mouseleave', function () {
                     this.style.transform = 'scale(1)';
                 });
             });
 
-            document.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     cerrarModal();
                 }
             });
 
-            modalOverlay.addEventListener('click', function(e) {
+            modalOverlay.addEventListener('click', function (e) {
                 if (e.target === modalOverlay) {
                     cerrarModal();
                 }

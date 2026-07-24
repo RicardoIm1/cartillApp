@@ -5,8 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contactos - Sistema de Cartillas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet" />
+
+    <!-- CSS Principal - TODOS los estilos base -->
+    <link rel="stylesheet" href="common/styles.css" />
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -947,7 +952,7 @@
                     .from('contactos')
                     .select('*')
                     .or(`remitente_id.eq.${authUserId},destinatario_id.eq.${authUserId}`)
-                    .order('created_at', { ascending: false });
+                    .order('created_at', {ascending: false});
 
                 var result = await query;
 
@@ -1221,7 +1226,7 @@
                 if (contactoActual.destinatario_id === authUserId && !contactoActual.leido) {
                     await supabaseClient
                         .from('contactos')
-                        .update({ leido: true, updated_at: new Date().toISOString() })
+                        .update({leido: true, updated_at: new Date().toISOString()})
                         .eq('id_uuid', id);
                     contactoActual.leido = true;
                 }
