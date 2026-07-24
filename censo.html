@@ -15,6 +15,10 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
+    
+    <!-- Transiciones cinematográficas para modales -->
+    <script src="common/transiciones.js">
+    </script>
 
     <style>
         /* ============================================================
@@ -1120,7 +1124,7 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
 ============================================================ -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
-            <h2 id="modalTitle">📝 Nuevo Registro de Censo</h2>
+            <h2><span class="icon">📝</span> Nuevo Registro</h2>
             <form id="censoForm" onsubmit="guardarCenso(event)">
                 <input type="hidden" id="editId" value="" />
 
@@ -1265,8 +1269,8 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" id="submitBtn">Guardar Registro</button>
+                    <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                    <button class="btn btn-primary">Guardar</button>
                 </div>
             </form>
         </div>
@@ -2276,6 +2280,9 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
         window.procesarCurp = procesarCurp;
         window.calcularEdad = calcularEdad;
         window.cargarMunicipios = cargarMunicipios;
+
+        // Abrir modal
+        document.getElementById('abrirModalBtn').addEventListener('click', abrirModal);
     </script>
 
 </body>
