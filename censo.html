@@ -1685,6 +1685,57 @@
         }
 
         // ============================================================
+        // MODAL - Asegurar que catálogos estén cargados ANTES de abrir
+        // ============================================================
+        function abrirModal() {
+            document.getElementById('censoForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('modalTitle').textContent = '📝 Nuevo Registro de Censo';
+            document.getElementById('submitBtn').textContent = 'Guardar Registro';
+            document.getElementById('edad').value = '';
+            document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
+            document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
+
+            var embarazoSelect = document.getElementById('embarazo');
+            if (embarazoSelect) {
+                embarazoSelect.disabled = false;
+            }
+
+            // Asegurar que los catálogos estén cargados ANTES de abrir el modal
+            if (!catalogos.cargados) {
+                console.log('📦 Cargando catálogos...');
+                cargarCatalogos().then(function () {
+                    console.log('✅ Catálogos cargados, abriendo modal...');
+                    // Verificar que el select de entidad tenga opciones
+                    var entidadSelect = document.getElementById('entidad');
+                    console.log('  - Opciones de entidad:', entidadSelect.options.length);
+                    if (typeof abrirModalCinematico === 'function') {
+                        abrirModalCinematico('modalOverlay');
+                    } else {
+                        modalOverlay.classList.add('active');
+                    }
+                });
+            } else {
+                console.log('📦 Catálogos ya cargados, abriendo modal...');
+                var entidadSelect = document.getElementById('entidad');
+                console.log('  - Opciones de entidad:', entidadSelect.options.length);
+                if (typeof abrirModalCinematico === 'function') {
+                    abrirModalCinematico('modalOverlay');
+                } else {
+                    modalOverlay.classList.add('active');
+                }
+            }
+        }
+
+        function cerrarModal() {
+            if (typeof cerrarModalCinematico === 'function') {
+                cerrarModalCinematico('modalOverlay');
+            } else {
+                modalOverlay.classList.remove('active');
+            }
+        }
+
+        // ============================================================
         // CARGAR REGISTROS DE CENSO
         // ============================================================
         async function cargarCenso() {
@@ -1692,11 +1743,11 @@
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="loading-spinner"></div>
-                        Cargando registros...
-                    </div>
-                `;
+                        <div class="empty-state">
+                            <div class="loading-spinner"></div>
+                            Cargando registros...
+                        </div>
+                    `;
                 errorElement.textContent = '';
 
                 var query = supabaseClient
@@ -1721,10 +1772,10 @@
 
                 if (data.length === 0) {
                     censoContainer.innerHTML = `
-                        <div class="empty-state">
-                            📭 No hay registros de censo
-                        </div>
-                    `;
+                            <div class="empty-state">
+                                📭 No hay registros de censo
+                            </div>
+                        `;
                     return;
                 }
 
@@ -1734,29 +1785,29 @@
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        ❌ Error al cargar los datos
-                    </div>
-                `;
+                        <div class="empty-state">
+                            ❌ Error al cargar los datos
+                        </div>
+                    `;
             }
         }
 
         function renderTable(data) {
             var html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Folio</th>
-                            <th>Nombre</th>
-                            <th>CURP</th>
-                            <th>Cartilla</th>
-                            <th>Fecha Entrega</th>
-                            <th>Centro</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Nombre</th>
+                                <th>CURP</th>
+                                <th>Cartilla</th>
+                                <th>Fecha Entrega</th>
+                                <th>Centro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
 
             data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
@@ -1766,72 +1817,29 @@
                 var centro = row.clues || 'N/A';
 
                 html += `
-                    <tr>
-                        <td><span class="badge">${row.folio || 'N/A'}</span></td>
-                        <td>${nombreCompleto}</td>
-                        <td>${row.curp || 'N/A'}</td>
-                        <td>${tipoCartilla}</td>
-                        <td>${fechaEntrega}</td>
-                        <td><span class="badge-clues">${centro}</span></td>
-                        <td>
-                            <div class="table-actions">
-                                <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
-                                <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                        <tr>
+                            <td><span class="badge">${row.folio || 'N/A'}</span></td>
+                            <td>${nombreCompleto}</td>
+                            <td>${row.curp || 'N/A'}</td>
+                            <td>${tipoCartilla}</td>
+                            <td>${fechaEntrega}</td>
+                            <td><span class="badge-clues">${centro}</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
+                                    <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
             });
 
             html += `
-                    </tbody>
-                </table>
-            `;
+                        </tbody>
+                    </table>
+                    `;
 
             censoContainer.innerHTML = html;
-        }
-
-        // ============================================================
-        // MODAL
-        // ============================================================
-        function abrirModal() {
-            document.getElementById('censoForm').reset();
-            document.getElementById('editId').value = '';
-            document.getElementById('modalTitle').textContent = '📝 Nuevo Registro de Censo';
-            document.getElementById('submitBtn').textContent = 'Guardar Registro';
-            document.getElementById('edad').value = '';
-            document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
-            document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
-
-            // Habilitar embarazo por defecto
-            var embarazoSelect = document.getElementById('embarazo');
-            if (embarazoSelect) {
-                embarazoSelect.disabled = false;
-            }
-
-            if (!catalogos.cargados) {
-                cargarCatalogos().then(function () {
-                    if (typeof abrirModalCinematico === 'function') {
-                        abrirModalCinematico('modalOverlay');
-                    } else {
-                        modalOverlay.classList.add('active');
-                    }
-                });
-            } else {
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
-            }
-        }
-
-        function cerrarModal() {
-            if (typeof cerrarModalCinematico === 'function') {
-                cerrarModalCinematico('modalOverlay');
-            } else {
-                modalOverlay.classList.remove('active');
-            }
         }
 
         // ============================================================
