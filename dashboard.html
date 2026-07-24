@@ -16,8 +16,8 @@
 
     <style>
         /* ============================================================
-           ESTILOS ESPECÍFICOS DEL DASHBOARD
-           ============================================================ */
+       ESTILOS ESPECÍFICOS DEL DASHBOARD
+       ============================================================ */
 
         /* Reset de body para el dashboard */
         body {
@@ -26,751 +26,612 @@
             justify-content: center;
             align-items: flex-start;
             overflow-x: hidden;
+            height: 100vh;
+            overflow-y: hidden;
         }
 
         /*==========================================================
-  DASHBOARD CONTAINER
-==========================================================*/
+    DASHBOARD CONTAINER - con altura fija
+    ==========================================================*/
 
         .dashboard-container {
-
             position: relative;
-
             display: flex;
-
             gap: 2.2rem;
-
             width: 100%;
             max-width: 1450px;
-
             margin: auto;
-
             padding: 2rem;
-
             border-radius: 34px;
-
+            height: calc(100vh - 4rem);
+            /* Altura total menos padding de body */
+            overflow: hidden;
+            /* Evita que el contenido se desborde */
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .06),
                     rgba(255, 255, 255, .02)),
-
                 var(--container-bg);
-
             backdrop-filter: blur(22px);
-
             border: 1px solid rgba(255, 255, 255, .05);
-
             box-shadow:
-
                 inset 2px 2px 5px rgba(255, 255, 255, .06),
-
                 inset -5px -5px 10px rgba(0, 0, 0, .18),
-
                 18px 18px 40px var(--container-shadow-dark),
-
                 -16px -16px 34px var(--container-shadow-light);
-
         }
 
         /*==========================================================
-  SIDEBAR
-==========================================================*/
+    SIDEBAR - altura completa
+    ==========================================================*/
 
         .sidebar {
-
             width: 240px;
-
             flex-shrink: 0;
-
             padding: 1.3rem;
-
             border-radius: 28px;
-
+            height: 100%;
+            /* Ocupa toda la altura del contenedor */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .05),
                     rgba(255, 255, 255, .02)),
-
                 var(--container-bg);
-
             box-shadow:
-
                 inset 2px 2px 5px rgba(255, 255, 255, .05),
-
                 inset -4px -4px 8px rgba(0, 0, 0, .16),
-
                 8px 8px 22px var(--container-shadow-dark),
-
                 -8px -8px 18px var(--container-shadow-light);
+        }
 
+        /* Contenedor del menú con scroll si es necesario */
+        .sidebar .menu-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            /* Espacio para el scroll */
+        }
+
+        /* Scroll personalizado para el menú */
+        .sidebar .menu-grid::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .sidebar .menu-grid::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar .menu-grid::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        /* Cerrar sesión al final del sidebar */
+        .sidebar .menu-item.danger {
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .menu-divider {
+            flex-shrink: 0;
         }
 
         /*==========================================================
-  BRAND
-==========================================================*/
+    BRAND
+    ==========================================================*/
 
         .sidebar-brand {
-
             display: flex;
-
             align-items: center;
-
             gap: 1rem;
-
             margin-bottom: 2rem;
-
             padding-bottom: 1.5rem;
-
             border-bottom: 1px solid rgba(255, 255, 255, .05);
-
+            flex-shrink: 0;
         }
 
         .logo-icon {
-
             width: 58px;
-
             height: 58px;
-
             display: flex;
-
             align-items: center;
-
             justify-content: center;
-
             border-radius: 18px;
-
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .14),
                     rgba(255, 255, 255, .02));
-
             box-shadow:
-
                 inset 2px 2px 5px rgba(255, 255, 255, .12),
-
                 inset -3px -3px 8px rgba(0, 0, 0, .16),
-
                 8px 8px 18px var(--container-shadow-dark),
-
                 -8px -8px 18px var(--container-shadow-light);
-
             font-size: 1.7rem;
-
         }
 
         .sidebar-brand h2 {
-
             font-size: 1.15rem;
-
             font-weight: 700;
-
             line-height: 1.2;
-
         }
 
         .sidebar-brand small {
-
             display: block;
-
             margin-top: .25rem;
-
             color: var(--text-muted);
-
         }
 
         /*==========================================================
-  MENU
-==========================================================*/
+    MENU
+    ==========================================================*/
 
         .menu-item {
-
             position: relative;
-
             overflow: hidden;
-
             display: flex;
-
             align-items: center;
-
             gap: .9rem;
-
             width: 100%;
-
             padding: .95rem 1rem;
-
             margin-bottom: .65rem;
-
             border: none;
-
             border-radius: 18px;
-
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .04),
                     rgba(255, 255, 255, .01));
-
             color: var(--text-secondary);
-
             text-decoration: none;
-
             cursor: pointer;
-
             transition: .22s cubic-bezier(.2, .8, .2, 1);
-
             box-shadow:
-
                 inset 1px 1px 3px rgba(255, 255, 255, .05),
-
                 inset -2px -2px 5px rgba(0, 0, 0, .10);
-
+            flex-shrink: 0;
         }
 
         /* brillo */
-
         .menu-item::before {
-
             content: "";
-
             position: absolute;
-
             inset: 3px;
-
             border-radius: inherit;
-
             background:
-
                 linear-gradient(180deg,
-
                     rgba(255, 255, 255, .14),
-
                     transparent 42%);
-
             pointer-events: none;
-
         }
 
         /* reflejo */
-
         .menu-item::after {
-
             content: "";
-
             position: absolute;
-
             width: 45%;
-
             height: 180%;
-
             top: -45%;
-
             left: -20%;
-
             background:
-
                 radial-gradient(ellipse,
-
                     rgba(255, 255, 255, .22),
-
                     transparent 70%);
-
             filter: blur(14px);
-
             opacity: .45;
-
         }
 
         .menu-item:hover {
-
             transform:
-
                 translateY(-3px) scale(1.01);
-
             color: white;
-
             background:
-
                 linear-gradient(145deg,
-
                     rgba(255, 255, 255, .08),
-
                     rgba(255, 255, 255, .02));
-
             box-shadow:
-
                 inset 2px 2px 4px rgba(255, 255, 255, .10),
-
                 inset -3px -3px 8px rgba(0, 0, 0, .08),
-
                 8px 10px 20px var(--container-shadow-dark),
-
                 -8px -8px 16px var(--container-shadow-light);
-
         }
 
         .menu-item:active {
-
             transform:
-
                 translateY(2px) scale(.985);
-
             box-shadow:
-
                 inset 5px 5px 10px var(--container-shadow-dark),
-
                 inset -5px -5px 10px var(--container-shadow-light);
-
         }
 
         .menu-item.active {
-
             color: white;
-
             background:
-
                 linear-gradient(145deg,
-
                     var(--btn-primary),
-
                     var(--btn-success));
-
             box-shadow:
-
                 inset 2px 2px 6px rgba(255, 255, 255, .18),
-
                 inset -4px -4px 8px rgba(0, 0, 0, .18),
-
                 0 0 28px rgba(67, 97, 238, .30);
-
         }
 
         /*==========================================================
-  ICONO
-==========================================================*/
+    ICONO
+    ==========================================================*/
 
         .menu-item .icon {
-
             width: 34px;
-
             text-align: center;
-
             font-size: 1.3rem;
-
             opacity: .95;
-
         }
 
         /*==========================================================
-  BADGE MENU
-==========================================================*/
+    BADGE MENU
+    ==========================================================*/
 
         .badge-menu {
-
             margin-left: auto;
-
             padding: .25rem .75rem;
-
             border-radius: 999px;
-
             font-size: .65rem;
-
             font-weight: 700;
-
             color: white;
-
             background:
-
                 linear-gradient(145deg,
                     var(--btn-success),
                     var(--btn-primary));
-
             box-shadow:
-
                 inset 2px 2px 4px rgba(255, 255, 255, .16),
-
                 4px 4px 10px rgba(0, 0, 0, .20);
-
         }
 
         /*==========================================================
-  USER BADGE
-==========================================================*/
+    MAIN CONTENT - ocupa el espacio restante
+    ==========================================================*/
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /*==========================================================
+    USER BADGE
+    ==========================================================*/
 
         .user-badge {
-
             display: inline-flex;
-
             align-items: center;
-
             gap: .5rem;
-
             padding: .85rem 1.6rem;
-
-            margin-bottom: 2rem;
-
+            margin-bottom: 1.5rem;
             border-radius: 999px;
-
+            flex-shrink: 0;
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .08),
                     rgba(255, 255, 255, .02)),
-
                 var(--container-bg);
-
             border: 1px solid rgba(255, 255, 255, .05);
-
             box-shadow:
-
                 inset 2px 2px 5px rgba(255, 255, 255, .08),
-
                 inset -3px -3px 8px rgba(0, 0, 0, .12),
-
                 8px 10px 22px var(--container-shadow-dark),
-
                 -8px -8px 18px var(--container-shadow-light);
-
         }
 
         .user-badge strong {
-
             color: var(--btn-success);
-
             font-weight: 700;
-
         }
 
         /*==========================================================
-=           PREMIUM CLAY TABLE
-==========================================================*/
+    HEADER
+    ==========================================================*/
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            padding-right: 3.5rem;
+            flex-shrink: 0;
+        }
+
+        .dashboard-header h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+            transition: color var(--transition-medium);
+        }
+
+        .dashboard-header .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            transition: color var(--transition-medium);
+        }
+
+        /*==========================================================
+    HEADER ACTIONS
+    ==========================================================*/
+
+        .header-actions {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .header-actions .info {
+            padding: .75rem 1.3rem;
+            border-radius: 999px;
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, .05),
+                    rgba(255, 255, 255, .02));
+            box-shadow:
+                inset 2px 2px 5px rgba(255, 255, 255, .05),
+                inset -3px -3px 6px rgba(0, 0, 0, .12);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        /*==========================================================
+    PREMIUM CLAY TABLE - con scroll interno
+    ==========================================================*/
 
         .table-container {
-
             position: relative;
-
-            margin-top: 2rem;
-
+            margin-top: 1rem;
             padding: 1rem;
-
             border-radius: 28px;
-
             overflow: auto;
-
+            flex: 1;
+            min-height: 0;
+            /* Importante para que flex funcione */
             background:
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .05),
                     rgba(255, 255, 255, .02)),
                 var(--container-bg);
-
             border: 1px solid rgba(255, 255, 255, .05);
-
             backdrop-filter: blur(18px);
-
             box-shadow:
-
                 inset 2px 2px 5px rgba(255, 255, 255, .06),
-
                 inset -5px -5px 10px rgba(0, 0, 0, .18),
-
                 14px 14px 35px var(--container-shadow-dark),
-
                 -14px -14px 30px var(--container-shadow-light);
+        }
 
+        /* Scroll personalizado para la tabla */
+        .table-container::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /*==========================================================*/
 
         table {
-
             width: 100%;
-
             border-collapse: separate;
-
             border-spacing: 0 12px;
-
         }
 
         /*==========================================================*/
 
         thead th {
-
             padding: 1rem;
-
             text-transform: uppercase;
-
             letter-spacing: 2px;
-
             font-size: .72rem;
-
             font-weight: 700;
-
             color: var(--text-muted);
-
             border: none;
-
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: var(--container-bg);
         }
 
         /*==========================================================*/
 
         tbody tr {
-
             transition: .22s cubic-bezier(.2, .8, .2, 1);
-
         }
 
         /*==========================================================*/
 
         tbody td {
-
             padding: 1rem;
-
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .05),
                     rgba(255, 255, 255, .02));
-
             border: none;
-
             color: var(--text-secondary);
-
             position: relative;
-
         }
 
         /* esquinas */
-
         tbody td:first-child {
-
             border-radius: 18px 0 0 18px;
-
         }
 
         tbody td:last-child {
-
             border-radius: 0 18px 18px 0;
-
         }
 
         /*==========================================================*/
 
         tbody tr:hover {
-
             transform:
                 translateY(-3px) scale(1.004);
-
         }
 
         tbody tr:hover td {
-
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 255, 255, .08),
                     rgba(255, 255, 255, .03));
-
             box-shadow:
-
                 inset 2px 2px 5px rgba(255, 255, 255, .08),
-
                 inset -4px -4px 8px rgba(0, 0, 0, .10),
-
                 8px 10px 20px rgba(0, 0, 0, .12);
-
         }
 
         /*==========================================================*/
 
         tbody tr:active {
-
             transform: translateY(2px);
-
         }
 
         tbody tr:active td {
-
             box-shadow:
-
                 inset 5px 5px 10px rgba(0, 0, 0, .18),
-
                 inset -4px -4px 8px rgba(255, 255, 255, .06);
-
         }
 
         /*==========================================================
-=           NUMEROS
-==========================================================*/
+    NUMEROS
+    ==========================================================*/
 
         .cantidad {
-
             font-size: 1.08rem;
-
             font-weight: 700;
-
         }
 
         /*==========================================================*/
 
         .cantidad-alta {
-
             color: #38d39f;
-
         }
 
         .cantidad-media {
-
             color: #ffbe3d;
-
         }
 
         .cantidad-baja {
-
             color: #ff5e7e;
-
         }
 
         /*==========================================================
-=           BADGES
-==========================================================*/
+    BADGES
+    ==========================================================*/
 
         .badge-clues {
-
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
-
             min-width: 64px;
-
             padding: .45rem .85rem;
-
             border-radius: 999px;
-
             font-size: .72rem;
-
             font-weight: 700;
-
             color: white;
-
             background:
-
                 linear-gradient(145deg,
                     var(--btn-success),
                     var(--btn-primary));
-
             box-shadow:
-
                 inset 2px 2px 5px rgba(255, 255, 255, .18),
-
                 inset -3px -3px 6px rgba(0, 0, 0, .18),
-
                 5px 5px 12px rgba(0, 0, 0, .18);
-
         }
 
         /*==========================================================
-=           HEADER ACTIONS
-==========================================================*/
-
-        .header-actions {
-
-            margin-top: 2rem;
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 1rem;
-
-        }
-
-        .header-actions .info {
-
-            padding: .75rem 1.3rem;
-
-            border-radius: 999px;
-
-            background:
-
-                linear-gradient(145deg,
-                    rgba(255, 255, 255, .05),
-                    rgba(255, 255, 255, .02));
-
-            box-shadow:
-
-                inset 2px 2px 5px rgba(255, 255, 255, .05),
-
-                inset -3px -3px 6px rgba(0, 0, 0, .12);
-
-        }
-
-        /*==========================================================
-=           LOADING
-==========================================================*/
+    LOADING
+    ==========================================================*/
 
         .loading-spinner {
-
             width: 20px;
-
             height: 20px;
-
             border-radius: 50%;
-
             border: 3px solid rgba(255, 255, 255, .10);
-
             border-top-color: var(--btn-primary);
-
             animation: spin .7s linear infinite;
-
         }
 
         /*==========================================================*/
 
         .empty-state {
-
             padding: 3rem;
-
             text-align: center;
-
             color: var(--text-muted);
-
             font-size: 1rem;
-
         }
 
         /*==========================================================*/
 
         .error {
-
             padding: 1rem;
-
             border-radius: 18px;
-
             background:
-
                 linear-gradient(145deg,
                     rgba(255, 94, 126, .12),
                     rgba(255, 94, 126, .05));
-
             color: #ff5e7e;
-
             font-weight: 600;
+        }
 
+        /*==========================================================
+    FOOTER
+    ==========================================================*/
+
+        .footer {
+            text-align: center;
+            padding: 1rem 0 0.5rem 0;
+            color: var(--footer-color);
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(255, 255, 255, .04);
+            margin-top: 1rem;
         }
 
         /* ============================================================
-           RESPONSIVE DEL DASHBOARD
-           ============================================================ */
+       RESPONSIVE DEL DASHBOARD
+       ============================================================ */
         @media (max-width: 992px) {
+            body {
+                height: auto;
+                overflow-y: auto;
+                padding: 1rem;
+            }
+
             .dashboard-container {
                 flex-direction: column;
                 padding: 1.5rem;
+                height: auto;
+                max-height: none;
+                overflow: visible;
             }
 
             .sidebar {
@@ -781,6 +642,13 @@
                 border-bottom: 1px solid var(--border-color);
                 padding-bottom: 1rem;
                 margin-bottom: 1rem;
+                height: auto;
+                max-height: 280px;
+            }
+
+            .sidebar .menu-grid {
+                overflow-y: auto;
+                max-height: 180px;
             }
 
             .sidebar-brand {
@@ -797,6 +665,7 @@
             .menu-item {
                 padding: 0.5rem 0.75rem;
                 font-size: 0.8rem;
+                margin-bottom: 0.3rem;
             }
 
             .menu-item .icon {
@@ -815,44 +684,115 @@
             .dashboard-header h1 {
                 font-size: 1.4rem;
             }
+
+            .main-content {
+                height: auto;
+                min-height: 400px;
+            }
+
+            .table-container {
+                min-height: 200px;
+                max-height: 500px;
+            }
         }
 
         @media (max-width: 600px) {
             body {
-                padding: 1rem;
+                padding: 0.5rem;
+                height: auto;
+                overflow-y: auto;
             }
 
             .dashboard-container {
-                padding: 1rem;
+                padding: 0.8rem;
+                border-radius: 20px;
+                height: auto;
+            }
+
+            .sidebar {
+                max-height: 200px;
+                padding: 0.8rem;
+            }
+
+            .sidebar .menu-grid {
+                max-height: 120px;
+            }
+
+            .sidebar-brand .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .sidebar-brand h2 {
+                font-size: 0.95rem;
             }
 
             .menu-grid {
                 grid-template-columns: 1fr 1fr;
+                gap: 0.2rem;
             }
 
             .menu-item {
-                font-size: 0.75rem;
-                padding: 0.4rem 0.6rem;
+                font-size: 0.7rem;
+                padding: 0.35rem 0.5rem;
+                border-radius: 12px;
             }
 
             .menu-item .icon {
-                font-size: 1rem;
-                width: 20px;
+                font-size: 0.9rem;
+                width: 18px;
+            }
+
+            .menu-item::after {
+                display: none;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .user-badge {
+                font-size: 0.75rem;
+                padding: 0.5rem 1rem;
             }
 
             table {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
                 min-width: 400px;
             }
 
             th,
             td {
-                padding: 0.5rem;
+                padding: 0.4rem 0.6rem;
             }
 
             .header-actions {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .header-actions .info {
+                font-size: 0.75rem;
+                padding: 0.4rem 0.8rem;
+                text-align: center;
+            }
+
+            .btn-group {
+                justify-content: center;
+            }
+
+            .badge-clues {
+                min-width: 40px;
+                padding: 0.2rem 0.5rem;
+                font-size: 0.6rem;
+            }
+
+            .table-container {
+                padding: 0.5rem;
+                border-radius: 16px;
+                max-height: 350px;
             }
         }
 
@@ -863,12 +803,68 @@
 
             table {
                 min-width: 320px;
-                font-size: 0.7rem;
+                font-size: 0.65rem;
             }
 
             th,
             td {
-                padding: 0.35rem 0.5rem;
+                padding: 0.3rem 0.4rem;
+            }
+
+            .table-container {
+                max-height: 280px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .dashboard-container {
+                height: calc(100vh - 2rem);
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .sidebar {
+                padding: 0.8rem;
+            }
+
+            .sidebar-brand {
+                margin-bottom: 0.8rem;
+                padding-bottom: 0.8rem;
+            }
+
+            .sidebar-brand .logo-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .sidebar-brand h2 {
+                font-size: 0.9rem;
+            }
+
+            .menu-item {
+                padding: 0.5rem 0.7rem;
+                font-size: 0.75rem;
+                margin-bottom: 0.3rem;
+            }
+
+            .user-badge {
+                padding: 0.4rem 1rem;
+                font-size: 0.7rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .header-actions {
+                margin-top: 0.3rem;
+            }
+
+            .table-container {
+                margin-top: 0.3rem;
+                padding: 0.5rem;
+            }
+
+            tbody td {
+                padding: 0.4rem 0.6rem;
             }
         }
     </style>
