@@ -11,7 +11,7 @@
 
     <!-- CSS Principal - TODOS los estilos base -->
     <link rel="stylesheet" href="common/styles.css" />
-    
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
@@ -649,6 +649,16 @@
             .checkbox-group {
                 gap: 0.75rem;
             }
+        }
+
+        tbody tr {
+            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            opacity: 1;
+        }
+
+        tbody tr[style*="display: none"] {
+            opacity: 0;
+            transform: scale(0.98);
         }
     </style>
 </head>
@@ -1876,6 +1886,12 @@
         window.procesarCurp = procesarCurp;
         window.calcularEdad = calcularEdad;
         window.cargarMunicipios = cargarMunicipios;
+
+        function highlightText(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query})`, 'gi');
+            return text.replace(regex, '<mark style="background:rgba(76,201,240,0.25);padding:0 2px;border-radius:3px;">$1</mark>');
+        }
     </script>
 
 </body>
