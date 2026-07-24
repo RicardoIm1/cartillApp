@@ -1685,49 +1685,6 @@
         }
 
         // ============================================================
-        // MODAL - Asegurar que catálogos estén cargados ANTES de abrir
-        // ============================================================
-        function abrirModal() {
-            document.getElementById('censoForm').reset();
-            document.getElementById('editId').value = '';
-            document.getElementById('modalTitle').textContent = '📝 Nuevo Registro de Censo';
-            document.getElementById('submitBtn').textContent = 'Guardar Registro';
-            document.getElementById('edad').value = '';
-            document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
-            document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
-
-            var embarazoSelect = document.getElementById('embarazo');
-            if (embarazoSelect) {
-                embarazoSelect.disabled = false;
-            }
-
-            // Asegurar que los catálogos estén cargados ANTES de abrir el modal
-            if (!catalogos.cargados) {
-                console.log('📦 Cargando catálogos...');
-                cargarCatalogos().then(function () {
-                    console.log('✅ Catálogos cargados, abriendo modal...');
-                    // Verificar que el select de entidad tenga opciones
-                    var entidadSelect = document.getElementById('entidad');
-                    console.log('  - Opciones de entidad:', entidadSelect.options.length);
-                    if (typeof abrirModalCinematico === 'function') {
-                        abrirModalCinematico('modalOverlay');
-                    } else {
-                        modalOverlay.classList.add('active');
-                    }
-                });
-            } else {
-                console.log('📦 Catálogos ya cargados, abriendo modal...');
-                var entidadSelect = document.getElementById('entidad');
-                console.log('  - Opciones de entidad:', entidadSelect.options.length);
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
-            }
-        }
-
-        // ============================================================
         // CARGAR REGISTROS DE CENSO
         // ============================================================
         async function cargarCenso() {
