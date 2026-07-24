@@ -1620,15 +1620,16 @@
                 }
             }
 
-            // 3. DETECTAR ENTIDAD
+            // 3. DETECTAR ENTIDAD (SOLO SI EL SELECT ESTÁ POBLADO)
             if (curpLimpio.length === 18) {
                 var claveEntidad = obtenerEntidadDesdeCurp(curpLimpio);
                 console.log('  - Clave entidad detectada:', claveEntidad);
                 if (claveEntidad) {
                     var nombreEntidad = obtenerNombreEntidad(claveEntidad);
                     console.log('  - Nombre entidad:', nombreEntidad);
-                    if (nombreEntidad && entidadSelect) {
-                        // Buscar la opción que coincida con el nombre
+
+                    // ESPERAR a que el select tenga opciones
+                    if (entidadSelect && entidadSelect.options.length > 1) {
                         var opciones = entidadSelect.options;
                         var encontrado = false;
                         for (var i = 0; i < opciones.length; i++) {
@@ -1640,12 +1641,30 @@
                             }
                         }
                         if (!encontrado) {
-                            console.warn('  - Entidad no encontrada en el select. Asegúrate de que cargarEntidades() se ejecutó.');
+                            console.warn('  - Entidad no encontrada en el select.');
                         }
                         // Cargar municipios de la entidad seleccionada
                         if (entidadSelect.value) {
                             cargarMunicipios();
                         }
+                    } else {
+                        console.warn('  - Select de entidad aún no tiene opciones. Reintentando en 500ms...');
+                        // Reintentar después de que los catálogos se carguen
+                        setTimeout(function () {
+                            if (entidadSelect && entidadSelect.options.length > 1) {
+                                var opciones = entidadSelect.options;
+                                for (var i = 0; i < opciones.length; i++) {
+                                    if (opciones[i].text === nombreEntidad) {
+                                        entidadSelect.value = opciones[i].value;
+                                        console.log('  - Entidad seleccionada (reintento):', opciones[i].value);
+                                        break;
+                                    }
+                                }
+                                if (entidadSelect.value) {
+                                    cargarMunicipios();
+                                }
+                            }
+                        }, 500);
                     }
                 }
 
@@ -1666,7 +1685,7 @@
         }
 
         // ============================================================
-        // MODAL - Versión mejorada (asegurar que catálogos estén cargados)
+        // MODAL - Asegurar que catálogos estén cargados ANTES de abrir
         // ============================================================
         function abrirModal() {
             document.getElementById('censoForm').reset();
@@ -1687,6 +1706,9 @@
                 console.log('📦 Cargando catálogos...');
                 cargarCatalogos().then(function () {
                     console.log('✅ Catálogos cargados, abriendo modal...');
+                    // Verificar que el select de entidad tenga opciones
+                    var entidadSelect = document.getElementById('entidad');
+                    console.log('  - Opciones de entidad:', entidadSelect.options.length);
                     if (typeof abrirModalCinematico === 'function') {
                         abrirModalCinematico('modalOverlay');
                     } else {
@@ -1695,6 +1717,8 @@
                 });
             } else {
                 console.log('📦 Catálogos ya cargados, abriendo modal...');
+                var entidadSelect = document.getElementById('entidad');
+                console.log('  - Opciones de entidad:', entidadSelect.options.length);
                 if (typeof abrirModalCinematico === 'function') {
                     abrirModalCinematico('modalOverlay');
                 } else {
@@ -1702,6 +1726,7 @@
                 }
             }
         }
+
         // ============================================================
         // CARGAR REGISTROS DE CENSO
         // ============================================================
