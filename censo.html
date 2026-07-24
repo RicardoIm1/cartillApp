@@ -338,7 +338,7 @@
         }
 
         /* ============================================================
-           MODAL
+           MODAL - VERSIÓN MEJORADA (más ancho y 3 columnas)
            ============================================================ */
         .modal-overlay {
             position: fixed;
@@ -362,14 +362,34 @@
         .modal-content {
             background: var(--container-bg);
             border-radius: var(--radius-lg);
-            padding: 2rem;
-            max-width: 800px;
+            padding: 2.5rem;
+            max-width: 1100px;
+            /* Aumentado de 800px a 1100px */
             width: 100%;
-            max-height: 90vh;
+            max-height: 92vh;
             overflow-y: auto;
             box-shadow: var(--shadow-raised);
             animation: modalIn 0.3s ease-out;
             border: 1px solid var(--border-color);
+        }
+
+        /* Scroll personalizado del modal */
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
 
         @keyframes modalIn {
@@ -388,6 +408,7 @@
             margin-bottom: 1.5rem;
             color: var(--text-primary);
             font-weight: 700;
+            font-size: 1.6rem;
         }
 
         .modal-actions {
@@ -398,7 +419,115 @@
         }
 
         /* ============================================================
-           FORMULARIO
+       FORMULARIO DEL MODAL - GRID MEJORADO (3 columnas)
+       ============================================================ */
+        .modal-content .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            /* 3 columnas en pantallas grandes */
+            gap: 1.2rem;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-content .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .modal-content .form-group.half-width {
+            grid-column: span 2;
+        }
+
+        .modal-content .form-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-medium);
+        }
+
+        .modal-content .form-section-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.6rem;
+        }
+
+        .modal-content .form-group label {
+            display: block;
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: var(--label-color, var(--text-muted));
+            margin-bottom: 0.3rem;
+            transition: color var(--transition-medium);
+        }
+
+        .modal-content .form-group input,
+        .modal-content .form-group select {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--container-bg);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            transition: all var(--transition-medium);
+            box-shadow: var(--shadow-pressed);
+        }
+
+        .modal-content .form-group input:focus,
+        .modal-content .form-group select:focus {
+            outline: none;
+            background: var(--input-focus-bg, var(--container-bg));
+            box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        .modal-content .form-group input::placeholder {
+            color: var(--text-muted-light);
+        }
+
+        .modal-content .form-group select option {
+            background: var(--container-bg);
+            color: var(--text-primary);
+        }
+
+        .modal-content .checkbox-group {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding-top: 0.3rem;
+        }
+
+        .modal-content .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 400;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-content .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            box-shadow: none;
+            accent-color: var(--btn-primary);
+        }
+
+        .modal-content .helper-text {
+            font-size: 0.7rem;
+            color: var(--text-muted-light);
+            margin-top: 0.2rem;
+        }
+
+        /* ============================================================
+           FORMULARIO FUERA DEL MODAL (para compatibilidad)
            ============================================================ */
         .form-grid {
             display: grid;
@@ -562,8 +691,20 @@
         }
 
         /* ============================================================
-           RESPONSIVE
+           RESPONSIVE DEL MODAL
            ============================================================ */
+        @media (max-width: 1200px) {
+            .modal-content {
+                max-width: 95vw;
+                padding: 2rem;
+            }
+
+            .modal-content .form-grid {
+                grid-template-columns: 1fr 1fr;
+                /* 2 columnas en tablet */
+            }
+        }
+
         @media (max-width: 992px) {
             body {
                 padding: 1rem;
@@ -578,13 +719,24 @@
                 overflow: visible;
             }
 
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
             .modal-content {
                 padding: 1.5rem;
+                max-width: 100%;
                 margin: 0.5rem;
+                max-height: 95vh;
+            }
+
+            .modal-content .form-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+            .modal-content .form-section {
+                padding: 1rem 1.2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -639,6 +791,45 @@
 
             .modal-content {
                 padding: 1rem;
+                border-radius: var(--radius-md);
+                margin: 0.3rem;
+                max-height: 98vh;
+            }
+
+            .modal-content .form-grid {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+
+            .modal-content .form-group.full-width {
+                grid-column: 1;
+            }
+
+            .modal-content .form-group.half-width {
+                grid-column: 1;
+            }
+
+            .modal-content .form-section {
+                padding: 0.8rem 1rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .modal-content h2 {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+
+            .modal-content .checkbox-group {
+                gap: 1rem;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .modal-actions .btn {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -702,6 +893,28 @@
                 padding: 0.8rem;
             }
 
+            .modal-content .form-section {
+                padding: 0.6rem 0.8rem;
+            }
+
+            .modal-content .form-group input,
+            .modal-content .form-group select {
+                padding: 0.5rem 0.7rem;
+                font-size: 0.8rem;
+            }
+
+            .modal-content .form-group label {
+                font-size: 0.75rem;
+            }
+
+            .modal-content .checkbox-group label {
+                font-size: 0.75rem;
+            }
+
+            .modal-content h2 {
+                font-size: 1.1rem;
+            }
+
             .modal-actions {
                 flex-direction: column;
             }
@@ -753,6 +966,37 @@
                 width: 24px;
                 height: 24px;
                 font-size: 0.65rem;
+            }
+
+            .modal-content {
+                padding: 1.2rem;
+                max-height: 95vh;
+            }
+
+            .modal-content .form-section {
+                padding: 0.8rem 1rem;
+                margin-bottom: 0.6rem;
+            }
+
+            .modal-content .form-grid {
+                gap: 0.6rem;
+            }
+
+            .modal-content h2 {
+                font-size: 1.2rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .modal-content .form-group input,
+            .modal-content .form-group select {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .modal-actions {
+                margin-top: 0.8rem;
+                padding-top: 0.5rem;
+                border-top: 1px solid var(--border-color);
             }
         }
     </style>
@@ -829,8 +1073,8 @@
     </div>
 
     <!-- ============================================================
-    MODAL FORMULARIO
-    ============================================================ -->
+MODAL FORMULARIO - VERSIÓN MEJORADA
+============================================================ -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal-content">
             <h2 id="modalTitle">📝 Nuevo Registro de Censo</h2>
