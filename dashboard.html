@@ -867,6 +867,219 @@
                 padding: 0.4rem 0.6rem;
             }
         }
+
+        /* ============================================================
+   BUSCADOR UNIVERSAL – CLAYMORPHISM PREMIUM
+   ============================================================ */
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            flex-shrink: 0;
+        }
+
+        .header-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        /* ============================================================
+   SEARCH WRAPPER
+   ============================================================ */
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 200px;
+            max-width: 480px;
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, .05),
+                    rgba(255, 255, 255, .02)),
+                var(--container-bg);
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, .05);
+            box-shadow:
+                inset 2px 2px 5px rgba(255, 255, 255, .05),
+                inset -3px -3px 6px rgba(0, 0, 0, .12),
+                6px 6px 14px var(--container-shadow-dark),
+                -6px -6px 12px var(--container-shadow-light);
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .search-wrapper:focus-within {
+            box-shadow:
+                inset 2px 2px 5px rgba(255, 255, 255, .08),
+                inset -3px -3px 6px rgba(0, 0, 0, .10),
+                0 0 0 3px rgba(67, 97, 238, .15),
+                8px 8px 20px var(--container-shadow-dark),
+                -8px -8px 18px var(--container-shadow-light);
+            border-color: rgba(67, 97, 238, .2);
+        }
+
+        /* ============================================================
+   ICONO DE BÚSQUEDA
+   ============================================================ */
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            font-size: 1rem;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-wrapper:focus-within .search-icon {
+            opacity: 0.8;
+        }
+
+        /* ============================================================
+   INPUT DE BÚSQUEDA
+   ============================================================ */
+        .search-input {
+            width: 100%;
+            padding: 0.85rem 3.2rem 0.85rem 3rem;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            outline: none;
+            border-radius: 999px;
+            font-family: 'Poppins', sans-serif;
+            transition: color 0.3s ease;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted-light);
+            font-weight: 400;
+        }
+
+        /* ============================================================
+   BOTÓN DE LIMPIAR
+   ============================================================ */
+        .search-clear {
+            position: absolute;
+            right: 3.2rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: 50%;
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, .08),
+                    rgba(255, 255, 255, .02));
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s ease;
+            box-shadow:
+                inset 1px 1px 3px rgba(255, 255, 255, .05),
+                inset -2px -2px 4px rgba(0, 0, 0, .10);
+        }
+
+        .search-clear.visible {
+            display: flex;
+        }
+
+        .search-clear:hover {
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, .14),
+                    rgba(255, 255, 255, .04));
+            color: var(--text-primary);
+            transform: scale(1.1);
+        }
+
+        .search-clear:active {
+            transform: scale(0.9);
+        }
+
+        /* ============================================================
+   SHORTCUT (⌘K)
+   ============================================================ */
+        .search-shortcut {
+            position: absolute;
+            right: 0.8rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-muted-light);
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, .04),
+                    rgba(255, 255, 255, .01));
+            border: 1px solid rgba(255, 255, 255, .04);
+            box-shadow:
+                inset 1px 1px 2px rgba(255, 255, 255, .04),
+                inset -1px -1px 2px rgba(0, 0, 0, .06);
+            pointer-events: none;
+            letter-spacing: 0.3px;
+        }
+
+        /* ============================================================
+   RESPONSIVE
+   ============================================================ */
+        @media (max-width: 768px) {
+            .header-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-wrapper {
+                max-width: 100%;
+                min-width: auto;
+            }
+
+            .search-shortcut {
+                display: none;
+            }
+
+            .header-actions-right {
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .search-input {
+                font-size: 0.8rem;
+                padding: 0.7rem 2.5rem 0.7rem 2.5rem;
+            }
+
+            .search-icon {
+                left: 0.7rem;
+                font-size: 0.85rem;
+            }
+
+            .search-clear {
+                right: 0.7rem;
+                width: 20px;
+                height: 20px;
+                font-size: 0.6rem;
+            }
+
+            .header-actions-right .info {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+            }
+
+            .header-actions-right .btn {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
     </style>
 </head>
 
@@ -944,12 +1157,19 @@
                 </div>
             </div>
 
-            <!-- TABLA INVENTARIO -->
+            <!-- ============================================================
+            HEADER ACTIONS CON BUSCADOR UNIVERSAL
+            ============================================================ -->
             <div class="header-actions">
-                <span class="info">
-                    <span id="totalRegistros">0</span> registros encontrados
-                </span>
-                <div class="btn-group">
+                <div class="search-wrapper">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" class="search-input" id="globalSearch" placeholder="Buscar en todo el sistema..."
+                        autocomplete="off" />
+                    <button class="search-clear" id="clearSearch" type="button">✕</button>
+                    <kbd class="search-shortcut">⌘K</kbd>
+                </div>
+                <div class="header-actions-right">
+                    <span class="info" id="totalRegistros">0 registros</span>
                     <button class="btn btn-secondary" onclick="loadDashboard()">🔄 Actualizar</button>
                 </div>
             </div>
@@ -1227,6 +1447,94 @@
             createParticles();
             loadDashboard();
         });
+    </script>
+    
+    <script>
+        // ============================================================
+        // BUSCADOR UNIVERSAL
+        // ============================================================
+        (function setupGlobalSearch() {
+            const searchInput = document.getElementById('globalSearch');
+            const clearBtn = document.getElementById('clearSearch');
+            const tableContainer = document.getElementById('inventarioContainer');
+
+            // Mostrar/ocultar botón de limpiar
+            searchInput.addEventListener('input', function () {
+                clearBtn.classList.toggle('visible', this.value.length > 0);
+                filterTable(this.value);
+            });
+
+            // Limpiar búsqueda
+            clearBtn.addEventListener('click', function () {
+                searchInput.value = '';
+                clearBtn.classList.remove('visible');
+                filterTable('');
+                searchInput.focus();
+            });
+
+            // Atajo de teclado: Ctrl+K o Cmd+K
+            document.addEventListener('keydown', function (e) {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchInput.select();
+                }
+                // Escape para limpiar y cerrar
+                if (e.key === 'Escape' && document.activeElement === searchInput) {
+                    searchInput.value = '';
+                    clearBtn.classList.remove('visible');
+                    filterTable('');
+                    searchInput.blur();
+                }
+            });
+
+            // Función de filtrado
+            function filterTable(query) {
+                const table = tableContainer.querySelector('table');
+                if (!table) return;
+
+                const rows = table.querySelectorAll('tbody tr');
+                const searchTerm = query.toLowerCase().trim();
+
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    const match = searchTerm === '' || text.includes(searchTerm);
+                    row.style.display = match ? '' : 'none';
+                    if (match) visibleCount++;
+                });
+
+                // Actualizar contador
+                const totalSpan = document.getElementById('totalRegistros');
+                if (totalSpan) {
+                    if (searchTerm === '') {
+                        totalSpan.textContent = rows.length + ' registros';
+                    } else {
+                        totalSpan.textContent = visibleCount + ' de ' + rows.length + ' registros';
+                    }
+                }
+
+                // Mostrar mensaje si no hay resultados
+                const emptyState = tableContainer.querySelector('.empty-state');
+                const noResults = tableContainer.querySelector('.no-results');
+
+                if (visibleCount === 0 && rows.length > 0) {
+                    if (!noResults) {
+                        const msg = document.createElement('div');
+                        msg.className = 'empty-state no-results';
+                        msg.innerHTML = '🔍 No se encontraron resultados para "<strong>' + query + '</strong>"';
+                        tableContainer.appendChild(msg);
+                    } else {
+                        noResults.innerHTML = '🔍 No se encontraron resultados para "<strong>' + query + '</strong>"';
+                        noResults.style.display = '';
+                    }
+                    if (emptyState) emptyState.style.display = 'none';
+                } else {
+                    if (noResults) noResults.style.display = 'none';
+                }
+            }
+        })();
     </script>
 
 </body>
