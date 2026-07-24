@@ -13,9 +13,13 @@
     <!-- CSS Principal - styles.css -->
     <link rel="stylesheet" href="common/styles.css" />
 
+    <!-- ============================================================
+    JAVASCRIPT EXTERNO
+    ============================================================ -->
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
-    
+
     <!-- Transiciones cinematográficas para modales -->
     <script src="common/transiciones.js">
     </script>
@@ -372,18 +376,31 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            display: none;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+            display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             padding: 1rem;
+            pointer-events: none;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            opacity: 0;
         }
 
         .modal-overlay.active {
-            display: flex;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            pointer-events: all;
+            opacity: 1;
+        }
+
+        body.light-mode .modal-overlay.active {
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .modal-content {
@@ -394,16 +411,22 @@
             width: 100%;
             max-height: 92vh;
             overflow-y: auto;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12),
-                0 2px 10px rgba(0, 0, 0, 0.04);
-            animation: modalIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25),
+                0 8px 32px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transform: scale(0.92) translateY(30px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Modo claro - sombras aún más sutiles */
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
         body.light-mode .modal-content {
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06),
-                0 2px 8px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08),
+                0 6px 24px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
@@ -1269,8 +1292,8 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
                 </div>
 
                 <div class="modal-actions">
-                    <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
-                    <button class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Guardar Registro</button>
                 </div>
             </form>
         </div>
@@ -1733,11 +1756,11 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="loading-spinner"></div>
-                        Cargando registros...
-                    </div>
-                `;
+                        <div class="empty-state">
+                            <div class="loading-spinner"></div>
+                            Cargando registros...
+                        </div>
+                    `;
                 errorElement.textContent = '';
 
                 var query = supabaseClient
@@ -1762,10 +1785,10 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
 
                 if (data.length === 0) {
                     censoContainer.innerHTML = `
-                        <div class="empty-state">
-                            📭 No hay registros de censo
-                        </div>
-                    `;
+                            <div class="empty-state">
+                                📭 No hay registros de censo
+                            </div>
+                        `;
                     return;
                 }
 
@@ -1775,29 +1798,29 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        ❌ Error al cargar los datos
-                    </div>
-                `;
+                        <div class="empty-state">
+                            ❌ Error al cargar los datos
+                        </div>
+                    `;
             }
         }
 
         function renderTable(data) {
             var html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Folio</th>
-                            <th>Nombre</th>
-                            <th>CURP</th>
-                            <th>Cartilla</th>
-                            <th>Fecha Entrega</th>
-                            <th>Centro</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Nombre</th>
+                                <th>CURP</th>
+                                <th>Cartilla</th>
+                                <th>Fecha Entrega</th>
+                                <th>Centro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    `;
 
             data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
@@ -1806,33 +1829,33 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
                 var centro = row.clues || 'N/A';
 
                 html += `
-                    <tr>
-                        <td><span class="badge">${row.folio || 'N/A'}</span></td>
-                        <td>${nombreCompleto}</td>
-                        <td>${row.curp || 'N/A'}</td>
-                        <td>${tipoCartilla}</td>
-                        <td>${fechaEntrega}</td>
-                        <td><span class="badge-clues">${centro}</span></td>
-                        <td>
-                            <div class="table-actions">
-                                <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
-                                <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                        <tr>
+                            <td><span class="badge">${row.folio || 'N/A'}</span></td>
+                            <td>${nombreCompleto}</td>
+                            <td>${row.curp || 'N/A'}</td>
+                            <td>${tipoCartilla}</td>
+                            <td>${fechaEntrega}</td>
+                            <td><span class="badge-clues">${centro}</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
+                                    <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
             });
 
             html += `
-                    </tbody>
-                </table>
-            `;
+                        </tbody>
+                    </table>
+                    `;
 
             censoContainer.innerHTML = html;
         }
 
         // ============================================================
-        // MODAL
+        // MODAL - Usando funciones de transiciones.js
         // ============================================================
         function abrirModal() {
             document.getElementById('censoForm').reset();
@@ -1850,15 +1873,28 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
 
             if (!catalogos.cargados) {
                 cargarCatalogos().then(function () {
-                    modalOverlay.classList.add('active');
+                    // Usar la función global de transiciones.js
+                    if (typeof abrirModalCinematico === 'function') {
+                        abrirModalCinematico('modalOverlay');
+                    } else {
+                        modalOverlay.classList.add('active');
+                    }
                 });
             } else {
-                modalOverlay.classList.add('active');
+                if (typeof abrirModalCinematico === 'function') {
+                    abrirModalCinematico('modalOverlay');
+                } else {
+                    modalOverlay.classList.add('active');
+                }
             }
         }
 
         function cerrarModal() {
-            modalOverlay.classList.remove('active');
+            if (typeof cerrarModalCinematico === 'function') {
+                cerrarModalCinematico('modalOverlay');
+            } else {
+                modalOverlay.classList.remove('active');
+            }
         }
 
         // ============================================================
@@ -1923,7 +1959,11 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
                 document.getElementById('embarazo').value = row.embarazo_id_uuid || '';
                 document.getElementById('tipo_migracion').value = row.migracion_id_uuid || '';
 
-                modalOverlay.classList.add('active');
+                if (typeof abrirModalCinematico === 'function') {
+                    abrirModalCinematico('modalOverlay');
+                } else {
+                    modalOverlay.classList.add('active');
+                }
 
             } catch (error) {
                 console.error('Error al cargar registro:', error);
@@ -2257,12 +2297,14 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
                 cargarCenso();
             });
 
+            // Cerrar modal con Escape (fallback si transiciones.js no carga)
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     cerrarModal();
                 }
             });
 
+            // Cerrar modal al hacer clic en el overlay (fallback)
             modalOverlay.addEventListener('click', function (e) {
                 if (e.target === modalOverlay) {
                     cerrarModal();
@@ -2280,9 +2322,6 @@ MODAL FORMULARIO - VERSIÓN MEJORADA
         window.procesarCurp = procesarCurp;
         window.calcularEdad = calcularEdad;
         window.cargarMunicipios = cargarMunicipios;
-
-        // Abrir modal
-        document.getElementById('abrirModalBtn').addEventListener('click', abrirModal);
     </script>
 
 </body>
