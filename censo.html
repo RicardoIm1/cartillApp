@@ -368,8 +368,10 @@
         }
 
         /* ============================================================
-   MODAL - ESTILO APPLE (sin resplandor)
+   MODAL - TRANSICIONES MÁS NOTORIAS
    ============================================================ */
+
+        /* OVERLAY - Fondo del modal */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -385,24 +387,31 @@
             z-index: 1000;
             padding: 1rem;
             pointer-events: none;
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            /* Aumentado de 0.5s a 0.7s */
             opacity: 0;
         }
 
         .modal-overlay.active {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.7);
+            /* Más oscuro para más contraste */
+            backdrop-filter: blur(16px);
+            /* Más blur para más efecto */
+            -webkit-backdrop-filter: blur(16px);
             pointer-events: all;
             opacity: 1;
         }
 
+        /* Modo claro - overlay más suave pero más notorio */
         body.light-mode .modal-overlay.active {
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
+        /* ============================================================
+   MODAL CONTENT - El panel principal
+   ============================================================ */
         .modal-content {
             background: var(--container-bg);
             border-radius: var(--radius-lg);
@@ -411,76 +420,200 @@
             width: 100%;
             max-height: 92vh;
             overflow-y: auto;
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25),
-                0 8px 32px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transform: scale(0.92) translateY(30px);
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.35),
+                0 10px 40px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            /* Efecto más pronunciado al abrir */
+            transform: scale(0.85) translateY(50px);
             opacity: 0;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* Spring más notorio */
         }
 
         .modal-overlay.active .modal-content {
             transform: scale(1) translateY(0);
             opacity: 1;
+            transition-delay: 0.1s;
+            /* Pequeño retraso para efecto cascada */
         }
 
+        /* Modo claro - sombras ajustadas */
         body.light-mode .modal-content {
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08),
-                0 6px 24px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12),
+                0 8px 30px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        /* Scroll personalizado del modal - más sutil */
-        .modal-content::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .modal-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-        }
-
-        body.light-mode .modal-content::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.08);
-        }
-
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        body.light-mode .modal-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.15);
-        }
-
-        @keyframes modalIn {
-            from {
+        /* ============================================================
+   ANIMACIÓN DE ENTRADA - MÁS NOTORIA
+   ============================================================ */
+        @keyframes modalSlideIn {
+            0% {
                 opacity: 0;
-                transform: translateY(20px) scale(0.97);
+                transform: scale(0.80) translateY(60px);
+                filter: blur(12px);
             }
 
-            to {
+            30% {
+                filter: blur(4px);
+            }
+
+            60% {
+                transform: scale(1.02) translateY(-5px);
+                /* Efecto "rebote" */
+                filter: blur(0px);
+            }
+
+            80% {
+                transform: scale(0.98) translateY(3px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .modal-overlay.active .modal-content {
+            animation: modalSlideIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* ============================================================
+   ANIMACIÓN DE SALIDA - MÁS NOTORIA
+   ============================================================ */
+        .modal-overlay.closing .modal-content {
+            animation: modalSlideOut 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes modalSlideOut {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                filter: blur(0);
+            }
+
+            40% {
+                filter: blur(6px);
+                transform: scale(0.95) translateY(-10px);
+            }
+
+            100% {
+                opacity: 0;
+                transform: scale(0.85) translateY(-40px);
+                filter: blur(12px);
+            }
+        }
+
+        /* ============================================================
+   ANIMACIÓN DEL OVERLAY - MÁS NOTORIA
+   ============================================================ */
+        .modal-overlay.closing {
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* ============================================================
+   TÍTULO DEL MODAL - CON EFECTO DE ENTRADA MÁS NOTORIO
+   ============================================================ */
+        .modal-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.8rem;
+            letter-spacing: -0.02em;
+            opacity: 0;
+            transform: translateY(-15px) scale(0.95);
+            animation: titleIn 0.6s ease 0.2s forwards;
+        }
+
+        @keyframes titleIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.95);
+            }
+
+            60% {
+                transform: translateY(3px) scale(1.02);
+            }
+
+            100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
             }
         }
 
-        .modal-content h2 {
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            font-weight: 700;
-            font-size: 1.6rem;
-            letter-spacing: -0.02em;
+        .modal-content h2 .icon {
+            display: inline-block;
+            animation: iconPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+            opacity: 0;
+            transform: scale(0.3) rotate(-20deg);
         }
 
+        @keyframes iconPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(-20deg);
+            }
+
+            60% {
+                transform: scale(1.2) rotate(5deg);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        /* ============================================================
+   FORM SECTIONS - ENTRADA ESCALONADA MÁS NOTORIA
+   ============================================================ */
+        .modal-content .form-section {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: sectionIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .modal-content .form-section:nth-child(1) {
+            animation-delay: 0.15s;
+        }
+
+        .modal-content .form-section:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .modal-content .form-section:nth-child(3) {
+            animation-delay: 0.35s;
+        }
+
+        @keyframes sectionIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) scale(0.97);
+            }
+
+            60% {
+                transform: translateY(-3px) scale(1.005);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ============================================================
+   MODAL ACTIONS - ENTRADA ESCALONADA MÁS NOTORIA
+   ============================================================ */
         .modal-actions {
             display: flex;
             gap: 1rem;
             margin-top: 1.5rem;
             justify-content: flex-end;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: sectionIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s forwards;
         }
 
         /* ============================================================
