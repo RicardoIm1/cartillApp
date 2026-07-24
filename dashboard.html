@@ -1204,6 +1204,20 @@
             background: #f72585;
             animation: none;
         }
+
+        /* Ocultar botón cuando Realtime está conectado */
+        .header-actions-right .btn-refresh {
+            transition: all 0.3s ease;
+        }
+
+        .header-actions-right .btn-refresh.hidden {
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 
@@ -1298,7 +1312,8 @@
                         Conectando...
                     </span>
                     <span class="info" id="totalRegistros">0 registros</span>
-                    <button class="btn btn-secondary" onclick="loadDashboard()">🔄 Actualizar</button>
+                    <button class="btn btn-secondary btn-refresh hidden" onclick="loadDashboard()">🔄
+                        Actualizar</button>
                 </div>
             </div>
 
@@ -1965,6 +1980,33 @@
         // Exponer funciones globalmente
         window.loadDashboard = loadDashboard;
         window.logout = logout;
+    </script>
+
+    <script>
+        function actualizarIndicadorRealtime(connected) {
+            var indicator = document.getElementById('realtimeIndicator');
+            var refreshBtn = document.querySelector('.btn-refresh');
+
+            if (!indicator) return;
+
+            var dot = indicator.querySelector('.dot');
+            if (dot) {
+                dot.className = 'dot ' + (connected ? 'connected' : 'disconnected');
+            }
+            indicator.innerHTML = `
+        <span class="dot ${connected ? 'connected' : 'disconnected'}"></span>
+        ${connected ? '🟢 En vivo' : '🔴 Desconectado'}
+    `;
+
+            // Mostrar/ocultar botón de actualización según conexión
+            if (refreshBtn) {
+                if (connected) {
+                    refreshBtn.classList.add('hidden');
+                } else {
+                    refreshBtn.classList.remove('hidden');
+                }
+            }
+        }
     </script>
 
 </body>
