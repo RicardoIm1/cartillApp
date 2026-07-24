@@ -1133,6 +1133,8 @@
                             <label for="embarazo">Embarazo</label>
                             <select id="embarazo">
                                 <option value="">Seleccionar...</option>
+                                <option value="no">No</option>
+                                <option value="si">Sí</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1301,28 +1303,31 @@
         // ============================================================
         var catalogos = {cargados: false};
 
-        async function cargarCatalogos() {
-            try {
-                await Promise.all([
-                    cargarEntidades(),
-                    cargarPaises(),
-                    cargarClues(),
-                    cargarTiposCartilla(),
-                    cargarMotivos(),
-                    cargarAnios(),
-                    cargarServicios(),
-                    cargarSiNo(),
-                    cargarDiscapacidades(),
-                    cargarEmbarazos(),
-                    cargarMigraciones()
-                ]);
-                catalogos.cargados = true;
-                console.log('✅ Catálogos cargados correctamente');
-            } catch (error) {
-                console.error('Error al cargar catálogos:', error);
-                errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
-            }
-        }
+        // ============================================================
+// CATÁLOGOS - CON EMBARAZOS CORREGIDO
+// ============================================================
+async function cargarCatalogos() {
+    try {
+        await Promise.all([
+            cargarEntidades(),
+            cargarPaises(),
+            cargarClues(),
+            cargarTiposCartilla(),
+            cargarMotivos(),
+            cargarAnios(),
+            cargarServicios(),
+            cargarSiNo(),
+            cargarDiscapacidades(),
+            cargarEmbarazos(), // <-- Esta función ahora fuerza Sí/No
+            cargarMigraciones()
+        ]);
+        catalogos.cargados = true;
+        console.log('✅ Catálogos cargados correctamente');
+    } catch (error) {
+        console.error('Error al cargar catálogos:', error);
+        errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
+    }
+}
 
         async function cargarMunicipios() {
             var entidadId = document.getElementById('entidad').value;
@@ -1440,15 +1445,15 @@
             return null;
         }
 
-        // ============================================================
-// RESTRICCIONES DE EMBARAZO SEGÚN SEXO Y EDAD - CORREGIDO
+// ============================================================
+// RESTRICCIONES DE EMBARAZO - CORREGIDO (SÍ/NO)
 // ============================================================
 function actualizarRestriccionesEmbarazo(sexo, edad) {
     var embarazoSelect = document.getElementById('embarazo');
     if (!embarazoSelect) return;
 
     // Si no hay opciones cargadas, esperar
-    if (embarazoSelect.options.length === 0) {
+    if (embarazoSelect.options.length <= 1) {
         console.log('⏳ Embarazo: aún sin opciones, reintentando en 300ms...');
         setTimeout(function() {
             actualizarRestriccionesEmbarazo(sexo, edad);
@@ -1456,41 +1461,49 @@ function actualizarRestriccionesEmbarazo(sexo, edad) {
         return;
     }
 
-    // Buscar la opción "No aplica"
-    var noAplicaIndex = -1;
-    var noAplicaValue = '';
+    // Buscar la opción "No"
+    var noValue = '';
+    var noIndex = -1;
     for (var i = 0; i < embarazoSelect.options.length; i++) {
         var text = embarazoSelect.options[i].text.toLowerCase().trim();
-        if (text === 'no aplica' || text === 'no' || text === 'n/a') {
-            noAplicaIndex = i;
-            noAplicaValue = embarazoSelect.options[i].value;
+        if (text === 'no') {
+            noValue = embarazoSelect.options[i].value;
+            noIndex = i;
             break;
         }
     }
 
-    // Si es hombre, deshabilitar y poner "No aplica"
+    // Si no encuentra "No", usar el primer valor después del placeholder
+    if (!noValue && embarazoSelect.options.length > 1) {
+        noValue = embarazoSelect.options[1].value;
+    }
+
+    // Si es hombre, deshabilitar y poner "No"
     if (sexo === 'H') {
         embarazoSelect.disabled = true;
-        if (noAplicaValue) {
-            embarazoSelect.value = noAplicaValue;
-            console.log('👤 Hombre → Embarazo deshabilitado: "No aplica"');
+        if (noValue) {
+            embarazoSelect.value = noValue;
+            console.log('👤 Hombre → Embarazo: "No" (deshabilitado)');
         }
         return;
     }
 
-    // Si es mujer, verificar edad fértil (15-49 años)
+    // Si es mujer
     if (sexo === 'M') {
         if (edad >= 15 && edad <= 49) {
-            // Edad fértil - habilitar
+            // Edad fértil - habilitar y poner "No" por defecto
             embarazoSelect.disabled = false;
-            console.log('👩 Mujer en edad fértil (' + edad + ' años) → Embarazo habilitado');
-        } else {
-            // Fuera de edad fértil - deshabilitar y poner "No aplica"
-            embarazoSelect.disabled = true;
-            if (noAplicaValue) {
-                embarazoSelect.value = noAplicaValue;
-                console.log('👩 Mujer fuera de edad fértil (' + edad + ' años) → Embarazo deshabilitado: "No aplica"');
+            if (noValue) {
+                embarazoSelect.value = noValue;
             }
+            console.log('👩 Mujer en edad fértil (' + edad + ' años) → Embarazo habilitado, valor por defecto: "No"');
+        } else {
+            // Fuera de edad fértil - deshabilitar y poner "No"
+            embarazoSelect.disabled = true;
+            if (noValue) {
+                embarazoSelect.value = noValue;
+            }
+            console.log('👩 Mujer fuera de edad fértil (' + edad + ' años) → Embarazo: "No" (deshabilitado)');
         }
     }
 }
@@ -2206,20 +2219,44 @@ async function procesarCurp(curp) {
             }
         }
 
-        async function cargarEmbarazos() {
-            try {
-                var result = await supabaseClient.from('embarazo').select('id_uuid, embarazo').order('embarazo');
-                var select = document.getElementById('embarazo');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data) {
-                    result.data.forEach(function (e) {
-                        select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
-                    });
-                }
-            } catch (error) {
-                console.error('Error cargando embarazos:', error);
-            }
+        // ============================================================
+// CARGAR EMBARAZOS - FORZAR SÍ/NO
+// ============================================================
+async function cargarEmbarazos() {
+    try {
+        // Primero intentar cargar desde la base de datos
+        var result = await supabaseClient.from('embarazo').select('id_uuid, embarazo').order('embarazo');
+        var select = document.getElementById('embarazo');
+        
+        // Si hay datos, usarlos
+        if (result.data && result.data.length > 0) {
+            select.innerHTML = '<option value="">Seleccionar...</option>';
+            result.data.forEach(function (e) {
+                select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
+            });
+            console.log('✅ Embarazos cargados desde BD:', result.data.length);
+            return;
         }
+
+        // Si no hay datos, crear opciones por defecto
+        console.warn('⚠️ No hay datos de embarazo en la BD. Usando valores por defecto.');
+        select.innerHTML = `
+            <option value="">Seleccionar...</option>
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+        `;
+
+    } catch (error) {
+        console.error('Error cargando embarazos:', error);
+        // Fallback: opciones manuales
+        var select = document.getElementById('embarazo');
+        select.innerHTML = `
+            <option value="">Seleccionar...</option>
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+        `;
+    }
+}
 
         async function cargarMigraciones() {
             try {
