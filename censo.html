@@ -16,7 +16,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
-    <!-- Estilos específicos del Censo -->
     <style>
         /* ============================================================
            ESTILOS ESPECÍFICOS DEL CENSO
@@ -95,7 +94,8 @@
             border-radius: 30px;
             margin-bottom: 1rem;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 4px 4px 10px var(--container-shadow-dark),
+                -4px -4px 10px var(--container-shadow-light);
             color: var(--text-primary);
             font-size: 0.85rem;
             transition: all var(--transition-medium);
@@ -145,13 +145,16 @@
             color: var(--text-primary);
             font-size: 0.9rem;
             transition: all var(--transition-medium);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 4px 4px 8px var(--container-shadow-dark),
+                inset -4px -4px 8px var(--container-shadow-light);
         }
 
         .search-bar .search-input-wrap input:focus {
             outline: none;
             background: var(--input-focus-bg, var(--container-bg));
-            box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: inset 2px 2px 5px var(--container-shadow-dark),
+                inset -2px -2px 5px var(--container-shadow-light),
+                0 0 0 3px rgba(67, 97, 238, 0.15);
         }
 
         .search-bar .search-input-wrap .search-icon {
@@ -171,6 +174,8 @@
             background: var(--card-bg);
             border-radius: 30px;
             border: 1px solid var(--border-color);
+            box-shadow: 3px 3px 8px var(--container-shadow-dark),
+                -3px -3px 8px var(--container-shadow-light);
         }
 
         /* ============================================================
@@ -181,7 +186,8 @@
             overflow: auto;
             margin-top: 0.5rem;
             background: var(--container-bg);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 4px 4px 10px var(--container-shadow-dark),
+                inset -4px -4px 10px var(--container-shadow-light);
             transition: all var(--transition-medium);
             flex: 1;
             min-height: 0;
@@ -256,7 +262,8 @@
         tbody tr:hover td {
             background: rgba(255, 255, 255, 0.06);
             transform: scale(1.002);
-            box-shadow: var(--shadow-raised);
+            box-shadow: 4px 4px 12px var(--container-shadow-dark),
+                -4px -4px 12px var(--container-shadow-light);
         }
 
         tbody tr[style*="display: none"] {
@@ -289,7 +296,8 @@
             font-weight: 700;
             color: white;
             background: linear-gradient(145deg, var(--btn-success), var(--btn-primary));
-            box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.15), 4px 4px 10px rgba(0, 0, 0, 0.15);
+            box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.15),
+                4px 4px 10px rgba(0, 0, 0, 0.12);
         }
 
         /* ============================================================
@@ -315,7 +323,8 @@
             justify-content: center;
             background: var(--card-bg);
             color: var(--text-secondary);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 4px 4px 10px var(--container-shadow-dark),
+                -4px -4px 10px var(--container-shadow-light);
         }
 
         .btn-icon:hover {
@@ -324,21 +333,26 @@
 
         .btn-icon:active {
             transform: scale(0.92);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 3px 3px 8px var(--container-shadow-dark),
+                inset -3px -3px 8px var(--container-shadow-light);
         }
 
         .btn-icon-edit:hover {
             color: var(--btn-success);
-            box-shadow: 0 0 20px rgba(76, 201, 240, 0.2);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.15),
+                4px 4px 10px var(--container-shadow-dark),
+                -4px -4px 10px var(--container-shadow-light);
         }
 
         .btn-icon-delete:hover {
             color: var(--btn-danger, #f72585);
-            box-shadow: 0 0 20px rgba(247, 37, 133, 0.2);
+            box-shadow: 0 0 20px rgba(247, 37, 133, 0.15),
+                4px 4px 10px var(--container-shadow-dark),
+                -4px -4px 10px var(--container-shadow-light);
         }
 
         /* ============================================================
-           MODAL - VERSIÓN MEJORADA (más ancho y 3 columnas)
+           MODAL - VERSIÓN MEJORADA
            ============================================================ */
         .modal-overlay {
             position: fixed;
@@ -346,8 +360,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(6px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -364,11 +378,11 @@
             border-radius: var(--radius-lg);
             padding: 2.5rem;
             max-width: 1100px;
-            /* Aumentado de 800px a 1100px */
             width: 100%;
             max-height: 92vh;
             overflow-y: auto;
-            box-shadow: var(--shadow-raised);
+            box-shadow: 8px 8px 24px var(--container-shadow-dark),
+                -8px -8px 24px var(--container-shadow-light);
             animation: modalIn 0.3s ease-out;
             border: 1px solid var(--border-color);
         }
@@ -424,7 +438,6 @@
         .modal-content .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            /* 3 columnas en pantallas grandes */
             gap: 1.2rem;
         }
 
@@ -477,14 +490,17 @@
             color: var(--text-primary);
             font-size: 0.9rem;
             transition: all var(--transition-medium);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 4px 4px 10px var(--container-shadow-dark),
+                inset -4px -4px 10px var(--container-shadow-light);
         }
 
         .modal-content .form-group input:focus,
         .modal-content .form-group select:focus {
             outline: none;
             background: var(--input-focus-bg, var(--container-bg));
-            box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: inset 2px 2px 5px var(--container-shadow-dark),
+                inset -2px -2px 5px var(--container-shadow-light),
+                0 0 0 3px rgba(67, 97, 238, 0.15);
         }
 
         .modal-content .form-group input::placeholder {
@@ -527,7 +543,7 @@
         }
 
         /* ============================================================
-           FORMULARIO FUERA DEL MODAL (para compatibilidad)
+           FORMULARIO FUERA DEL MODAL
            ============================================================ */
         .form-grid {
             display: grid;
@@ -562,14 +578,17 @@
             color: var(--text-primary);
             font-size: 0.9rem;
             transition: all var(--transition-medium);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 4px 4px 10px var(--container-shadow-dark),
+                inset -4px -4px 10px var(--container-shadow-light);
         }
 
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
             background: var(--input-focus-bg, var(--container-bg));
-            box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: inset 2px 2px 5px var(--container-shadow-dark),
+                inset -2px -2px 5px var(--container-shadow-light),
+                0 0 0 3px rgba(67, 97, 238, 0.15);
         }
 
         .form-group input::placeholder {
@@ -691,7 +710,7 @@
         }
 
         /* ============================================================
-           RESPONSIVE DEL MODAL
+           RESPONSIVE
            ============================================================ */
         @media (max-width: 1200px) {
             .modal-content {
@@ -701,7 +720,6 @@
 
             .modal-content .form-grid {
                 grid-template-columns: 1fr 1fr;
-                /* 2 columnas en tablet */
             }
         }
 
@@ -1000,6 +1018,7 @@
             }
         }
     </style>
+
 </head>
 
 <body>
