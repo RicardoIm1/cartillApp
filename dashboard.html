@@ -1081,6 +1081,129 @@
                 padding: 0.4rem 0.8rem;
             }
         }
+
+        /* ============================================================
+   ANIMACIÓN PARA NUEVOS REGISTROS EN TIEMPO REAL
+   ============================================================ */
+
+        /* Efecto "pulse" para nuevos registros */
+        @keyframes rowFlash {
+            0% {
+                background: rgba(76, 201, 240, 0);
+                transform: scale(1);
+            }
+
+            20% {
+                background: rgba(76, 201, 240, 0.25);
+                transform: scale(1.01);
+            }
+
+            50% {
+                background: rgba(76, 201, 240, 0.15);
+                transform: scale(1.005);
+            }
+
+            100% {
+                background: rgba(76, 201, 240, 0);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rowPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 30px 8px rgba(76, 201, 240, 0.15);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(76, 201, 240, 0);
+            }
+        }
+
+        /* Clase aplicada temporalmente a nuevas filas */
+        tbody tr.row-new {
+            animation: rowFlash 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        tbody tr.row-new td {
+            animation: rowPulse 1.2s ease forwards;
+        }
+
+        /* Badge "Nuevo" flotante */
+        .badge-nuevo {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 30px;
+            font-size: 0.55rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: white;
+            background: linear-gradient(145deg, #4cc9f0, #4361ee);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.3);
+            animation: badgePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            margin-left: 0.3rem;
+        }
+
+        @keyframes badgePop {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Contador de cambios en tiempo real */
+        .realtime-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .realtime-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4cc9f0;
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.3;
+                transform: scale(0.7);
+            }
+        }
+
+        .realtime-indicator .dot.connected {
+            background: #4cc9f0;
+        }
+
+        .realtime-indicator .dot.disconnected {
+            background: #f72585;
+            animation: none;
+        }
     </style>
 </head>
 
@@ -1159,7 +1282,7 @@
             </div>
 
             <!-- ============================================================
-            HEADER ACTIONS CON BUSCADOR UNIVERSAL
+            HEADER ACTIONS CON BUSCADOR UNIVERSAL Y REALTIME
             ============================================================ -->
             <div class="header-actions">
                 <div class="search-wrapper">
@@ -1170,6 +1293,10 @@
                     <kbd class="search-shortcut">⌘K</kbd>
                 </div>
                 <div class="header-actions-right">
+                    <span class="realtime-indicator" id="realtimeIndicator">
+                        <span class="dot connected"></span>
+                        Conectando...
+                    </span>
                     <span class="info" id="totalRegistros">0 registros</span>
                     <button class="btn btn-secondary" onclick="loadDashboard()">🔄 Actualizar</button>
                 </div>
@@ -1183,6 +1310,7 @@
             </div>
 
             <div id="error" class="error"></div>
+            <div id="success" class="success-msg" style="display:none;"></div>
             <div class="footer">
                 Sistema de Cartillas de Salud © <span id="currentYear"></span>
             </div>
@@ -1256,9 +1384,15 @@
         // ============================================================
         var inventarioContainer = document.getElementById('inventarioContainer');
         var errorElement = document.getElementById('error');
+        var successElement = document.getElementById('success');
         var userName = document.getElementById('userName');
         var userRole = document.getElementById('userRole');
         var totalRegistros = document.getElementById('totalRegistros');
+
+        // ============================================================
+        // USUARIO ACTUAL
+        // ============================================================
+        var usuarioActual = null;
 
         // ============================================================
         // 1. OBTENER USUARIO Y SUS CLUES
@@ -1273,7 +1407,6 @@
                     return null;
                 }
 
-                // CONSULTA ACTUALIZADA PARA UUID
                 var userResult = await supabaseClient
                     .from('usuario')
                     .select(`
@@ -1288,14 +1421,17 @@
 
                 if (!userResult.data || userResult.data.length === 0) {
                     console.warn('Usuario no encontrado en tabla usuario.');
-                    return {
+                    var userData = {
                         nombre: session.user.email,
                         id_clues: null,
                         clues: null
                     };
+                    usuarioActual = userData;
+                    return userData;
                 }
 
-                return userResult.data[0];
+                usuarioActual = userResult.data[0];
+                return usuarioActual;
 
             } catch (error) {
                 console.error('Error al obtener usuario:', error);
@@ -1315,6 +1451,7 @@
                     </div>
                 `;
                 errorElement.textContent = '';
+                successElement.style.display = 'none';
 
                 var user = await getUserInfo();
                 if (!user) return;
@@ -1325,7 +1462,6 @@
                 userName.textContent = nombreCompleto;
                 userRole.textContent = user.clues ? '🏥 ' + user.clues.nombre : '👤 Sin centro asignado';
 
-                // CONSULTA ACTUALIZADA PARA UUID
                 var query = supabaseClient
                     .from('inventario')
                     .select(`
@@ -1364,7 +1500,7 @@
         // 3. RENDERIZAR TABLA DE INVENTARIO
         // ============================================================
         function renderInventoryTable(data) {
-            totalRegistros.textContent = data.length;
+            totalRegistros.textContent = data.length + ' registros';
 
             if (!data || data.length === 0) {
                 inventarioContainer.innerHTML = `
@@ -1404,7 +1540,7 @@
                 var fecha = item.updated_at ? new Date(item.updated_at).toLocaleDateString('es-MX') : 'N/A';
 
                 html += `
-                    <tr>
+                    <tr data-id="${item.id_inventario}">
                         <td><span class="badge-clues">${codigoClues}</span></td>
                         <td>${nombreClues}</td>
                         <td>${tipo}</td>
@@ -1439,33 +1575,18 @@
         }
 
         // ============================================================
-        // 5. INICIALIZACIÓN
-        // ============================================================
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        window.logout = logout;
-
-        window.addEventListener('load', function () {
-            createParticles();
-            loadDashboard();
-        });
-    </script>
-    
-    <script>
-        // ============================================================
-        // BUSCADOR UNIVERSAL
+        // 5. BUSCADOR UNIVERSAL
         // ============================================================
         (function setupGlobalSearch() {
             const searchInput = document.getElementById('globalSearch');
             const clearBtn = document.getElementById('clearSearch');
             const tableContainer = document.getElementById('inventarioContainer');
 
-            // Mostrar/ocultar botón de limpiar
             searchInput.addEventListener('input', function () {
                 clearBtn.classList.toggle('visible', this.value.length > 0);
                 filterTable(this.value);
             });
 
-            // Limpiar búsqueda
             clearBtn.addEventListener('click', function () {
                 searchInput.value = '';
                 clearBtn.classList.remove('visible');
@@ -1473,14 +1594,12 @@
                 searchInput.focus();
             });
 
-            // Atajo de teclado: Ctrl+K o Cmd+K
             document.addEventListener('keydown', function (e) {
                 if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                     e.preventDefault();
                     searchInput.focus();
                     searchInput.select();
                 }
-                // Escape para limpiar y cerrar
                 if (e.key === 'Escape' && document.activeElement === searchInput) {
                     searchInput.value = '';
                     clearBtn.classList.remove('visible');
@@ -1489,7 +1608,6 @@
                 }
             });
 
-            // Función de filtrado
             function filterTable(query) {
                 const table = tableContainer.querySelector('table');
                 if (!table) return;
@@ -1506,7 +1624,6 @@
                     if (match) visibleCount++;
                 });
 
-                // Actualizar contador
                 const totalSpan = document.getElementById('totalRegistros');
                 if (totalSpan) {
                     if (searchTerm === '') {
@@ -1516,7 +1633,6 @@
                     }
                 }
 
-                // Mostrar mensaje si no hay resultados
                 const emptyState = tableContainer.querySelector('.empty-state');
                 const noResults = tableContainer.querySelector('.no-results');
 
@@ -1536,6 +1652,319 @@
                 }
             }
         })();
+
+        // ============================================================
+        // 6. SUPABASE REALTIME - ACTUALIZACIÓN EN TIEMPO REAL
+        // ============================================================
+
+        var realtimeSubscription = null;
+        var isRealtimeConnected = false;
+
+        // ============================================================
+        // INICIAR SUSCRIPCIÓN REALTIME
+        // ============================================================
+        function iniciarRealtime() {
+            try {
+                if (realtimeSubscription) {
+                    realtimeSubscription.unsubscribe();
+                    realtimeSubscription = null;
+                }
+
+                realtimeSubscription = supabaseClient
+                    .channel('inventario-realtime')
+                    .on(
+                        'postgres_changes',
+                        {
+                            event: '*',
+                            schema: 'public',
+                            table: 'inventario'
+                        },
+                        function (payload) {
+                            console.log('🔄 Cambio en tiempo real:', payload);
+                            verificarYProcesarCambio(payload);
+                        }
+                    )
+                    .subscribe(function (status) {
+                        if (status === 'SUBSCRIBED') {
+                            isRealtimeConnected = true;
+                            console.log('✅ Conectado a Realtime');
+                            actualizarIndicadorRealtime(true);
+                        } else if (status === 'CHANNEL_ERROR') {
+                            isRealtimeConnected = false;
+                            console.warn('⚠️ Error en Realtime, intentando reconectar...');
+                            actualizarIndicadorRealtime(false);
+                            setTimeout(iniciarRealtime, 5000);
+                        }
+                    });
+
+            } catch (error) {
+                console.error('Error al iniciar Realtime:', error);
+                isRealtimeConnected = false;
+                actualizarIndicadorRealtime(false);
+            }
+        }
+
+        // ============================================================
+        // VERIFICAR Y PROCESAR CAMBIO
+        // ============================================================
+        function verificarYProcesarCambio(payload) {
+            var user = usuarioActual;
+            if (!user) return;
+
+            var cluesId = user.id_clues || user.clues_id_uuid;
+
+            if (!cluesId) {
+                procesarCambioAdmin(payload);
+                return;
+            }
+
+            var newCluesId = payload.new ? payload.new.clues_id_uuid : null;
+            var oldCluesId = payload.old ? payload.old.clues_id_uuid : null;
+
+            var afectaAlUsuario = (newCluesId === cluesId) || (oldCluesId === cluesId);
+
+            if (afectaAlUsuario) {
+                procesarCambio(payload);
+            }
+        }
+
+        // ============================================================
+        // PROCESAR CAMBIO PARA ADMIN (ve todo)
+        // ============================================================
+        function procesarCambioAdmin(payload) {
+            mostrarNotificacion('🔄', 'Cambio detectado en el inventario', 'info');
+            actualizarDashboardConCambio(payload);
+        }
+
+        // ============================================================
+        // PROCESAR CAMBIO PARA USUARIO NORMAL
+        // ============================================================
+        function procesarCambio(payload) {
+            mostrarNotificacion('📦', 'Inventario actualizado en tu centro', 'success');
+            actualizarDashboardConCambio(payload);
+        }
+
+        // ============================================================
+        // ACTUALIZAR DASHBOARD CON EL CAMBIO
+        // ============================================================
+        function actualizarDashboardConCambio(payload) {
+            var event = payload.eventType;
+            var newData = payload.new;
+            var oldData = payload.old;
+
+            var table = document.querySelector('#inventarioContainer table');
+            if (!table) {
+                loadDashboard();
+                return;
+            }
+
+            switch (event) {
+                case 'INSERT':
+                    agregarFila(newData);
+                    break;
+                case 'UPDATE':
+                    actualizarFila(newData, oldData);
+                    break;
+                case 'DELETE':
+                    eliminarFila(oldData);
+                    break;
+            }
+
+            actualizarContador();
+        }
+
+        // ============================================================
+        // AGREGAR FILA CON ANIMACIÓN
+        // ============================================================
+        function agregarFila(data) {
+            var tbody = document.querySelector('#inventarioContainer tbody');
+            if (!tbody) return;
+
+            var exists = document.querySelector(`#inventarioContainer tbody tr[data-id="${data.id_inventario}"]`);
+            if (exists) return;
+
+            var html = crearFilaHTML(data);
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            var newRow = tempDiv.firstElementChild;
+
+            tbody.prepend(newRow);
+            newRow.classList.add('row-new');
+
+            setTimeout(function () {
+                newRow.classList.remove('row-new');
+            }, 1500);
+
+            var nombre = data.clues ? data.clues.nombre : 'Nuevo centro';
+            var cantidad = data.cantidad || 0;
+            mostrarNotificacion('📥', `${nombre}: +${cantidad} cartillas`, 'success');
+
+            var totalElement = document.getElementById('totalRegistros');
+            if (totalElement) {
+                totalElement.style.transition = 'transform 0.2s ease';
+                totalElement.style.transform = 'scale(1.1)';
+                setTimeout(function () {
+                    totalElement.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+
+        // ============================================================
+        // ACTUALIZAR FILA
+        // ============================================================
+        function actualizarFila(newData, oldData) {
+            var row = document.querySelector(`#inventarioContainer tbody tr[data-id="${newData.id_inventario}"]`);
+            if (!row) {
+                agregarFila(newData);
+                return;
+            }
+
+            var cells = row.querySelectorAll('td');
+            if (cells.length >= 5) {
+                var cantidad = newData.cantidad || 0;
+                var cantidadClass = cantidad > 100 ? 'cantidad-alta' :
+                    cantidad > 20 ? 'cantidad-media' : 'cantidad-baja';
+
+                cells[3].innerHTML = `<span class="cantidad ${cantidadClass}">${cantidad}</span>`;
+
+                var fecha = newData.updated_at ? new Date(newData.updated_at).toLocaleDateString('es-MX') : 'N/A';
+                cells[4].textContent = fecha;
+
+                row.style.transition = 'all 0.3s ease';
+                row.style.background = 'rgba(76, 201, 240, 0.1)';
+                setTimeout(function () {
+                    row.style.background = '';
+                }, 1000);
+
+                mostrarNotificacion('🔄', `Actualización: ${cantidad} cartillas`, 'info');
+            }
+        }
+
+        // ============================================================
+        // ELIMINAR FILA CON ANIMACIÓN
+        // ============================================================
+        function eliminarFila(oldData) {
+            var row = document.querySelector(`#inventarioContainer tbody tr[data-id="${oldData.id_inventario}"]`);
+            if (!row) return;
+
+            row.style.transition = 'all 0.4s ease';
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(50px)';
+
+            setTimeout(function () {
+                row.remove();
+                actualizarContador();
+                mostrarNotificacion('🗑️', 'Registro eliminado', 'warning');
+            }, 400);
+        }
+
+        // ============================================================
+        // CREAR HTML DE FILA
+        // ============================================================
+        function crearFilaHTML(data) {
+            var clues = data.clues || {};
+            var tipoCartilla = data.tipo_cartilla || {};
+
+            var codigoClues = clues.clues || 'N/A';
+            var nombreClues = clues.nombre || 'Sin nombre';
+            var tipo = tipoCartilla.tipo_cartilla || 'Sin tipo';
+
+            var cantidad = data.cantidad || 0;
+            var cantidadClass = cantidad > 100 ? 'cantidad-alta' :
+                cantidad > 20 ? 'cantidad-media' : 'cantidad-baja';
+
+            var fecha = data.updated_at ? new Date(data.updated_at).toLocaleDateString('es-MX') : 'N/A';
+
+            return `
+                <tr data-id="${data.id_inventario}">
+                    <td><span class="badge-clues">${codigoClues}</span></td>
+                    <td>${nombreClues}</td>
+                    <td>${tipo}</td>
+                    <td style="text-align:center;">
+                        <span class="cantidad ${cantidadClass}">${cantidad}</span>
+                        <span class="badge-nuevo">Nuevo</span>
+                    </td>
+                    <td style="color:var(--text-muted-light); font-size:0.8rem;">${fecha}</td>
+                </tr>
+            `;
+        }
+
+        // ============================================================
+        // ACTUALIZAR CONTADOR
+        // ============================================================
+        function actualizarContador() {
+            var tbody = document.querySelector('#inventarioContainer tbody');
+            if (!tbody) return;
+
+            var total = tbody.querySelectorAll('tr').length;
+            var totalElement = document.getElementById('totalRegistros');
+            if (totalElement) {
+                totalElement.textContent = total + ' registros';
+            }
+        }
+
+        // ============================================================
+        // INDICADOR DE CONEXIÓN REALTIME
+        // ============================================================
+        function actualizarIndicadorRealtime(connected) {
+            var indicator = document.getElementById('realtimeIndicator');
+            if (!indicator) return;
+
+            var dot = indicator.querySelector('.dot');
+            if (dot) {
+                dot.className = 'dot ' + (connected ? 'connected' : 'disconnected');
+            }
+            indicator.innerHTML = `
+                <span class="dot ${connected ? 'connected' : 'disconnected'}"></span>
+                ${connected ? '🟢 En vivo' : '🔴 Desconectado'}
+            `;
+        }
+
+        // ============================================================
+        // NOTIFICACIONES TEMPORALES
+        // ============================================================
+        function mostrarNotificacion(icon, mensaje, tipo) {
+            var container = document.getElementById('success');
+            if (!container) return;
+
+            var colors = {
+                success: '#4cc9f0',
+                info: '#4361ee',
+                warning: '#f8961e',
+                error: '#f72585'
+            };
+
+            container.innerHTML = `${icon} ${mensaje}`;
+            container.style.border = '1px solid ' + (colors[tipo] || colors.success);
+            container.style.background = 'rgba(76, 201, 240, 0.05)';
+            container.style.display = 'block';
+
+            clearTimeout(container._timeout);
+            container._timeout = setTimeout(function () {
+                container.innerHTML = '';
+                container.style.display = 'none';
+                container.style.border = 'none';
+                container.style.background = 'none';
+            }, 3000);
+        }
+
+        // ============================================================
+        // 7. INICIALIZACIÓN
+        // ============================================================
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        window.logout = logout;
+
+        window.addEventListener('load', function () {
+            createParticles();
+            loadDashboard().then(function () {
+                // Iniciar Realtime después de cargar el dashboard
+                setTimeout(iniciarRealtime, 500);
+            });
+        });
+
+        // Exponer funciones globalmente
+        window.loadDashboard = loadDashboard;
+        window.logout = logout;
     </script>
 
 </body>
