@@ -1441,43 +1441,59 @@
         }
 
         // ============================================================
-        // RESTRICCIONES DE EMBARAZO SEGÚN SEXO Y EDAD
-        // ============================================================
-        function actualizarRestriccionesEmbarazo(sexo, edad) {
-            var embarazoSelect = document.getElementById('embarazo');
-            if (!embarazoSelect) return;
+// RESTRICCIONES DE EMBARAZO SEGÚN SEXO Y EDAD - CORREGIDO
+// ============================================================
+function actualizarRestriccionesEmbarazo(sexo, edad) {
+    var embarazoSelect = document.getElementById('embarazo');
+    if (!embarazoSelect) return;
 
-            // Si es hombre, deshabilitar y poner "No aplica"
-            if (sexo === 'H') {
-                embarazoSelect.disabled = true;
-                var opciones = embarazoSelect.options;
-                for (var i = 0; i < opciones.length; i++) {
-                    if (opciones[i].text === 'No aplica') {
-                        embarazoSelect.value = opciones[i].value;
-                        break;
-                    }
-                }
-                return;
-            }
+    // Si no hay opciones cargadas, esperar
+    if (embarazoSelect.options.length === 0) {
+        console.log('⏳ Embarazo: aún sin opciones, reintentando en 300ms...');
+        setTimeout(function() {
+            actualizarRestriccionesEmbarazo(sexo, edad);
+        }, 300);
+        return;
+    }
 
-            // Si es mujer, verificar edad fértil (15-49 años)
-            if (sexo === 'M') {
-                if (edad >= 15 && edad <= 49) {
-                    // Edad fértil - habilitar
-                    embarazoSelect.disabled = false;
-                } else {
-                    // Fuera de edad fértil - deshabilitar y poner "No aplica"
-                    embarazoSelect.disabled = true;
-                    var opciones = embarazoSelect.options;
-                    for (var i = 0; i < opciones.length; i++) {
-                        if (opciones[i].text === 'No aplica') {
-                            embarazoSelect.value = opciones[i].value;
-                            break;
-                        }
-                    }
-                }
+    // Buscar la opción "No aplica"
+    var noAplicaIndex = -1;
+    var noAplicaValue = '';
+    for (var i = 0; i < embarazoSelect.options.length; i++) {
+        var text = embarazoSelect.options[i].text.toLowerCase().trim();
+        if (text === 'no aplica' || text === 'no' || text === 'n/a') {
+            noAplicaIndex = i;
+            noAplicaValue = embarazoSelect.options[i].value;
+            break;
+        }
+    }
+
+    // Si es hombre, deshabilitar y poner "No aplica"
+    if (sexo === 'H') {
+        embarazoSelect.disabled = true;
+        if (noAplicaValue) {
+            embarazoSelect.value = noAplicaValue;
+            console.log('👤 Hombre → Embarazo deshabilitado: "No aplica"');
+        }
+        return;
+    }
+
+    // Si es mujer, verificar edad fértil (15-49 años)
+    if (sexo === 'M') {
+        if (edad >= 15 && edad <= 49) {
+            // Edad fértil - habilitar
+            embarazoSelect.disabled = false;
+            console.log('👩 Mujer en edad fértil (' + edad + ' años) → Embarazo habilitado');
+        } else {
+            // Fuera de edad fértil - deshabilitar y poner "No aplica"
+            embarazoSelect.disabled = true;
+            if (noAplicaValue) {
+                embarazoSelect.value = noAplicaValue;
+                console.log('👩 Mujer fuera de edad fértil (' + edad + ' años) → Embarazo deshabilitado: "No aplica"');
             }
         }
+    }
+}
 
         // ============================================================
         // FUNCIONES PARA DECODIFICAR CURP
@@ -1556,7 +1572,7 @@
         }
 
         // ============================================================
-// PROCESAR CURP AL ESCRIBIR - VERSIÓN MEJORADA
+// PROCESAR CURP AL ESCRIBIR - CON EMBARAZO CORREGIDO
 // ============================================================
 async function procesarCurp(curp) {
     if (!curp) return;
@@ -1570,7 +1586,7 @@ async function procesarCurp(curp) {
     var sexoSelect = document.getElementById('sexo');
     var tipoCartillaSelect = document.getElementById('tipo_cartilla');
 
-    // 1. DETECTAR SEXO (posición 11, base 1 = índice 10)
+    // 1. DETECTAR SEXO
     if (curpLimpio.length >= 11) {
         var sexo = curpLimpio.charAt(10).toUpperCase();
         console.log('  - Sexo detectado:', sexo);
@@ -1581,28 +1597,25 @@ async function procesarCurp(curp) {
         }
     }
 
-    // 2. DETECTAR FECHA DE NACIMIENTO (posiciones 5-10, base 1 = índices 4-9)
+    // 2. DETECTAR FECHA DE NACIMIENTO
     if (curpLimpio.length >= 17) {
         var anioStr = curpLimpio.substring(4, 6);
         var mesStr = curpLimpio.substring(6, 8);
         var diaStr = curpLimpio.substring(8, 10);
-        
-        console.log('  - Fecha raw:', anioStr, mesStr, diaStr);
-        
+
         var anio = parseInt(anioStr);
         var mes = parseInt(mesStr) - 1;
         var dia = parseInt(diaStr);
-        
+
         var añoActual = new Date().getFullYear();
         var anioCompleto = (anio > (añoActual - 2000)) ? 1900 + anio : 2000 + anio;
-        
+
         var fechaNac = new Date(anioCompleto, mes, dia);
-        
+
         if (!isNaN(fechaNac.getTime())) {
-            var anioCompletoStr = fechaNac.getFullYear();
-            var mesStr2 = String(fechaNac.getMonth() + 1).padStart(2, '0');
-            var diaStr2 = String(fechaNac.getDate()).padStart(2, '0');
-            var fechaStr = anioCompletoStr + '-' + mesStr2 + '-' + diaStr2;
+            var fechaStr = fechaNac.getFullYear() + '-' +
+                String(fechaNac.getMonth() + 1).padStart(2, '0') + '-' +
+                String(fechaNac.getDate()).padStart(2, '0');
             fechaNacInput.value = fechaStr;
             console.log('  - Fecha nacimiento detectada:', fechaStr);
 
@@ -1627,22 +1640,21 @@ async function procesarCurp(curp) {
                         }
                     }
                 }
-                // Actualizar restricciones de embarazo
+                // ACTUALIZAR RESTRICCIONES DE EMBARAZO
                 actualizarRestriccionesEmbarazo(sexo, edad);
             }
         }
     }
 
-    // 3. DETECTAR ENTIDAD (posiciones 12-13, base 1 = índices 11-12)
+    // 3. DETECTAR ENTIDAD
     if (curpLimpio.length === 18) {
         var claveEntidad = curpLimpio.substring(11, 13);
         console.log('  - Clave entidad detectada:', claveEntidad);
-        
+
         if (claveEntidad) {
             var nombreEntidad = obtenerNombreEntidad(claveEntidad);
             console.log('  - Nombre entidad:', nombreEntidad);
 
-            // Buscar en el select
             if (entidadSelect && entidadSelect.options.length > 1) {
                 var opciones = entidadSelect.options;
                 var encontrado = false;
@@ -1662,7 +1674,7 @@ async function procesarCurp(curp) {
                 }
             } else {
                 console.warn('  - Select de entidad aún no tiene opciones. Reintentando en 500ms...');
-                setTimeout(function () {
+                setTimeout(function() {
                     if (entidadSelect && entidadSelect.options.length > 1) {
                         var opciones = entidadSelect.options;
                         for (var i = 0; i < opciones.length; i++) {
