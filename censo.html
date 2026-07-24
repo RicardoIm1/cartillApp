@@ -1556,133 +1556,145 @@
         }
 
         // ============================================================
-        // PROCESAR CURP AL ESCRIBIR - VERSIÓN MEJORADA
-        // ============================================================
-        async function procesarCurp(curp) {
-            if (!curp) return;
+// PROCESAR CURP AL ESCRIBIR - VERSIÓN MEJORADA
+// ============================================================
+async function procesarCurp(curp) {
+    if (!curp) return;
 
-            console.log('🔍 Procesando CURP:', curp);
+    console.log('🔍 Procesando CURP:', curp);
 
-            var curpLimpio = curp.trim().toUpperCase();
-            var entidadSelect = document.getElementById('entidad');
-            var fechaNacInput = document.getElementById('fecha_nac');
-            var edadInput = document.getElementById('edad');
-            var sexoSelect = document.getElementById('sexo');
-            var tipoCartillaSelect = document.getElementById('tipo_cartilla');
+    var curpLimpio = curp.trim().toUpperCase();
+    var entidadSelect = document.getElementById('entidad');
+    var fechaNacInput = document.getElementById('fecha_nac');
+    var edadInput = document.getElementById('edad');
+    var sexoSelect = document.getElementById('sexo');
+    var tipoCartillaSelect = document.getElementById('tipo_cartilla');
 
-            // 1. DETECTAR SEXO
-            if (curpLimpio.length >= 11) {
-                var sexo = obtenerSexoDesdeCurp(curpLimpio);
-                console.log('  - Sexo detectado:', sexo);
-                if (sexo) {
-                    sexoSelect.value = sexo;
-                    // Disparar evento change para actualizar restricciones
-                    var event = new Event('change');
-                    sexoSelect.dispatchEvent(event);
-                }
-            }
+    // 1. DETECTAR SEXO (posición 11, base 1 = índice 10)
+    if (curpLimpio.length >= 11) {
+        var sexo = curpLimpio.charAt(10).toUpperCase();
+        console.log('  - Sexo detectado:', sexo);
+        if (sexo === 'H' || sexo === 'M') {
+            sexoSelect.value = sexo;
+            var event = new Event('change');
+            sexoSelect.dispatchEvent(event);
+        }
+    }
 
-            // 2. DETECTAR FECHA DE NACIMIENTO
-            if (curpLimpio.length >= 17) {
-                var fechaNac = obtenerFechaNacDesdeCurp(curpLimpio);
-                if (fechaNac && !isNaN(fechaNac.getTime())) {
-                    var anio = fechaNac.getFullYear();
-                    var mes = String(fechaNac.getMonth() + 1).padStart(2, '0');
-                    var dia = String(fechaNac.getDate()).padStart(2, '0');
-                    var fechaStr = anio + '-' + mes + '-' + dia;
-                    fechaNacInput.value = fechaStr;
-                    console.log('  - Fecha nacimiento detectada:', fechaStr);
+    // 2. DETECTAR FECHA DE NACIMIENTO (posiciones 5-10, base 1 = índices 4-9)
+    if (curpLimpio.length >= 17) {
+        var anioStr = curpLimpio.substring(4, 6);
+        var mesStr = curpLimpio.substring(6, 8);
+        var diaStr = curpLimpio.substring(8, 10);
+        
+        console.log('  - Fecha raw:', anioStr, mesStr, diaStr);
+        
+        var anio = parseInt(anioStr);
+        var mes = parseInt(mesStr) - 1;
+        var dia = parseInt(diaStr);
+        
+        var añoActual = new Date().getFullYear();
+        var anioCompleto = (anio > (añoActual - 2000)) ? 1900 + anio : 2000 + anio;
+        
+        var fechaNac = new Date(anioCompleto, mes, dia);
+        
+        if (!isNaN(fechaNac.getTime())) {
+            var anioCompletoStr = fechaNac.getFullYear();
+            var mesStr2 = String(fechaNac.getMonth() + 1).padStart(2, '0');
+            var diaStr2 = String(fechaNac.getDate()).padStart(2, '0');
+            var fechaStr = anioCompletoStr + '-' + mesStr2 + '-' + diaStr2;
+            fechaNacInput.value = fechaStr;
+            console.log('  - Fecha nacimiento detectada:', fechaStr);
 
-                    // Calcular edad
-                    calcularEdad();
+            // Calcular edad
+            calcularEdad();
 
-                    var edad = parseInt(edadInput.value);
-                    var sexo = sexoSelect.value;
-                    console.log('  - Edad calculada:', edad);
+            var edad = parseInt(edadInput.value);
+            var sexo = sexoSelect.value;
+            console.log('  - Edad calculada:', edad);
 
-                    // Sugerir tipo de cartilla
-                    if (!isNaN(edad) && sexo) {
-                        var sugerencia = sugerirTipoCartilla(edad, sexo);
-                        console.log('  - Tipo cartilla sugerido:', sugerencia);
-                        if (sugerencia) {
-                            var opciones = tipoCartillaSelect.options;
-                            for (var i = 0; i < opciones.length; i++) {
-                                if (opciones[i].text === sugerencia) {
-                                    tipoCartillaSelect.value = opciones[i].value;
-                                    console.log('  - Tipo cartilla seleccionado:', opciones[i].value);
-                                    break;
-                                }
-                            }
+            // Sugerir tipo de cartilla
+            if (!isNaN(edad) && sexo) {
+                var sugerencia = sugerirTipoCartilla(edad, sexo);
+                console.log('  - Tipo cartilla sugerido:', sugerencia);
+                if (sugerencia) {
+                    var opciones = tipoCartillaSelect.options;
+                    for (var i = 0; i < opciones.length; i++) {
+                        if (opciones[i].text === sugerencia) {
+                            tipoCartillaSelect.value = opciones[i].value;
+                            console.log('  - Tipo cartilla seleccionado:', opciones[i].value);
+                            break;
                         }
-                        // Actualizar restricciones de embarazo
-                        actualizarRestriccionesEmbarazo(sexo, edad);
                     }
                 }
+                // Actualizar restricciones de embarazo
+                actualizarRestriccionesEmbarazo(sexo, edad);
             }
+        }
+    }
 
-            // 3. DETECTAR ENTIDAD (SOLO SI EL SELECT ESTÁ POBLADO)
-            if (curpLimpio.length === 18) {
-                var claveEntidad = obtenerEntidadDesdeCurp(curpLimpio);
-                console.log('  - Clave entidad detectada:', claveEntidad);
-                if (claveEntidad) {
-                    var nombreEntidad = obtenerNombreEntidad(claveEntidad);
-                    console.log('  - Nombre entidad:', nombreEntidad);
+    // 3. DETECTAR ENTIDAD (posiciones 12-13, base 1 = índices 11-12)
+    if (curpLimpio.length === 18) {
+        var claveEntidad = curpLimpio.substring(11, 13);
+        console.log('  - Clave entidad detectada:', claveEntidad);
+        
+        if (claveEntidad) {
+            var nombreEntidad = obtenerNombreEntidad(claveEntidad);
+            console.log('  - Nombre entidad:', nombreEntidad);
 
-                    // ESPERAR a que el select tenga opciones
+            // Buscar en el select
+            if (entidadSelect && entidadSelect.options.length > 1) {
+                var opciones = entidadSelect.options;
+                var encontrado = false;
+                for (var i = 0; i < opciones.length; i++) {
+                    if (opciones[i].text === nombreEntidad) {
+                        entidadSelect.value = opciones[i].value;
+                        console.log('  - Entidad seleccionada:', opciones[i].value);
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    console.warn('  - Entidad no encontrada en el select.');
+                }
+                if (entidadSelect.value) {
+                    cargarMunicipios();
+                }
+            } else {
+                console.warn('  - Select de entidad aún no tiene opciones. Reintentando en 500ms...');
+                setTimeout(function () {
                     if (entidadSelect && entidadSelect.options.length > 1) {
                         var opciones = entidadSelect.options;
-                        var encontrado = false;
                         for (var i = 0; i < opciones.length; i++) {
                             if (opciones[i].text === nombreEntidad) {
                                 entidadSelect.value = opciones[i].value;
-                                console.log('  - Entidad seleccionada:', opciones[i].value);
-                                encontrado = true;
+                                console.log('  - Entidad seleccionada (reintento):', opciones[i].value);
                                 break;
                             }
                         }
-                        if (!encontrado) {
-                            console.warn('  - Entidad no encontrada en el select.');
-                        }
-                        // Cargar municipios de la entidad seleccionada
                         if (entidadSelect.value) {
                             cargarMunicipios();
                         }
-                    } else {
-                        console.warn('  - Select de entidad aún no tiene opciones. Reintentando en 500ms...');
-                        // Reintentar después de que los catálogos se carguen
-                        setTimeout(function () {
-                            if (entidadSelect && entidadSelect.options.length > 1) {
-                                var opciones = entidadSelect.options;
-                                for (var i = 0; i < opciones.length; i++) {
-                                    if (opciones[i].text === nombreEntidad) {
-                                        entidadSelect.value = opciones[i].value;
-                                        console.log('  - Entidad seleccionada (reintento):', opciones[i].value);
-                                        break;
-                                    }
-                                }
-                                if (entidadSelect.value) {
-                                    cargarMunicipios();
-                                }
-                            }
-                        }, 500);
                     }
-                }
-
-                // Validar CURP completo
-                if (validarCurp(curpLimpio)) {
-                    document.getElementById('curp').style.borderColor = '#4cc9f0';
-                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
-                    console.log('✅ CURP válida');
-                } else {
-                    document.getElementById('curp').style.borderColor = '#f72585';
-                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-                    console.warn('⚠️ CURP inválida');
-                }
-            } else {
-                document.getElementById('curp').style.borderColor = '';
-                document.getElementById('curp').style.boxShadow = '';
+                }, 500);
             }
         }
+
+        // Validar CURP completo
+        if (validarCurp(curpLimpio)) {
+            document.getElementById('curp').style.borderColor = '#4cc9f0';
+            document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
+            console.log('✅ CURP válida');
+        } else {
+            document.getElementById('curp').style.borderColor = '#f72585';
+            document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+            console.warn('⚠️ CURP inválida');
+        }
+    } else {
+        document.getElementById('curp').style.borderColor = '';
+        document.getElementById('curp').style.boxShadow = '';
+    }
+}
 
         // ============================================================
         // MODAL - Asegurar que catálogos estén cargados ANTES de abrir
