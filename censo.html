@@ -44,13 +44,21 @@
             padding: 2rem;
             position: relative;
             z-index: 1;
-            box-shadow: var(--shadow-soft);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04),
+                0 8px 30px rgba(0, 0, 0, 0.06);
             transition: all var(--transition-medium);
             animation: fadeIn 0.6s ease-out 0.4s both;
             height: calc(100vh - 4rem);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        body.light-mode .censo-container {
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04),
+                0 4px 16px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         /* ============================================================
