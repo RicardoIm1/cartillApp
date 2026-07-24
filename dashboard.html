@@ -13,7 +13,9 @@
            ESTILOS ESPECÍFICOS DEL DASHBOARD - VERSIÓN OPTIMIZADA
            ============================================================ */
 
-        /* Reset de body */
+        /* ============================================================
+           RESET Y FONDO UNIFORME
+           ========================================================== */
         body {
             padding: 2rem;
             display: flex;
@@ -22,7 +24,48 @@
             min-height: 100vh;
             overflow-x: hidden;
             background: var(--bg-primary);
-            /* Fondo base, el backdrop-blur irá en el contenedor */
+            /* Fondo sólido, sin gradientes */
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ============================================================
+           PARTÍCULAS - Versión ligera pero visible
+           ========================================================== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.05));
+            animation: floatParticle linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-110vh) translateX(50px) scale(0.5);
+                opacity: 0;
+            }
         }
 
         /* ============================================================
@@ -30,6 +73,7 @@
            ========================================================== */
         .dashboard-container {
             position: relative;
+            z-index: 1;
             display: flex;
             gap: 2rem;
             width: 100%;
@@ -39,16 +83,13 @@
             border-radius: 34px;
             min-height: calc(100vh - 4rem);
             background: var(--container-bg);
-            /* Fondo base, menos gradientes */
             backdrop-filter: blur(8px);
-            /* Blur suave, menos costoso */
             border: 1px solid rgba(255, 255, 255, .05);
             box-shadow: 0 20px 60px var(--container-shadow-dark);
-            /* Una sola sombra */
         }
 
         /* ============================================================
-           SIDEBAR - Sin blur extra, solo una sombra
+           SIDEBAR
            ========================================================== */
         .sidebar {
             width: 240px;
@@ -121,7 +162,7 @@
         }
 
         /* ============================================================
-           MENU - Optimizado, sin pseudo-elementos costosos
+           MENU - Optimizado
            ========================================================== */
         .menu-item {
             display: flex;
@@ -138,7 +179,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             will-change: transform, background;
-            /* Sugerencia para el navegador */
         }
 
         .menu-item:hover {
@@ -257,7 +297,7 @@
         }
 
         /* ============================================================
-           TABLA - Sin blur, con una sombra ligera
+           TABLA - ALTURA UNIFORME EN LAS FILAS
            ========================================================== */
         .table-container {
             position: relative;
@@ -299,19 +339,39 @@
             z-index: 2;
             background: var(--container-bg);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: left;
         }
 
+        thead th:last-child {
+            text-align: left;
+        }
+
+        /* ALTURA UNIFORME PARA TODAS LAS FILAS */
         tbody tr {
             transition: all 0.2s ease;
             will-change: transform;
             cursor: default;
+            height: 72px;
+            /* Altura fija para uniformidad */
         }
 
         tbody td {
-            padding: 1rem;
+            padding: 0.75rem 1rem;
             background: rgba(255, 255, 255, 0.02);
             color: var(--text-secondary);
             border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            vertical-align: middle;
+            height: 72px;
+            /* Misma altura que el tr */
+        }
+
+        /* Asegurar que el contenido no desborde */
+        tbody td span,
+        tbody td .badge-clues,
+        tbody td .cantidad {
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
         }
 
         tbody td:first-child {
@@ -334,19 +394,29 @@
             transform: translateY(2px);
         }
 
+        /* ============================================================
+           ESTILOS DE CELDAS
+           ========================================================== */
         .cantidad {
             font-size: 1.08rem;
             font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 8px;
+            min-width: 50px;
+            justify-content: center;
         }
 
         .cantidad-alta {
             color: #38d39f;
+            background: rgba(56, 211, 159, 0.08);
         }
         .cantidad-media {
             color: #ffbe3d;
+            background: rgba(255, 190, 61, 0.08);
         }
         .cantidad-baja {
             color: #ff5e7e;
+            background: rgba(255, 94, 126, 0.08);
         }
 
         .badge-clues {
@@ -363,6 +433,9 @@
             box-shadow: 0 2px 10px rgba(67, 97, 238, 0.2);
         }
 
+        /* ============================================================
+           LOADING Y ESTADOS
+           ========================================================== */
         .loading-spinner {
             width: 20px;
             height: 20px;
@@ -371,6 +444,12 @@
             border-top-color: var(--btn-primary);
             animation: spin .7s linear infinite;
             margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .empty-state {
@@ -531,6 +610,9 @@
             display: none;
         }
 
+        /* ============================================================
+           ANIMACIONES PARA NUEVOS REGISTROS
+           ========================================================== */
         .badge-nuevo {
             display: inline-block;
             padding: 0.1rem 0.4rem;
@@ -776,15 +858,94 @@
             }
             tbody td {
                 padding: 0.3rem 0.5rem;
+                height: 60px;
+            }
+            tbody tr {
+                height: 60px;
+            }
+        }
+
+        /* ============================================================
+           TEMA OSCURO/CLARO - Variables CSS
+           ========================================================== */
+        :root {
+            --bg-primary: #0a0a0f;
+            --container-bg: rgba(18, 18, 28, 0.85);
+            --container-shadow-dark: rgba(0, 0, 0, 0.5);
+            --container-shadow-light: rgba(255, 255, 255, 0.02);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --text-muted-light: rgba(255, 255, 255, 0.3);
+            --btn-primary: #4361ee;
+            --btn-success: #4cc9f0;
+            --btn-danger: #f72585;
+            --border-color: rgba(255, 255, 255, 0.05);
+            --footer-color: rgba(255, 255, 255, 0.3);
+            --card-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        body.light-mode {
+            --bg-primary: #f0f2f5;
+            --container-bg: rgba(255, 255, 255, 0.85);
+            --container-shadow-dark: rgba(0, 0, 0, 0.08);
+            --container-shadow-light: rgba(255, 255, 255, 0.5);
+            --text-primary: #1a1a2e;
+            --text-secondary: rgba(0, 0, 0, 0.8);
+            --text-muted: rgba(0, 0, 0, 0.5);
+            --text-muted-light: rgba(0, 0, 0, 0.3);
+            --border-color: rgba(0, 0, 0, 0.05);
+            --footer-color: rgba(0, 0, 0, 0.3);
+            --card-bg: rgba(0, 0, 0, 0.02);
+        }
+
+        /* Toggle de tema */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: var(--container-bg);
+            backdrop-filter: blur(8px);
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 600px) {
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
 
+    <!-- PARTÍCULAS -->
     <div class="particles" id="particles"></div>
 
     <div class="dashboard-container" id="app">
+        <!-- Botón de tema -->
         <button class="theme-toggle" id="themeToggle" type="button" title="Cambiar tema">🌙</button>
 
         <!-- ============================================================
@@ -906,7 +1067,7 @@
         var loadAbortController = null;
 
         // ============================================================
-        // TEMA (DIURNO/NOCTURNO) - Optimizado
+        // TEMA (DIURNO/NOCTURNO)
         // ============================================================
         (function setupTheme() {
             var body = document.body;
@@ -926,22 +1087,34 @@
         })();
 
         // ============================================================
-        // PARTÍCULAS - Versión ligera
+        // PARTÍCULAS - Versión ligera pero visible
         // ============================================================
         function createParticles() {
             var container = document.getElementById('particles');
-            for (var i = 0; i < 12; i++) {
+            var count = 15; // Menos partículas para mejor rendimiento
+
+            for (var i = 0; i < count; i++) {
                 var p = document.createElement('div');
                 p.classList.add('particle');
-                var size = Math.random() * 8 + 4;
+
+                var size = Math.random() * 6 + 3;
+                var x = Math.random() * 100;
+                var duration = Math.random() * 25 + 20;
+                var delay = Math.random() * 8;
+
                 p.style.cssText = `
-                    width:${size}px; height:${size}px;
-                    left:${Math.random()*100}%;
-                    bottom:-${size}px;
-                    animation-duration:${Math.random()*20+15}s;
-                    animation-delay:${Math.random()*5}s;
-                    opacity:${Math.random()*0.4+0.1};
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}%;
+                    bottom: -10px;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                    opacity: ${Math.random() * 0.3 + 0.1};
+                    background: radial-gradient(circle at 30% 30%, 
+                        rgba(255, 255, 255, ${Math.random() * 0.2 + 0.1}), 
+                        rgba(255, 255, 255, 0.02));
                 `;
+
                 container.appendChild(p);
             }
         }
@@ -979,7 +1152,6 @@
         // CARGAR INVENTARIO - Con AbortController
         // ============================================================
         async function loadDashboard() {
-            // Cancela peticiones anteriores
             if (loadAbortController) {
                 loadAbortController.abort();
             }
@@ -1018,7 +1190,6 @@
 
                 var result = await query.order('clues_id_uuid');
 
-                // Si se abortó, no hacer nada
                 if (loadAbortController.signal.aborted) return;
 
                 if (result.error) throw result.error;
@@ -1038,7 +1209,7 @@
         }
 
         // ============================================================
-        // RENDERIZAR TABLA - Solo inserta filas, no reconstruye todo
+        // RENDERIZAR TABLA - Con altura uniforme
         // ============================================================
         function renderInventoryTable(data) {
             totalRegistros.textContent = data.length + ' registros';
@@ -1093,7 +1264,7 @@
         }
 
         // ============================================================
-        // BUSCADOR - Filtrado rápido sobre filas existentes
+        // BUSCADOR - Filtrado rápido
         // ============================================================
         (function setupGlobalSearch() {
             var searchInput = document.getElementById('globalSearch');
@@ -1145,7 +1316,6 @@
                         (searchTerm !== '' ? ' de ' + rows.length : '') + ' registros';
                 }
 
-                // Mostrar "sin resultados"
                 var noResults = inventarioContainer.querySelector('.no-results');
                 if (visibleCount === 0 && rows.length > 0) {
                     if (!noResults) {
