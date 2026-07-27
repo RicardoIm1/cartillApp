@@ -26,9 +26,10 @@
 
     <style>
         /* ============================================================
-           ESTILOS ESPECÍFICOS DEL CENSO
-           ============================================================ */
+       ESTILOS ESPECÍFICOS DEL CENSO - SOMBRAS SUAVES
+       ============================================================ */
 
+        /* Reset de body para el censo */
         body {
             padding: 2rem;
             display: flex;
@@ -39,6 +40,9 @@
             overflow-y: hidden;
         }
 
+        /* ============================================================
+       CONTENEDOR PRINCIPAL - SOMBRAS SUAVES
+       ============================================================ */
         .censo-container {
             max-width: 1200px;
             width: 100%;
@@ -48,7 +52,8 @@
             padding: 2rem;
             position: relative;
             z-index: 1;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04), 0 8px 30px rgba(0, 0, 0, 0.06);
+            box-shadow: 9px 9px 18px var(--container-shadow-1),
+                -9px -9px 18px var(--container-shadow-2);
             transition: all var(--transition-medium);
             animation: fadeIn 0.6s ease-out 0.4s both;
             height: calc(100vh - 4rem);
@@ -59,10 +64,14 @@
         }
 
         body.light-mode .censo-container {
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
+            box-shadow: 6px 6px 14px var(--container-shadow-1),
+                -6px -6px 14px var(--container-shadow-2);
             border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
+        /* ============================================================
+       HEADER
+       ============================================================ */
         .censo-header {
             display: flex;
             justify-content: space-between;
@@ -88,6 +97,9 @@
             transition: color var(--transition-medium);
         }
 
+        /* ============================================================
+       USER BADGE - SOMBRAS SUAVES
+       ============================================================ */
         .user-badge {
             display: inline-flex;
             align-items: center;
@@ -98,7 +110,8 @@
             border-radius: 30px;
             margin-bottom: 1rem;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
             color: var(--text-primary);
             font-size: 0.85rem;
             transition: all var(--transition-medium);
@@ -120,6 +133,9 @@
             color: var(--badge-text);
         }
 
+        /* ============================================================
+       SEARCH BAR - SOMBRAS SUAVES
+       ============================================================ */
         .search-bar {
             display: flex;
             gap: 1rem;
@@ -145,13 +161,16 @@
             color: var(--text-primary);
             font-size: 0.9rem;
             transition: all var(--transition-medium);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 4px 4px 8px var(--container-shadow-1),
+                inset -4px -4px 8px var(--container-shadow-2);
         }
 
         .search-bar .search-input-wrap input:focus {
             outline: none;
             background: var(--input-focus-bg, var(--container-bg));
-            box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: inset 2px 2px 5px var(--container-shadow-1),
+                inset -2px -2px 5px var(--container-shadow-2),
+                0 0 0 3px rgba(67, 97, 238, 0.15);
         }
 
         .search-bar .search-input-wrap .search-icon {
@@ -171,15 +190,20 @@
             background: var(--card-bg);
             border-radius: 30px;
             border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 3px 3px 6px var(--container-shadow-1),
+                -3px -3px 6px var(--container-shadow-2);
         }
 
+        /* ============================================================
+       TABLA - SOMBRAS SUAVES
+       ============================================================ */
         .table-container {
             border-radius: var(--radius-md);
             overflow: auto;
             margin-top: 0.5rem;
             background: var(--container-bg);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 4px 4px 8px var(--container-shadow-1),
+                inset -4px -4px 8px var(--container-shadow-2);
             transition: all var(--transition-medium);
             flex: 1;
             min-height: 0;
@@ -205,6 +229,9 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        /* ============================================================
+       TABLA - FILAS
+       ============================================================ */
         table {
             width: 100%;
             border-collapse: separate;
@@ -253,7 +280,8 @@
         tbody tr:hover td {
             background: rgba(255, 255, 255, 0.06);
             transform: scale(1.002);
-            box-shadow: var(--shadow-raised);
+            box-shadow: 4px 4px 10px var(--container-shadow-1),
+                -4px -4px 10px var(--container-shadow-2);
         }
 
         tbody tr[style*="display: none"] {
@@ -261,6 +289,9 @@
             transform: scale(0.98);
         }
 
+        /* ============================================================
+       BADGES
+       ============================================================ */
         .badge {
             display: inline-block;
             padding: 0.2rem 0.7rem;
@@ -283,9 +314,13 @@
             font-weight: 700;
             color: white;
             background: linear-gradient(145deg, var(--btn-success), var(--btn-primary));
-            box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.15), 4px 4px 10px rgba(0, 0, 0, 0.12);
+            box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.15),
+                4px 4px 10px rgba(0, 0, 0, 0.10);
         }
 
+        /* ============================================================
+       ACCIONES DE TABLA - SOMBRAS SUAVES
+       ============================================================ */
         .table-actions {
             display: flex;
             gap: 0.4rem;
@@ -306,7 +341,8 @@
             justify-content: center;
             background: var(--card-bg);
             color: var(--text-secondary);
-            box-shadow: var(--shadow-soft);
+            box-shadow: 4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
         }
 
         .btn-icon:hover {
@@ -315,22 +351,27 @@
 
         .btn-icon:active {
             transform: scale(0.92);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 3px 3px 6px var(--container-shadow-1),
+                inset -3px -3px 6px var(--container-shadow-2);
         }
 
         .btn-icon-edit:hover {
             color: var(--btn-success);
-            box-shadow: 0 0 20px rgba(76, 201, 240, 0.2);
+            box-shadow: 0 0 20px rgba(76, 201, 240, 0.12),
+                4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
         }
 
         .btn-icon-delete:hover {
             color: var(--btn-danger, #f72585);
-            box-shadow: 0 0 20px rgba(247, 37, 133, 0.2);
+            box-shadow: 0 0 20px rgba(247, 37, 133, 0.12),
+                4px 4px 8px var(--container-shadow-1),
+                -4px -4px 8px var(--container-shadow-2);
         }
 
         /* ============================================================
-           MODAL - TRANSICIONES CINEMATOGRÁFICAS
-           ============================================================ */
+       MODAL - TRANSICIONES CINEMATOGRÁFICAS CON SOMBRAS SUAVES
+       ============================================================ */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -351,17 +392,17 @@
         }
 
         .modal-overlay.active {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             pointer-events: all;
             opacity: 1;
         }
 
         body.light-mode .modal-overlay.active {
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .modal-content {
@@ -372,9 +413,10 @@
             width: 100%;
             max-height: 92vh;
             overflow-y: auto;
-            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.35), 0 10px 40px rgba(0, 0, 0, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transform: scale(0.85) translateY(50px);
+            box-shadow: 9px 9px 18px var(--container-shadow-1),
+                -9px -9px 18px var(--container-shadow-2);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transform: scale(0.92) translateY(30px);
             opacity: 0;
             transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
@@ -386,10 +428,12 @@
         }
 
         body.light-mode .modal-content {
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12), 0 8px 30px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 6px 6px 14px var(--container-shadow-1),
+                -6px -6px 14px var(--container-shadow-2);
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
 
+        /* Scroll personalizado del modal */
         .modal-content::-webkit-scrollbar {
             width: 4px;
         }
@@ -415,6 +459,9 @@
             background: rgba(0, 0, 0, 0.15);
         }
 
+        /* ============================================================
+       MODAL - TÍTULO Y ANIMACIONES
+       ============================================================ */
         .modal-content h2 {
             margin-bottom: 1.5rem;
             color: var(--text-primary);
@@ -492,8 +539,8 @@
         }
 
         /* ============================================================
-           FORMULARIO DEL MODAL - GRID 3 COLUMNAS
-           ============================================================ */
+       FORMULARIO DEL MODAL - GRID 3 COLUMNAS
+       ============================================================ */
         .modal-content .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -564,14 +611,17 @@
             color: var(--text-primary);
             font-size: 0.9rem;
             transition: all var(--transition-medium);
-            box-shadow: var(--shadow-pressed);
+            box-shadow: inset 4px 4px 8px var(--container-shadow-1),
+                inset -4px -4px 8px var(--container-shadow-2);
         }
 
         .modal-content .form-group input:focus,
         .modal-content .form-group select:focus {
             outline: none;
             background: var(--input-focus-bg, var(--container-bg));
-            box-shadow: var(--shadow-pressed), 0 0 0 3px rgba(67, 97, 238, 0.15);
+            box-shadow: inset 2px 2px 5px var(--container-shadow-1),
+                inset -2px -2px 5px var(--container-shadow-2),
+                0 0 0 3px rgba(67, 97, 238, 0.15);
         }
 
         .modal-content .form-group input::placeholder {
@@ -614,8 +664,8 @@
         }
 
         /* ============================================================
-           ESTADOS
-           ============================================================ */
+       ESTADOS
+       ============================================================ */
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -661,6 +711,9 @@
             background: rgba(76, 201, 240, 0.08);
         }
 
+        /* ============================================================
+       FOOTER
+       ============================================================ */
         .footer {
             text-align: center;
             padding: 0.8rem 0 0.3rem 0;
@@ -672,8 +725,8 @@
         }
 
         /* ============================================================
-           RESPONSIVE
-           ============================================================ */
+       RESPONSIVE
+       ============================================================ */
         @media (max-width: 1200px) {
             .modal-content {
                 max-width: 95vw;
@@ -1304,30 +1357,30 @@
         var catalogos = {cargados: false};
 
         // ============================================================
-// CATÁLOGOS - CON EMBARAZOS CORREGIDO
-// ============================================================
-async function cargarCatalogos() {
-    try {
-        await Promise.all([
-            cargarEntidades(),
-            cargarPaises(),
-            cargarClues(),
-            cargarTiposCartilla(),
-            cargarMotivos(),
-            cargarAnios(),
-            cargarServicios(),
-            cargarSiNo(),
-            cargarDiscapacidades(),
-            cargarEmbarazos(), // <-- Esta función ahora fuerza Sí/No
-            cargarMigraciones()
-        ]);
-        catalogos.cargados = true;
-        console.log('✅ Catálogos cargados correctamente');
-    } catch (error) {
-        console.error('Error al cargar catálogos:', error);
-        errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
-    }
-}
+        // CATÁLOGOS - CON EMBARAZOS CORREGIDO
+        // ============================================================
+        async function cargarCatalogos() {
+            try {
+                await Promise.all([
+                    cargarEntidades(),
+                    cargarPaises(),
+                    cargarClues(),
+                    cargarTiposCartilla(),
+                    cargarMotivos(),
+                    cargarAnios(),
+                    cargarServicios(),
+                    cargarSiNo(),
+                    cargarDiscapacidades(),
+                    cargarEmbarazos(), // <-- Esta función ahora fuerza Sí/No
+                    cargarMigraciones()
+                ]);
+                catalogos.cargados = true;
+                console.log('✅ Catálogos cargados correctamente');
+            } catch (error) {
+                console.error('Error al cargar catálogos:', error);
+                errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
+            }
+        }
 
         async function cargarMunicipios() {
             var entidadId = document.getElementById('entidad').value;
@@ -1445,68 +1498,68 @@ async function cargarCatalogos() {
             return null;
         }
 
-// ============================================================
-// RESTRICCIONES DE EMBARAZO - CORREGIDO (SÍ/NO)
-// ============================================================
-function actualizarRestriccionesEmbarazo(sexo, edad) {
-    var embarazoSelect = document.getElementById('embarazo');
-    if (!embarazoSelect) return;
+        // ============================================================
+        // RESTRICCIONES DE EMBARAZO - CORREGIDO (SÍ/NO)
+        // ============================================================
+        function actualizarRestriccionesEmbarazo(sexo, edad) {
+            var embarazoSelect = document.getElementById('embarazo');
+            if (!embarazoSelect) return;
 
-    // Si no hay opciones cargadas, esperar
-    if (embarazoSelect.options.length <= 1) {
-        console.log('⏳ Embarazo: aún sin opciones, reintentando en 300ms...');
-        setTimeout(function() {
-            actualizarRestriccionesEmbarazo(sexo, edad);
-        }, 300);
-        return;
-    }
-
-    // Buscar la opción "No"
-    var noValue = '';
-    var noIndex = -1;
-    for (var i = 0; i < embarazoSelect.options.length; i++) {
-        var text = embarazoSelect.options[i].text.toLowerCase().trim();
-        if (text === 'no') {
-            noValue = embarazoSelect.options[i].value;
-            noIndex = i;
-            break;
-        }
-    }
-
-    // Si no encuentra "No", usar el primer valor después del placeholder
-    if (!noValue && embarazoSelect.options.length > 1) {
-        noValue = embarazoSelect.options[1].value;
-    }
-
-    // Si es hombre, deshabilitar y poner "No"
-    if (sexo === 'H') {
-        embarazoSelect.disabled = true;
-        if (noValue) {
-            embarazoSelect.value = noValue;
-            console.log('👤 Hombre → Embarazo: "No" (deshabilitado)');
-        }
-        return;
-    }
-
-    // Si es mujer
-    if (sexo === 'M') {
-        if (edad >= 15 && edad <= 49) {
-            // Edad fértil - habilitar y poner "No" por defecto
-            embarazoSelect.disabled = false;
-            if (noValue) {
-                embarazoSelect.value = noValue;
+            // Si no hay opciones cargadas, esperar
+            if (embarazoSelect.options.length <= 1) {
+                console.log('⏳ Embarazo: aún sin opciones, reintentando en 300ms...');
+                setTimeout(function () {
+                    actualizarRestriccionesEmbarazo(sexo, edad);
+                }, 300);
+                return;
             }
-            console.log('👩 Mujer en edad fértil (' + edad + ' años) → Embarazo habilitado, valor por defecto: "No"');
-        } else {
-            // Fuera de edad fértil - deshabilitar y poner "No"
-            embarazoSelect.disabled = true;
-            if (noValue) {
-                embarazoSelect.value = noValue;
+
+            // Buscar la opción "No"
+            var noValue = '';
+            var noIndex = -1;
+            for (var i = 0; i < embarazoSelect.options.length; i++) {
+                var text = embarazoSelect.options[i].text.toLowerCase().trim();
+                if (text === 'no') {
+                    noValue = embarazoSelect.options[i].value;
+                    noIndex = i;
+                    break;
+                }
             }
-            console.log('👩 Mujer fuera de edad fértil (' + edad + ' años) → Embarazo: "No" (deshabilitado)');
+
+            // Si no encuentra "No", usar el primer valor después del placeholder
+            if (!noValue && embarazoSelect.options.length > 1) {
+                noValue = embarazoSelect.options[1].value;
+            }
+
+            // Si es hombre, deshabilitar y poner "No"
+            if (sexo === 'H') {
+                embarazoSelect.disabled = true;
+                if (noValue) {
+                    embarazoSelect.value = noValue;
+                    console.log('👤 Hombre → Embarazo: "No" (deshabilitado)');
+                }
+                return;
+            }
+
+            // Si es mujer
+            if (sexo === 'M') {
+                if (edad >= 15 && edad <= 49) {
+                    // Edad fértil - habilitar y poner "No" por defecto
+                    embarazoSelect.disabled = false;
+                    if (noValue) {
+                        embarazoSelect.value = noValue;
+                    }
+                    console.log('👩 Mujer en edad fértil (' + edad + ' años) → Embarazo habilitado, valor por defecto: "No"');
+                } else {
+                    // Fuera de edad fértil - deshabilitar y poner "No"
+                    embarazoSelect.disabled = true;
+                    if (noValue) {
+                        embarazoSelect.value = noValue;
+                    }
+                    console.log('👩 Mujer fuera de edad fértil (' + edad + ' años) → Embarazo: "No" (deshabilitado)');
+                }
+            }
         }
-    }
-}
 
         // ============================================================
         // FUNCIONES PARA DECODIFICAR CURP
@@ -1585,141 +1638,141 @@ function actualizarRestriccionesEmbarazo(sexo, edad) {
         }
 
         // ============================================================
-// PROCESAR CURP AL ESCRIBIR - CON EMBARAZO CORREGIDO
-// ============================================================
-async function procesarCurp(curp) {
-    if (!curp) return;
+        // PROCESAR CURP AL ESCRIBIR - CON EMBARAZO CORREGIDO
+        // ============================================================
+        async function procesarCurp(curp) {
+            if (!curp) return;
 
-    console.log('🔍 Procesando CURP:', curp);
+            console.log('🔍 Procesando CURP:', curp);
 
-    var curpLimpio = curp.trim().toUpperCase();
-    var entidadSelect = document.getElementById('entidad');
-    var fechaNacInput = document.getElementById('fecha_nac');
-    var edadInput = document.getElementById('edad');
-    var sexoSelect = document.getElementById('sexo');
-    var tipoCartillaSelect = document.getElementById('tipo_cartilla');
+            var curpLimpio = curp.trim().toUpperCase();
+            var entidadSelect = document.getElementById('entidad');
+            var fechaNacInput = document.getElementById('fecha_nac');
+            var edadInput = document.getElementById('edad');
+            var sexoSelect = document.getElementById('sexo');
+            var tipoCartillaSelect = document.getElementById('tipo_cartilla');
 
-    // 1. DETECTAR SEXO
-    if (curpLimpio.length >= 11) {
-        var sexo = curpLimpio.charAt(10).toUpperCase();
-        console.log('  - Sexo detectado:', sexo);
-        if (sexo === 'H' || sexo === 'M') {
-            sexoSelect.value = sexo;
-            var event = new Event('change');
-            sexoSelect.dispatchEvent(event);
-        }
-    }
-
-    // 2. DETECTAR FECHA DE NACIMIENTO
-    if (curpLimpio.length >= 17) {
-        var anioStr = curpLimpio.substring(4, 6);
-        var mesStr = curpLimpio.substring(6, 8);
-        var diaStr = curpLimpio.substring(8, 10);
-
-        var anio = parseInt(anioStr);
-        var mes = parseInt(mesStr) - 1;
-        var dia = parseInt(diaStr);
-
-        var añoActual = new Date().getFullYear();
-        var anioCompleto = (anio > (añoActual - 2000)) ? 1900 + anio : 2000 + anio;
-
-        var fechaNac = new Date(anioCompleto, mes, dia);
-
-        if (!isNaN(fechaNac.getTime())) {
-            var fechaStr = fechaNac.getFullYear() + '-' +
-                String(fechaNac.getMonth() + 1).padStart(2, '0') + '-' +
-                String(fechaNac.getDate()).padStart(2, '0');
-            fechaNacInput.value = fechaStr;
-            console.log('  - Fecha nacimiento detectada:', fechaStr);
-
-            // Calcular edad
-            calcularEdad();
-
-            var edad = parseInt(edadInput.value);
-            var sexo = sexoSelect.value;
-            console.log('  - Edad calculada:', edad);
-
-            // Sugerir tipo de cartilla
-            if (!isNaN(edad) && sexo) {
-                var sugerencia = sugerirTipoCartilla(edad, sexo);
-                console.log('  - Tipo cartilla sugerido:', sugerencia);
-                if (sugerencia) {
-                    var opciones = tipoCartillaSelect.options;
-                    for (var i = 0; i < opciones.length; i++) {
-                        if (opciones[i].text === sugerencia) {
-                            tipoCartillaSelect.value = opciones[i].value;
-                            console.log('  - Tipo cartilla seleccionado:', opciones[i].value);
-                            break;
-                        }
-                    }
+            // 1. DETECTAR SEXO
+            if (curpLimpio.length >= 11) {
+                var sexo = curpLimpio.charAt(10).toUpperCase();
+                console.log('  - Sexo detectado:', sexo);
+                if (sexo === 'H' || sexo === 'M') {
+                    sexoSelect.value = sexo;
+                    var event = new Event('change');
+                    sexoSelect.dispatchEvent(event);
                 }
-                // ACTUALIZAR RESTRICCIONES DE EMBARAZO
-                actualizarRestriccionesEmbarazo(sexo, edad);
             }
-        }
-    }
 
-    // 3. DETECTAR ENTIDAD
-    if (curpLimpio.length === 18) {
-        var claveEntidad = curpLimpio.substring(11, 13);
-        console.log('  - Clave entidad detectada:', claveEntidad);
+            // 2. DETECTAR FECHA DE NACIMIENTO
+            if (curpLimpio.length >= 17) {
+                var anioStr = curpLimpio.substring(4, 6);
+                var mesStr = curpLimpio.substring(6, 8);
+                var diaStr = curpLimpio.substring(8, 10);
 
-        if (claveEntidad) {
-            var nombreEntidad = obtenerNombreEntidad(claveEntidad);
-            console.log('  - Nombre entidad:', nombreEntidad);
+                var anio = parseInt(anioStr);
+                var mes = parseInt(mesStr) - 1;
+                var dia = parseInt(diaStr);
 
-            if (entidadSelect && entidadSelect.options.length > 1) {
-                var opciones = entidadSelect.options;
-                var encontrado = false;
-                for (var i = 0; i < opciones.length; i++) {
-                    if (opciones[i].text === nombreEntidad) {
-                        entidadSelect.value = opciones[i].value;
-                        console.log('  - Entidad seleccionada:', opciones[i].value);
-                        encontrado = true;
-                        break;
+                var añoActual = new Date().getFullYear();
+                var anioCompleto = (anio > (añoActual - 2000)) ? 1900 + anio : 2000 + anio;
+
+                var fechaNac = new Date(anioCompleto, mes, dia);
+
+                if (!isNaN(fechaNac.getTime())) {
+                    var fechaStr = fechaNac.getFullYear() + '-' +
+                        String(fechaNac.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(fechaNac.getDate()).padStart(2, '0');
+                    fechaNacInput.value = fechaStr;
+                    console.log('  - Fecha nacimiento detectada:', fechaStr);
+
+                    // Calcular edad
+                    calcularEdad();
+
+                    var edad = parseInt(edadInput.value);
+                    var sexo = sexoSelect.value;
+                    console.log('  - Edad calculada:', edad);
+
+                    // Sugerir tipo de cartilla
+                    if (!isNaN(edad) && sexo) {
+                        var sugerencia = sugerirTipoCartilla(edad, sexo);
+                        console.log('  - Tipo cartilla sugerido:', sugerencia);
+                        if (sugerencia) {
+                            var opciones = tipoCartillaSelect.options;
+                            for (var i = 0; i < opciones.length; i++) {
+                                if (opciones[i].text === sugerencia) {
+                                    tipoCartillaSelect.value = opciones[i].value;
+                                    console.log('  - Tipo cartilla seleccionado:', opciones[i].value);
+                                    break;
+                                }
+                            }
+                        }
+                        // ACTUALIZAR RESTRICCIONES DE EMBARAZO
+                        actualizarRestriccionesEmbarazo(sexo, edad);
                     }
                 }
-                if (!encontrado) {
-                    console.warn('  - Entidad no encontrada en el select.');
-                }
-                if (entidadSelect.value) {
-                    cargarMunicipios();
-                }
-            } else {
-                console.warn('  - Select de entidad aún no tiene opciones. Reintentando en 500ms...');
-                setTimeout(function() {
+            }
+
+            // 3. DETECTAR ENTIDAD
+            if (curpLimpio.length === 18) {
+                var claveEntidad = curpLimpio.substring(11, 13);
+                console.log('  - Clave entidad detectada:', claveEntidad);
+
+                if (claveEntidad) {
+                    var nombreEntidad = obtenerNombreEntidad(claveEntidad);
+                    console.log('  - Nombre entidad:', nombreEntidad);
+
                     if (entidadSelect && entidadSelect.options.length > 1) {
                         var opciones = entidadSelect.options;
+                        var encontrado = false;
                         for (var i = 0; i < opciones.length; i++) {
                             if (opciones[i].text === nombreEntidad) {
                                 entidadSelect.value = opciones[i].value;
-                                console.log('  - Entidad seleccionada (reintento):', opciones[i].value);
+                                console.log('  - Entidad seleccionada:', opciones[i].value);
+                                encontrado = true;
                                 break;
                             }
+                        }
+                        if (!encontrado) {
+                            console.warn('  - Entidad no encontrada en el select.');
                         }
                         if (entidadSelect.value) {
                             cargarMunicipios();
                         }
+                    } else {
+                        console.warn('  - Select de entidad aún no tiene opciones. Reintentando en 500ms...');
+                        setTimeout(function () {
+                            if (entidadSelect && entidadSelect.options.length > 1) {
+                                var opciones = entidadSelect.options;
+                                for (var i = 0; i < opciones.length; i++) {
+                                    if (opciones[i].text === nombreEntidad) {
+                                        entidadSelect.value = opciones[i].value;
+                                        console.log('  - Entidad seleccionada (reintento):', opciones[i].value);
+                                        break;
+                                    }
+                                }
+                                if (entidadSelect.value) {
+                                    cargarMunicipios();
+                                }
+                            }
+                        }, 500);
                     }
-                }, 500);
+                }
+
+                // Validar CURP completo
+                if (validarCurp(curpLimpio)) {
+                    document.getElementById('curp').style.borderColor = '#4cc9f0';
+                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
+                    console.log('✅ CURP válida');
+                } else {
+                    document.getElementById('curp').style.borderColor = '#f72585';
+                    document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                    console.warn('⚠️ CURP inválida');
+                }
+            } else {
+                document.getElementById('curp').style.borderColor = '';
+                document.getElementById('curp').style.boxShadow = '';
             }
         }
-
-        // Validar CURP completo
-        if (validarCurp(curpLimpio)) {
-            document.getElementById('curp').style.borderColor = '#4cc9f0';
-            document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
-            console.log('✅ CURP válida');
-        } else {
-            document.getElementById('curp').style.borderColor = '#f72585';
-            document.getElementById('curp').style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-            console.warn('⚠️ CURP inválida');
-        }
-    } else {
-        document.getElementById('curp').style.borderColor = '';
-        document.getElementById('curp').style.boxShadow = '';
-    }
-}
 
         // ============================================================
         // MODAL - Asegurar que catálogos estén cargados ANTES de abrir
@@ -2220,43 +2273,43 @@ async function procesarCurp(curp) {
         }
 
         // ============================================================
-// CARGAR EMBARAZOS - FORZAR SÍ/NO
-// ============================================================
-async function cargarEmbarazos() {
-    try {
-        // Primero intentar cargar desde la base de datos
-        var result = await supabaseClient.from('embarazo').select('id_uuid, embarazo').order('embarazo');
-        var select = document.getElementById('embarazo');
-        
-        // Si hay datos, usarlos
-        if (result.data && result.data.length > 0) {
-            select.innerHTML = '<option value="">Seleccionar...</option>';
-            result.data.forEach(function (e) {
-                select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
-            });
-            console.log('✅ Embarazos cargados desde BD:', result.data.length);
-            return;
+        // CARGAR EMBARAZOS - FORZAR SÍ/NO
+        // ============================================================
+        async function cargarEmbarazos() {
+            try {
+                // Primero intentar cargar desde la base de datos
+                var result = await supabaseClient.from('embarazo').select('id_uuid, embarazo').order('embarazo');
+                var select = document.getElementById('embarazo');
+
+                // Si hay datos, usarlos
+                if (result.data && result.data.length > 0) {
+                    select.innerHTML = '<option value="">Seleccionar...</option>';
+                    result.data.forEach(function (e) {
+                        select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
+                    });
+                    console.log('✅ Embarazos cargados desde BD:', result.data.length);
+                    return;
+                }
+
+                // Si no hay datos, crear opciones por defecto
+                console.warn('⚠️ No hay datos de embarazo en la BD. Usando valores por defecto.');
+                select.innerHTML = `
+            <option value="">Seleccionar...</option>
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+        `;
+
+            } catch (error) {
+                console.error('Error cargando embarazos:', error);
+                // Fallback: opciones manuales
+                var select = document.getElementById('embarazo');
+                select.innerHTML = `
+            <option value="">Seleccionar...</option>
+            <option value="no">No</option>
+            <option value="si">Sí</option>
+        `;
+            }
         }
-
-        // Si no hay datos, crear opciones por defecto
-        console.warn('⚠️ No hay datos de embarazo en la BD. Usando valores por defecto.');
-        select.innerHTML = `
-            <option value="">Seleccionar...</option>
-            <option value="no">No</option>
-            <option value="si">Sí</option>
-        `;
-
-    } catch (error) {
-        console.error('Error cargando embarazos:', error);
-        // Fallback: opciones manuales
-        var select = document.getElementById('embarazo');
-        select.innerHTML = `
-            <option value="">Seleccionar...</option>
-            <option value="no">No</option>
-            <option value="si">Sí</option>
-        `;
-    }
-}
 
         async function cargarMigraciones() {
             try {
