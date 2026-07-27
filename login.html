@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Inicio de Sesión</title>
     <link rel="stylesheet" href="common/styles.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <base target="_top" />
 
     <!-- Librería de Supabase -->
@@ -15,34 +16,134 @@
 
     <style>
         /* ============================================================
-           ESTILOS ESPECÍFICOS DEL LOGIN
-           ============================================================ */
+       ESTILOS ESPECÍFICOS DEL LOGIN - ESTILO JUGUETE 80'S
+       ============================================================ */
 
-        /* Reset de body para centrar el login */
+        /* ============================================================
+       VARIABLES - Heredan del theme principal
+       ========================================================== */
+        :root {
+            --bg-primary: #141E30;
+            --container-bg: #1c2541;
+            --container-shadow-dark: #0d1320;
+            --container-shadow-light: #2b3f60;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.9);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --text-muted-light: rgba(255, 255, 255, 0.4);
+            --input-bg: #1c2541;
+            --input-shadow-dark: #0d1320;
+            --input-shadow-light: #2b3f60;
+            --input-focus-bg: #243b55;
+            --input-placeholder: rgba(255, 255, 255, 0.5);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-primary-shadow-dark: #2b3f60;
+            --btn-primary-shadow-light: #3a56d4;
+            --error-color: #f72585;
+            --footer-color: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --card-bg: rgba(255, 255, 255, 0.02);
+            --label-color: rgba(255, 255, 255, 0.7);
+            --shadow-deep: 8px 8px 16px var(--container-shadow-dark),
+                -8px -8px 16px var(--container-shadow-light);
+            --shadow-float: 12px 12px 24px var(--container-shadow-dark),
+                -12px -12px 24px var(--container-shadow-light);
+            --shadow-inset: inset 4px 4px 8px var(--container-shadow-dark),
+                inset -4px -4px 8px var(--container-shadow-light);
+            --shadow-pressed: inset 4px 4px 10px var(--container-shadow-dark),
+                inset -4px -4px 10px var(--container-shadow-light);
+            --shadow-btn-primary: 4px 4px 8px var(--btn-primary-shadow-dark),
+                -4px -4px 8px var(--btn-primary-shadow-light);
+        }
+
+        body.light-mode {
+            --bg-primary: #e0e5ec;
+            --container-bg: #e8ecf4;
+            --container-shadow-dark: #b8bcc8;
+            --container-shadow-light: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: rgba(0, 0, 0, 0.8);
+            --text-muted: rgba(0, 0, 0, 0.5);
+            --text-muted-light: rgba(0, 0, 0, 0.3);
+            --input-bg: #e8ecf4;
+            --input-shadow-dark: #b8bcc8;
+            --input-shadow-light: #ffffff;
+            --input-focus-bg: #d5dbe8;
+            --input-placeholder: rgba(0, 0, 0, 0.4);
+            --btn-primary: #4361ee;
+            --btn-primary-hover: #3a56d4;
+            --btn-primary-shadow-dark: #2a3f8a;
+            --btn-primary-shadow-light: #6b8aff;
+            --error-color: #e63946;
+            --footer-color: rgba(0, 0, 0, 0.5);
+            --border-color: rgba(0, 0, 0, 0.06);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --label-color: rgba(0, 0, 0, 0.7);
+            --shadow-deep: 8px 8px 16px var(--container-shadow-dark),
+                -8px -8px 16px var(--container-shadow-light);
+            --shadow-float: 12px 12px 24px var(--container-shadow-dark),
+                -12px -12px 24px var(--container-shadow-light);
+            --shadow-inset: inset 4px 4px 8px var(--container-shadow-dark),
+                inset -4px -4px 8px var(--container-shadow-light);
+            --shadow-pressed: inset 4px 4px 10px var(--container-shadow-dark),
+                inset -4px -4px 10px var(--container-shadow-light);
+            --shadow-btn-primary: 4px 4px 8px var(--btn-primary-shadow-dark),
+                -4px -4px 8px var(--btn-primary-shadow-light);
+        }
+
+        /* ============================================================
+       RESET BODY - FONDO UNIFORME
+       ========================================================== */
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 2rem;
             overflow: hidden;
+            background: linear-gradient(145deg, var(--bg-primary), var(--container-bg));
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            transition: background 0.5s ease, color 0.3s ease;
         }
 
-        /* Claymorphism container - específico para login */
+        /* ============================================================
+       CLAYMORPHISM CONTAINER - PLACA PRINCIPAL CON RELIEVE
+       ========================================================== */
         .glass-container {
             background: var(--container-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            width: 400px;
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 440px;
             max-width: 100%;
             animation: fadeIn 0.6s ease-out 0.4s both;
             position: relative;
             z-index: 1;
-            box-shadow: 9px 9px 18px var(--container-shadow-1),
-                -9px -9px 18px var(--container-shadow-2);
+            box-shadow: var(--shadow-deep);
+            border: 1px solid rgba(255, 255, 255, 0.03);
             transition: background 0.4s ease, box-shadow 0.4s ease;
         }
 
-        /* Logo */
+        body.light-mode .glass-container {
+            box-shadow: var(--shadow-deep);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================================
+       LOGO - CON RELIEVE
+       ========================================================== */
         .logo {
             text-align: center;
             margin-bottom: 2rem;
@@ -53,18 +154,26 @@
             filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.3));
         }
 
-        /* Título del login */
+        /* ============================================================
+       TÍTULO DEL LOGIN - CON RELIEVE
+       ========================================================== */
         .login-title {
             text-align: center;
             margin-bottom: 2rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-primary);
             font-size: 1.8rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
             transition: color 0.3s ease;
+            text-shadow: 2px 2px 4px var(--container-shadow-dark);
         }
 
-        /* Formulario clay */
+        body.light-mode .login-title {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ============================================================
+       FORMULARIO - INPUTS CON RELIEVE INTERNO
+       ========================================================== */
         .form-group {
             margin-bottom: 1.5rem;
             position: relative;
@@ -74,29 +183,29 @@
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: var(--label-color);
             transition: color 0.3s ease;
+            font-size: 0.85rem;
         }
 
         .form-group input {
             width: 100%;
-            padding: 1rem;
+            padding: 1rem 1.2rem;
             border: none;
-            border-radius: 12px;
-            background: var(--container-bg);
+            border-radius: 14px;
+            background: var(--input-bg);
             color: var(--text-primary);
             font-size: 1rem;
             transition: all 0.3s ease;
-            box-shadow: inset 4px 4px 8px var(--container-shadow-1),
-                inset -4px -4px 8px var(--container-shadow-2);
+            box-shadow: var(--shadow-inset);
+            font-family: 'Poppins', sans-serif;
         }
 
         .form-group input:focus {
             outline: none;
-            background: var(--input-focus-bg, var(--container-bg));
-            box-shadow: inset 2px 2px 5px var(--container-shadow-1),
-                inset -2px -2px 5px var(--container-shadow-2),
-                0 0 0 3px rgba(67, 97, 238, 0.3);
+            background: var(--input-focus-bg);
+            box-shadow: var(--shadow-pressed),
+                0 0 0 3px rgba(67, 97, 238, 0.15);
         }
 
         .form-group input::placeholder {
@@ -104,30 +213,56 @@
             transition: color 0.3s ease;
         }
 
-        /* Botón de login - usa .btn-primary de styles.css */
+        /* ============================================================
+       BOTÓN DE LOGIN - PLACA CON RELIEVE PROFUNDO
+       ========================================================== */
         .btn-login {
             width: 100%;
-            padding: 1rem;
-            margin-top: 1rem;
+            padding: 1rem 1.5rem;
+            margin-top: 0.5rem;
+            border: none;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            background: var(--btn-primary);
+            color: white;
+            box-shadow: var(--shadow-btn-primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-login:hover:not(:disabled) {
+            background: var(--btn-primary-hover);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-float);
+        }
+
+        .btn-login:active:not(:disabled) {
+            transform: translateY(2px) scale(0.97);
+            box-shadow: var(--shadow-pressed);
         }
 
         .btn-login:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none !important;
         }
 
-        /* Loading spinner */
+        /* ============================================================
+       LOADING SPINNER
+       ========================================================== */
         .loading {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
             border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
+            animation: spin 0.8s linear infinite;
             margin-left: 10px;
             vertical-align: middle;
         }
@@ -138,15 +273,25 @@
             }
         }
 
-        /* Error */
+        /* ============================================================
+       ERROR - CON RELIEVE
+       ========================================================== */
         .error {
-            color: var(--error-color, #f72585);
+            color: var(--error-color);
             margin-top: 1rem;
             text-align: center;
             font-weight: 500;
             animation: shake 0.5s ease;
             min-height: 2rem;
             transition: color 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 12px;
+            background: rgba(247, 37, 133, 0.06);
+            box-shadow: var(--shadow-inset);
+        }
+
+        body.light-mode .error {
+            background: rgba(230, 57, 70, 0.06);
         }
 
         @keyframes shake {
@@ -158,28 +303,124 @@
 
             20%,
             60% {
-                transform: translateX(-5px);
+                transform: translateX(-6px);
             }
 
             40%,
             80% {
-                transform: translateX(5px);
+                transform: translateX(6px);
             }
         }
 
-        /* Footer dentro del login */
+        /* ============================================================
+       FOOTER DEL LOGIN
+       ========================================================== */
         .login-footer {
             text-align: center;
             margin-top: 2rem;
             color: var(--footer-color);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .login-footer a {
+            color: var(--btn-success, #4cc9f0);
+            text-decoration: none;
+            font-weight: 500;
             transition: color 0.3s ease;
         }
 
-        /* Responsividad específica del login */
+        .login-footer a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        /* ============================================================
+       THEME TOGGLE - BOTÓN FLOTANTE CON RELIEVE
+       ========================================================== */
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            background: var(--container-bg);
+            backdrop-filter: blur(8px);
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: var(--shadow-float);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        body.light-mode .theme-toggle {
+            border: 1px solid rgba(0, 0, 0, 0.04);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: var(--shadow-float);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.92);
+            box-shadow: var(--shadow-pressed);
+        }
+
+        /* ============================================================
+       PARTÍCULAS - Versión ligera
+       ========================================================== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--particle-color, rgba(255, 255, 255, 0.04));
+            animation: floatParticle linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: translateY(-110vh) translateX(50px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* ============================================================
+       RESPONSIVE
+       ========================================================== */
         @media (max-width: 992px) {
             .glass-container {
-                padding: 1.5rem;
+                padding: 2rem;
                 width: 90vw;
             }
 
@@ -188,32 +429,134 @@
             }
         }
 
-        @media (max-width: 360px) {
-            .glass-container {
+        @media (max-width: 600px) {
+            body {
                 padding: 1rem;
-                border-radius: 15px;
+            }
+
+            .glass-container {
+                padding: 1.5rem;
+                border-radius: 20px;
             }
 
             .login-title {
                 font-size: 1.3rem;
-            }
-
-            .btn-login {
-                font-size: 0.85rem;
-                padding: 0.75rem;
+                margin-bottom: 1.5rem;
             }
 
             .form-group input {
-                padding: 0.75rem;
+                padding: 0.8rem 1rem;
                 font-size: 0.9rem;
+                border-radius: 12px;
+            }
+
+            .btn-login {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.85rem;
+                border-radius: 12px;
+            }
+
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .logo svg {
+                height: 45px;
+            }
+
+            .login-footer {
+                font-size: 0.75rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .glass-container {
+                padding: 1rem;
+                border-radius: 16px;
+                width: 100%;
+            }
+
+            .login-title {
+                font-size: 1.1rem;
+                margin-bottom: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-group input {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.85rem;
+                border-radius: 10px;
+            }
+
+            .btn-login {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+                border-radius: 10px;
             }
 
             .theme-toggle {
                 top: 0.5rem;
                 right: 0.5rem;
-                width: 32px;
-                height: 32px;
+                width: 34px;
+                height: 34px;
                 font-size: 1rem;
+            }
+
+            .logo svg {
+                height: 35px;
+            }
+
+            .login-footer {
+                font-size: 0.65rem;
+                margin-top: 1rem;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .glass-container {
+                padding: 1.5rem;
+            }
+
+            .logo {
+                margin-bottom: 1rem;
+            }
+
+            .logo svg {
+                height: 40px;
+            }
+
+            .login-title {
+                font-size: 1.3rem;
+                margin-bottom: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 0.8rem;
+            }
+
+            .form-group input {
+                padding: 0.6rem 0.8rem;
+            }
+
+            .btn-login {
+                padding: 0.6rem 1rem;
+                margin-top: 0.3rem;
+            }
+
+            .login-footer {
+                margin-top: 1rem;
+                padding: 0.3rem 0;
             }
         }
     </style>
@@ -284,7 +627,7 @@
             }
 
             // Cambiar tema al hacer clic
-            themeToggle.addEventListener('click', function() {
+            themeToggle.addEventListener('click', function () {
                 var isLight = body.classList.toggle('light-mode');
                 if (isLight) {
                     icon.textContent = '☀️';
@@ -338,7 +681,7 @@
             if (loginBtn) loginBtn.disabled = true;
 
             try {
-                const { data, error } = await supabase.auth.signInWithPassword({
+                const {data, error} = await supabase.auth.signInWithPassword({
                     email: email,
                     password: password
                 });
@@ -414,14 +757,14 @@
             }
         }
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             createParticles();
 
-            document.querySelectorAll('input').forEach(function(input) {
-                input.addEventListener('mouseenter', function() {
+            document.querySelectorAll('input').forEach(function (input) {
+                input.addEventListener('mouseenter', function () {
                     input.style.transform = 'scale(1.02)';
                 });
-                input.addEventListener('mouseleave', function() {
+                input.addEventListener('mouseleave', function () {
                     input.style.transform = 'scale(1)';
                 });
             });
@@ -432,7 +775,7 @@
         // ============================================================
 
         async function logout() {
-            const { error } = await supabase.auth.signOut();
+            const {error} = await supabase.auth.signOut();
             if (error) {
                 console.error('Error al cerrar sesión:', error);
             } else {
