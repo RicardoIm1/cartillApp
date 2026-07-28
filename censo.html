@@ -1801,7 +1801,7 @@
                 return false;
             }
         }
-        
+
         // ============================================================
         // CARGAR TODOS LOS CATÁLOGOS
         // ============================================================
@@ -2277,15 +2277,16 @@
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-                <div class="empty-state">
-                    <div class="loading-spinner"></div>
-                    Cargando registros...
-                </div>
-            `;
+            <div class="empty-state">
+                <div class="loading-spinner"></div>
+                Cargando registros...
+            </div>
+        `;
                 errorElement.textContent = '';
 
+                // CAMBIAR: Usar tabla 'censo' en lugar de 'vista_censo'
                 var query = supabaseClient
-                    .from('vista_censo')
+                    .from('censo')
                     .select('*')
                     .order('fecha_entrega', {ascending: false});
 
@@ -2306,10 +2307,10 @@
 
                 if (data.length === 0) {
                     censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        📭 No hay registros de censo
-                    </div>
-                `;
+                <div class="empty-state">
+                    📭 No hay registros de censo
+                </div>
+            `;
                     return;
                 }
 
@@ -2319,58 +2320,52 @@
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-                <div class="empty-state">
-                    ❌ Error al cargar los datos
-                </div>
-            `;
+            <div class="empty-state">
+                ❌ Error al cargar los datos
+            </div>
+        `;
             }
         }
 
         function renderTable(data) {
             var html = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Folio</th>
-                        <th>Nombre</th>
-                        <th>CURP</th>
-                        <th>Cartilla</th>
-                        <th>Fecha Entrega</th>
-                        <th>Centro</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
+        <table>
+            <thead>
+                <tr>
+                    <th>Folio</th>
+                    <th>Nombre</th>
+                    <th>CURP</th>
+                    <th>Fecha Entrega</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
 
             data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
-                var tipoCartilla = row.tipo_cartilla || 'N/A';
-                var centro = row.clues || 'N/A';
 
                 html += `
-                <tr>
-                    <td><span class="badge">${row.folio || 'N/A'}</span></td>
-                    <td>${nombreCompleto}</td>
-                    <td>${row.curp || 'N/A'}</td>
-                    <td>${tipoCartilla}</td>
-                    <td>${fechaEntrega}</td>
-                    <td><span class="badge-clues">${centro}</span></td>
-                    <td>
-                        <div class="table-actions">
-                            <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
-                            <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
-                        </div>
-                    </td>
-                </tr>
-            `;
+            <tr>
+                <td><span class="badge">${row.folio || 'N/A'}</span></td>
+                <td>${nombreCompleto}</td>
+                <td>${row.curp || 'N/A'}</td>
+                <td>${fechaEntrega}</td>
+                <td>
+                    <div class="table-actions">
+                        <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
+                        <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
+                    </div>
+                </td>
+            </tr>
+        `;
             });
 
             html += `
-                </tbody>
-            </table>
-        `;
+            </tbody>
+        </table>
+    `;
 
             censoContainer.innerHTML = html;
         }
@@ -2384,8 +2379,9 @@
                     await cargarCatalogos();
                 }
 
+                // CAMBIAR: Usar tabla 'censo' en lugar de 'vista_censo'
                 var result = await supabaseClient
-                    .from('vista_censo')
+                    .from('censo')
                     .select('*')
                     .eq('id_uuid', id)
                     .single();
