@@ -1386,28 +1386,43 @@
         }
 
         // ============================================================
-        // USUARIO ACTUAL
+        // USUARIO ACTUAL - CON UUID CORRECTO
         // ============================================================
         async function getUserInfo() {
             try {
                 var sessionResult = await supabaseClient.auth.getSession();
                 var session = sessionResult.data.session;
-                if (!session) {window.location.href = 'login.html'; return null;}
+                if (!session) {
+                    window.location.href = 'login.html';
+                    return null;
+                }
 
                 var userResult = await supabaseClient
                     .from('usuario')
                     .select(`
-                        id_usuario, nombre, paterno, materno, id_clues,
-                        clues:clues_id_uuid (id_uuid, clues, nombre)
-                    `)
+                id_uuid,
+                nombre,
+                paterno,
+                materno,
+                rol,
+                clues_id_uuid,
+                clues:clues_id_uuid (id_uuid, clues, nombre)
+            `)
                     .eq('auth_user_id', session.user.id);
 
                 if (!userResult.data || userResult.data.length === 0) {
-                    usuarioActual = {nombre: session.user.email, id_clues: null, clues: null};
+                    usuarioActual = {
+                        nombre: session.user.email,
+                        clues_id_uuid: null,
+                        clues: null,
+                        rol: 'usuario'
+                    };
                     return usuarioActual;
                 }
+
                 usuarioActual = userResult.data[0];
                 return usuarioActual;
+
             } catch (error) {
                 console.error('Error al obtener usuario:', error);
                 return null;
@@ -1415,7 +1430,7 @@
         }
 
         // ============================================================
-        // CARGAR INVENTARIO - Con AbortController
+        // CARGAR INVENTARIO - FILTRADO POR CLUES DEL USUARIO
         // ============================================================
         async function loadDashboard() {
             if (loadAbortController) {
@@ -1425,33 +1440,47 @@
 
             try {
                 inventarioContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="loading-spinner"></div>
-                        Cargando inventario...
-                    </div>
-                `;
+            <div class="empty-state">
+                <div class="loading-spinner"></div>
+                Cargando inventario...
+            </div>
+        `;
                 errorElement.textContent = '';
                 successElement.style.display = 'none';
 
                 var user = await getUserInfo();
                 if (!user) return;
 
+                // Mostrar información del usuario
                 var nombreCompleto = user.nombre || 'Usuario';
                 if (user.paterno) nombreCompleto += ' ' + user.paterno;
                 if (user.materno) nombreCompleto += ' ' + user.materno;
                 userName.textContent = nombreCompleto;
-                userRole.textContent = user.clues ? '🏥 ' + user.clues.nombre : '👤 Sin centro asignado';
 
+                // Mostrar rol y centro
+                var rolText = user.rol || 'usuario';
+                var centroText = user.clues ? '🏥 ' + user.clues.nombre : '👤 Sin centro asignado';
+                userRole.textContent = centroText;
+
+                // ============================================================
+                // CONSTRUIR CONSULTA CON FILTRO POR CLUES DEL USUARIO
+                // ============================================================
                 var query = supabaseClient
                     .from('inventario')
                     .select(`
-                        id_inventario, cantidad, updated_at,
-                        clues:clues_id_uuid (id_uuid, clues, nombre),
-                        tipo_cartilla:tipo_cartilla_id_uuid (id_uuid, tipo_cartilla)
-                    `);
+                id_inventario,
+                cantidad,
+                updated_at,
+                clues:clues_id_uuid (id_uuid, clues, nombre),
+                tipo_cartilla:tipo_cartilla_id_uuid (id_uuid, tipo_cartilla)
+            `);
 
-                if (user.id_clues) {
-                    query = query.eq('clues_id_uuid', user.id_clues);
+                // FILTRAR POR CLUES DEL USUARIO (usando UUID)
+                if (user.clues_id_uuid) {
+                    query = query.eq('clues_id_uuid', user.clues_id_uuid);
+                    console.log('🔍 Filtrando por CLUES:', user.clues_id_uuid);
+                } else {
+                    console.log('👤 Usuario sin CLUES asignado, mostrando todos los registros');
                 }
 
                 var result = await query.order('clues_id_uuid');
@@ -1459,7 +1488,22 @@
                 if (loadAbortController.signal.aborted) return;
 
                 if (result.error) throw result.error;
-                renderInventoryTable(result.data || []);
+
+                var data = result.data || [];
+
+                // Mostrar mensaje si no hay datos
+                if (data.length === 0) {
+                    var mensaje = user.clues_id_uuid ?
+                        '📭 No hay inventario para tu centro de salud' :
+                        '📭 No hay registros de inventario';
+                    inventarioContainer.innerHTML = `
+                <div class="empty-state">${mensaje}</div>
+            `;
+                    totalRegistros.textContent = '0 registros';
+                    return;
+                }
+
+                renderInventoryTable(data);
 
             } catch (error) {
                 if (error.name === 'AbortError') {
@@ -1469,11 +1513,10 @@
                 console.error('Error al cargar inventario:', error);
                 errorElement.textContent = 'Error: ' + (error.message || 'No se pudo cargar el inventario');
                 inventarioContainer.innerHTML = `
-                    <div class="empty-state">❌ Error al cargar los datos</div>
-                `;
+            <div class="empty-state">❌ Error al cargar los datos</div>
+        `;
             }
         }
-
         // ============================================================
         // RENDERIZAR TABLA
         // ============================================================
