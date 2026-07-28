@@ -2244,24 +2244,40 @@
         window.cerrarModalCinematico = cerrarModalCinematico;
 
         // ============================================================
-        // CARGAR REGISTROS DE CENSO
+        // CARGAR REGISTROS DE CENSO - FILTRADO POR CLUES DEL USUARIO
         // ============================================================
         async function cargarCenso() {
             try {
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-                        <div class="empty-state">
-                            <div class="loading-spinner"></div>
-                            Cargando registros...
-                        </div>
-                    `;
+            <div class="empty-state">
+                <div class="loading-spinner"></div>
+                Cargando registros...
+            </div>
+        `;
                 errorElement.textContent = '';
+
+                // ============================================================
+                // OBTENER USUARIO ACTUAL PARA FILTRAR POR CLUES
+                // ============================================================
+                var user = await getUsuarioActual();
+                if (!user) return;
 
                 var query = supabaseClient
                     .from('censo')
                     .select('*')
                     .order('fecha_entrega', {ascending: false});
+
+                // ============================================================
+                // FILTRAR POR CLUES DEL USUARIO (si tiene uno asignado)
+                // ============================================================
+                if (user.clues_id_uuid) {
+                    query = query.eq('clues_id_uuid', user.clues_id_uuid);
+                    console.log('🔍 Filtrando censo por CLUES:', user.clues_id_uuid);
+                } else {
+                    console.log('👤 Usuario sin CLUES asignado, mostrando todos los registros');
+                }
 
                 if (search.length > 0) {
                     query = query.or(
@@ -2279,11 +2295,12 @@
                 totalRegistros.textContent = data.length + ' registros';
 
                 if (data.length === 0) {
+                    var mensaje = user.clues_id_uuid ?
+                        '📭 No hay registros de censo para tu centro de salud' :
+                        '📭 No hay registros de censo';
                     censoContainer.innerHTML = `
-                            <div class="empty-state">
-                                📭 No hay registros de censo
-                            </div>
-                        `;
+                <div class="empty-state">${mensaje}</div>
+            `;
                     return;
                 }
 
@@ -2293,10 +2310,10 @@
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-                        <div class="empty-state">
-                            ❌ Error al cargar los datos
-                        </div>
-                    `;
+            <div class="empty-state">
+                ❌ Error al cargar los datos
+            </div>
+        `;
             }
         }
 
@@ -2351,6 +2368,40 @@
                 if (!catalogos.cargados) {
                     await cargarCatalogos();
                 }
+
+                // ============================================================
+                // OBTENER USUARIO ACTUAL
+                // ============================================================
+                var user = await getUsuarioActual();
+                if (!user) return;
+
+                var result = await supabaseClient
+                    .from('censo')
+                    .select('*')
+                    .eq('id_uuid', id)
+                    .single();
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var row = result.data;
+
+                // ============================================================
+                // VERIFICAR QUE EL REGISTRO PERTENECE AL CLUES DEL USUARIO
+                // ============================================================
+                if (user.clues_id_uuid && row.clues_id_uuid !== user.clues_id_uuid) {
+                    errorElement.textContent = '❌ No tienes permiso para editar este registro. Pertenece a otro centro de salud.';
+                    errorElement.style.color = '#f72585';
+                    setTimeout(function () {
+                        errorElement.textContent = '';
+                    }, 5000);
+                    return;
+                }
+
+                document.getElementById('editId').value = row.id_uuid;
+                document.getElementById('modalTitle').textContent = '✏️ Editar Registro de Censo';
+                document.getElementById('submitBtn').textContent = 'Actualizar Registro';
 
                 var result = await supabaseClient
                     .from('censo')
@@ -2457,9 +2508,6 @@
             }
         }
 
-        // ============================================================
-        // GUARDAR REGISTRO
-        // ============================================================
         // ============================================================
         // GUARDAR REGISTRO - CON MANEJO DE ERROR DE CURP DUPLICADA
         // ============================================================
@@ -2606,7 +2654,7 @@
         }
 
         // ============================================================
-        // ELIMINAR REGISTRO
+        // ELIMINAR REGISTRO - CON VERIFICACIÓN DE CLUES
         // ============================================================
         async function eliminarCenso(id) {
             if (!confirm('¿Estás seguro de eliminar este registro?')) {
@@ -2614,6 +2662,34 @@
             }
 
             try {
+                // ============================================================
+                // OBTENER USUARIO ACTUAL
+                // ============================================================
+                var user = await getUsuarioActual();
+                if (!user) return;
+
+                // ============================================================
+                // VERIFICAR QUE EL REGISTRO PERTENECE AL CLUES DEL USUARIO
+                // ============================================================
+                var checkResult = await supabaseClient
+                    .from('censo')
+                    .select('clues_id_uuid')
+                    .eq('id_uuid', id)
+                    .single();
+
+                if (checkResult.error) {
+                    throw checkResult.error;
+                }
+
+                if (user.clues_id_uuid && checkResult.data.clues_id_uuid !== user.clues_id_uuid) {
+                    errorElement.textContent = '❌ No tienes permiso para eliminar este registro. Pertenece a otro centro de salud.';
+                    errorElement.style.color = '#f72585';
+                    setTimeout(function () {
+                        errorElement.textContent = '';
+                    }, 5000);
+                    return;
+                }
+
                 var result = await supabaseClient
                     .from('censo')
                     .delete()
