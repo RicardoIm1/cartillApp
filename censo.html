@@ -1772,36 +1772,37 @@
 
                 if (result.data && result.data.length > 0) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
-                    var count = 0;
                     result.data.forEach(function (item) {
                         if (esUUID(item.id_uuid)) {
                             var valor = item[campoTexto] || 'Sin nombre';
                             select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
-                            count++;
                         }
                     });
-                    console.log(`✅ ${idSelect}: ${count} opciones cargadas desde BD`);
+                    console.log(`✅ ${idSelect}: ${result.data.length} opciones cargadas desde BD`);
                     return true;
                 }
 
-                // Fallback
+                // Si no hay datos en la BD, usar fallback pero NO guardar los UUIDs
                 console.warn(`⚠️ No hay datos en "${tabla}", usando fallback para ${idSelect}`);
                 if (DATOS_FALLBACK[idSelect]) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
+                    // Guardamos el texto y un marcador, NO el UUID
                     DATOS_FALLBACK[idSelect].forEach(function (item) {
                         var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
-                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                        // Usamos un marcador especial para saber que es fallback
+                        var marker = 'fb_' + valor.replace(/\s/g, '_').toLowerCase();
+                        select.innerHTML += `<option value="${marker}">${valor}</option>`;
                     });
-                    console.log(`✅ ${idSelect}: ${DATOS_FALLBACK[idSelect].length} opciones desde fallback`);
+                    console.log(`✅ ${idSelect}: ${DATOS_FALLBACK[idSelect].length} opciones desde fallback (marcadas)`);
                     return true;
                 }
 
                 // Si no hay fallback, crear opciones mínimas para selects críticos
                 if (idSelect === 'se_proporciono_info') {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
-                    select.innerHTML += `<option value="${generarUUID()}">Sí</option>`;
-                    select.innerHTML += `<option value="${generarUUID()}">No</option>`;
-                    console.log(`✅ ${idSelect}: creado manualmente con "Sí" y "No"`);
+                    select.innerHTML += `<option value="fb_si">Sí</option>`;
+                    select.innerHTML += `<option value="fb_no">No</option>`;
+                    console.log(`✅ ${idSelect}: creado manualmente con "Sí" y "No" (marcados)`);
                     return true;
                 }
 
@@ -1811,11 +1812,10 @@
                 console.error(`❌ Error cargando ${idSelect}:`, error);
                 var select = document.getElementById(idSelect);
                 if (select) {
-                    // Crear opciones mínimas para selects críticos
                     if (idSelect === 'se_proporciono_info') {
                         select.innerHTML = '<option value="">Seleccionar...</option>';
-                        select.innerHTML += `<option value="${generarUUID()}">Sí</option>`;
-                        select.innerHTML += `<option value="${generarUUID()}">No</option>`;
+                        select.innerHTML += `<option value="fb_si">Sí</option>`;
+                        select.innerHTML += `<option value="fb_no">No</option>`;
                         console.log(`✅ ${idSelect}: creado manualmente (error)`);
                         return true;
                     }
@@ -1823,7 +1823,8 @@
                         select.innerHTML = '<option value="">Seleccionar...</option>';
                         DATOS_FALLBACK[idSelect].forEach(function (item) {
                             var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
-                            select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                            var marker = 'fb_' + valor.replace(/\s/g, '_').toLowerCase();
+                            select.innerHTML += `<option value="${marker}">${valor}</option>`;
                         });
                         return true;
                     }
@@ -2424,23 +2425,78 @@
         // ============================================================
         // GUARDAR REGISTRO - SOLO UUIDs
         // ============================================================
+        // ============================================================
+        // GUARDAR REGISTRO - CON MANEJO DE FALLBACK
+        // ============================================================
         async function guardarCenso(event) {
             event.preventDefault();
 
             var editIdVal = document.getElementById('editId').value;
             var isEdit = editIdVal !== '';
 
-            // Función para obtener UUID de un select
-            function getUUID(selectId) {
+            // Función para obtener UUID de un select (con manejo de fallback)
+            async function getUUIDWithFallback(selectId, tabla, campoTexto) {
                 var select = document.getElementById(selectId);
                 if (!select) return null;
                 var val = select.value;
+
+                // Si es un UUID válido, usarlo
                 if (esUUID(val)) {
                     return val;
                 }
+
+                // Si es un marcador de fallback (empieza con "fb_")
+                if (val && val.startsWith('fb_')) {
+                    // Obtener el texto seleccionado
+                    var texto = select.options[select.selectedIndex]?.text || '';
+                    if (!texto) return null;
+
+                    // Buscar si ya existe en la BD
+                    var result = await supabaseClient
+                        .from(tabla)
+                        .select('id_uuid')
+                        .eq(campoTexto, texto)
+                        .maybeSingle();
+
+                    if (result.data && result.data.id_uuid) {
+                        console.log(`✅ Encontrado en BD: "${texto}" → ${result.data.id_uuid}`);
+                        return result.data.id_uuid;
+                    }
+
+                    // Si no existe, crearlo
+                    var nuevoUUID = generarUUID();
+                    var dataInsert = {
+                        id_uuid: nuevoUUID,
+                        [campoTexto]: texto
+                    };
+
+                    var insertResult = await supabaseClient
+                        .from(tabla)
+                        .insert(dataInsert)
+                        .select('id_uuid')
+                        .maybeSingle();
+
+                    if (insertResult.data && insertResult.data.id_uuid) {
+                        console.log(`✅ Creado en BD: "${texto}" → ${insertResult.data.id_uuid}`);
+                        return insertResult.data.id_uuid;
+                    }
+
+                    console.warn(`⚠️ No se pudo crear "${texto}" en ${tabla}`);
+                    return null;
+                }
+
+                // Si no es UUID ni marcador, devolver null
                 return null;
             }
 
+            // Obtener el texto seleccionado de un select
+            function getSelectedText(selectId) {
+                var select = document.getElementById(selectId);
+                if (!select || select.selectedIndex < 0) return '';
+                return select.options[select.selectedIndex]?.text || '';
+            }
+
+            // Construir el objeto data
             var data = {
                 nombre: document.getElementById('nombre').value.trim(),
                 paterno: document.getElementById('paterno').value.trim(),
@@ -2453,28 +2509,38 @@
                 pob_indigena: document.getElementById('pob_indigena').checked,
                 pob_afromex: document.getElementById('pob_afromex').checked,
                 pob_migrante: document.getElementById('pob_migrante').checked,
-                especificar_otro: document.getElementById('especificar_otro').value.trim() || null,
-
-                // SOLO COLUMNAS UUID
-                entidad_id_uuid: getUUID('entidad'),
-                municipio_id_uuid: getUUID('municipio'),
-                clues_id_uuid: getUUID('clues'),
-                pais_id_uuid: getUUID('pais'),
-                tipo_cartilla_id_uuid: getUUID('tipo_cartilla'),
-                motivo_entrega_id_uuid: getUUID('motivo_entrega'),
-                agno_edicion_id_uuid: getUUID('agno_edicion'),
-                servicio_entrega_id_uuid: getUUID('servicio_entrega'),
-                si_no_id_uuid: getUUID('se_proporciono_info'),
-                discapacidad_id_uuid: getUUID('discapacidad'),
-                embarazo_id_uuid: getUUID('embarazo'),
-                migracion_id_uuid: getUUID('tipo_migracion')
+                especificar_otro: document.getElementById('especificar_otro').value.trim() || null
             };
+
+            // Obtener UUIDs con manejo de fallback
+            try {
+                data.tipo_cartilla_id_uuid = await getUUIDWithFallback('tipo_cartilla', 'tipo_cartilla', 'tipo_cartilla');
+                data.motivo_entrega_id_uuid = await getUUIDWithFallback('motivo_entrega', 'motivo_entrega', 'motivo');
+                data.agno_edicion_id_uuid = await getUUIDWithFallback('agno_edicion', 'agno_edicion', 'agno_edicion');
+                data.servicio_entrega_id_uuid = await getUUIDWithFallback('servicio_entrega', 'servicio_entrega', 'servicio_entrega');
+                data.si_no_id_uuid = await getUUIDWithFallback('se_proporciono_info', 'si_no', 'sino');
+                data.discapacidad_id_uuid = await getUUIDWithFallback('discapacidad', 'discapacidad', 'discapacidad');
+                data.embarazo_id_uuid = await getUUIDWithFallback('embarazo', 'embarazo', 'embarazo');
+                data.migracion_id_uuid = await getUUIDWithFallback('tipo_migracion', 'tipo_migracion', 'migracion');
+                data.entidad_id_uuid = await getUUIDWithFallback('entidad', 'entidad', 'entidad');
+                data.municipio_id_uuid = await getUUIDWithFallback('municipio', 'municipio', 'municipio');
+                data.clues_id_uuid = await getUUIDWithFallback('clues', 'clues', 'clues');
+                data.pais_id_uuid = await getUUIDWithFallback('pais', 'pais', 'pais');
+            } catch (error) {
+                console.error('Error al obtener UUIDs:', error);
+                errorElement.textContent = 'Error al procesar los datos: ' + error.message;
+                submitBtn.disabled = false;
+                submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
+                return;
+            }
 
             // Validar campos requeridos
             if (!data.nombre || !data.paterno || !data.curp || !data.fecha_nac || !data.sexo || !data.fecha_entrega ||
                 !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid || !data.clues_id_uuid ||
                 !data.entidad_id_uuid || !data.municipio_id_uuid) {
                 errorElement.textContent = 'Por favor completa todos los campos requeridos (*)';
+                submitBtn.disabled = false;
+                submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
                 return;
             }
 
