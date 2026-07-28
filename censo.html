@@ -18,6 +18,9 @@
     </script>
 
     <style>
+        /* ============================================================
+       CSS VARIABLES PARA TEMA DIURNO / NOCTURNO
+       ============================================================ */
         :root {
             --bg-gradient-start: #141E30;
             --bg-gradient-end: #243B55;
@@ -1303,11 +1306,12 @@
                                 <option value="">Seleccionar...</option>
                             </select>
                         </div>
+                        <!-- CLUES ya NO es seleccionable -->
                         <div class="form-group">
-                            <label for="clues">Centro de Salud (CLUES) *</label>
-                            <select id="clues" required>
-                                <option value="">Seleccionar...</option>
-                            </select>
+                            <label>Centro de Salud (CLUES) *</label>
+                            <input type="text" id="cluesDisplay" class="form-control" readonly
+                                style="background:var(--input-bg); color:var(--text-primary); cursor:not-allowed; opacity:0.8; width:100%; padding:0.6rem 1rem; border:none; border-radius:12px; box-shadow:inset 4px 4px 8px var(--input-shadow-1), inset -4px -4px 8px var(--input-shadow-2);" />
+                            <div class="helper-text">💡 Asignado automáticamente según tu usuario</div>
                         </div>
                         <div class="form-group">
                             <label for="pais">País</label>
@@ -1565,12 +1569,7 @@
                 'ADOLESCENTES': '6dea1de7-14fd-4f68-a2bf-759b7802cc2a',
                 'HOMBRES': 'b9350f1e-5eef-4b81-af07-f3d1f3cda0c5',
                 'MUJERES': 'f8c08d30-04c7-41fc-8695-ecb49999d9d2',
-                'ADULTO MAYOR': 'cee027e9-4bfa-4250-9133-e224cf4193c3',
-                'Cartilla de Vacunación': '23125121-82cc-4487-999d-8b3ef1538e78',
-                'Cartilla de Embarazo': '6a03f90f-5663-42d6-96f7-0fb4debc0e24',
-                'Cartilla de Adulto Mayor': '6171056a-c183-47a5-b91f-df129cd6db27',
-                'Cartilla de Salud Mental': 'd726fc7a-29d4-4914-b681-3a498d2caa0c',
-                'Cartilla Nacional de Salud': '253c8044-e512-4b1b-8f14-adb708f6bfd5'
+                'ADULTO MAYOR': 'cee027e9-4bfa-4250-9133-e224cf4193c3'
             },
             motivo_entrega: {
                 'NUEVO USUARIOS': 'b72398e5-e3b0-46f5-8865-c9126cc23c64',
@@ -1624,20 +1623,16 @@
                 'JALISCO': 'febba07c-89fb-426f-b44b-713a332a2504'
             },
             municipio: {
-                'PUERTO VALLARTA': '241dd144-8404-423e-8a67-6e314bd0a628',
-                'MASCOTA': 'd8f4c578-18e6-4531-8578-954779bd1e65',
-                'TALPA DE ALLENDE': 'ee4a1b4b-c1c5-4d1e-8b0a-3eda27a58f1b',
-                'Puerto Vallarta': '06677850-3385-4bde-9137-4b1a8df0cab2',
-                'Tonalá': 'd224bf4b-af36-453b-bc73-c5968cda7f46',
-                'Tlaquepaque': 'd2ec35e9-8bb7-4c0c-832e-26641dd472c3',
+                'Guadalajara': '63cbea7e-1e85-4059-bae3-a42ac74a1fc4',
                 'Zapopan': '7146a0ed-5c69-461f-bd54-acee948b6acd',
-                'Guadalajara': '63cbea7e-1e85-4059-bae3-a42ac74a1fc4'
+                'Tlaquepaque': 'd2ec35e9-8bb7-4c0c-832e-26641dd472c3',
+                'Tonalá': 'd224bf4b-af36-453b-bc73-c5968cda7f46',
+                'Puerto Vallarta': '06677850-3385-4bde-9137-4b1a8df0cab2',
+                'TALPA DE ALLENDE': 'ee4a1b4b-c1c5-4d1e-8b0a-3eda27a58f1b',
+                'MASCOTA': 'd8f4c578-18e6-4531-8578-954779bd1e65'
             },
             pais: {
                 'México': 'd22524a0-23d3-4a49-bd9a-f5c8c574f1bd'
-            },
-            clues: {
-                'JCSSA003583': '50363da6-0a58-4a78-be60-0e84520cc3f2'
             }
         };
 
@@ -1724,13 +1719,6 @@
                 {id_uuid: generarUUID(), motivo: 'Renovación'},
                 {id_uuid: generarUUID(), motivo: 'Traslado'},
                 {id_uuid: generarUUID(), motivo: 'Otro'}
-            ],
-            clues: [
-                {id_uuid: UUIDS_REALES.clues['JCSSA003583'] || generarUUID(), clues: 'JCSSA003583'},
-                {id_uuid: generarUUID(), clues: 'CLUES001'},
-                {id_uuid: generarUUID(), clues: 'CLUES002'},
-                {id_uuid: generarUUID(), clues: 'CLUES003'},
-                {id_uuid: generarUUID(), clues: 'CLUES004'}
             ]
         };
 
@@ -1807,7 +1795,7 @@
         }
 
         // ============================================================
-        // CARGAR TODOS LOS CATÁLOGOS
+        // CARGAR TODOS LOS CATÁLOGOS (sin CLUES)
         // ============================================================
         var catalogos = {cargados: false};
 
@@ -1817,7 +1805,7 @@
 
                 await cargarCatalogo('entidad', 'entidad', 'entidad');
                 await cargarCatalogo('pais', 'pais', 'pais');
-                await cargarCatalogo('clues', 'clues', 'clues');
+                // CLUES NO se carga como catálogo porque es automático del usuario
                 await cargarCatalogo('tipo_cartilla', 'tipo_cartilla', 'tipo_cartilla');
                 await cargarCatalogo('motivo_entrega', 'motivo_entrega', 'motivo');
                 await cargarCatalogo('agno_edicion', 'agno_edicion', 'agno_edicion');
@@ -2089,23 +2077,18 @@
         function validarCurp(curp) {
             if (!curp) return false;
 
-            // Limpiar y convertir a mayúsculas
             var curpLimpio = curp.trim().toUpperCase();
 
-            // Debe tener exactamente 18 caracteres
             if (curpLimpio.length !== 18) {
                 return false;
             }
 
-            // Expresión regular para CURP válida
-            // 4 letras + 6 dígitos + 1 letra (H/M) + 3 letras + 3 letras + 2 dígitos
             var regex = /^[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}$/;
 
             if (!regex.test(curpLimpio)) {
                 return false;
             }
 
-            // Validar que el sexo sea H o M (posición 10, índice 9)
             var sexo = curpLimpio.charAt(10);
             if (sexo !== 'H' && sexo !== 'M') {
                 return false;
@@ -2122,7 +2105,6 @@
             var fechaNacInput = document.getElementById('fecha_nac');
             var sexoSelect = document.getElementById('sexo');
 
-            // Detectar sexo
             if (curpLimpio.length >= 11) {
                 var sexo = curpLimpio.charAt(10).toUpperCase();
                 if (sexo === 'H' || sexo === 'M') {
@@ -2132,7 +2114,6 @@
                 }
             }
 
-            // Detectar fecha de nacimiento
             if (curpLimpio.length >= 17) {
                 var anioStr = curpLimpio.substring(4, 6);
                 var mesStr = curpLimpio.substring(6, 8);
@@ -2156,7 +2137,6 @@
                 }
             }
 
-            // Detectar entidad
             if (curpLimpio.length === 18) {
                 var claveEntidad = curpLimpio.substring(11, 13);
                 if (claveEntidad) {
@@ -2172,7 +2152,6 @@
                     }
                 }
 
-                // Validar CURP
                 var curpInput = document.getElementById('curp');
                 if (validarCurp(curpLimpio)) {
                     curpInput.style.borderColor = '#4cc9f0';
@@ -2211,6 +2190,18 @@
             document.getElementById('edad').value = '';
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
             document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
+
+            // ============================================================
+            // MOSTRAR CLUES DEL USUARIO (SOLO LECTURA)
+            // ============================================================
+            var cluesDisplay = document.getElementById('cluesDisplay');
+            if (cluesDisplay) {
+                if (usuarioActual && usuarioActual.clues) {
+                    cluesDisplay.value = usuarioActual.clues.clues + ' - ' + usuarioActual.clues.nombre;
+                } else {
+                    cluesDisplay.value = '⚠️ Sin centro asignado';
+                }
+            }
 
             document.getElementById('se_proporciono_info').value = 'si';
 
@@ -2251,16 +2242,13 @@
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-            <div class="empty-state">
-                <div class="loading-spinner"></div>
-                Cargando registros...
-            </div>
-        `;
+                    <div class="empty-state">
+                        <div class="loading-spinner"></div>
+                        Cargando registros...
+                    </div>
+                `;
                 errorElement.textContent = '';
 
-                // ============================================================
-                // OBTENER USUARIO ACTUAL PARA FILTRAR POR CLUES
-                // ============================================================
                 var user = await getUsuarioActual();
                 if (!user) return;
 
@@ -2269,9 +2257,6 @@
                     .select('*')
                     .order('fecha_entrega', {ascending: false});
 
-                // ============================================================
-                // FILTRAR POR CLUES DEL USUARIO (si tiene uno asignado)
-                // ============================================================
                 if (user.clues_id_uuid) {
                     query = query.eq('clues_id_uuid', user.clues_id_uuid);
                     console.log('🔍 Filtrando censo por CLUES:', user.clues_id_uuid);
@@ -2299,8 +2284,8 @@
                         '📭 No hay registros de censo para tu centro de salud' :
                         '📭 No hay registros de censo';
                     censoContainer.innerHTML = `
-                <div class="empty-state">${mensaje}</div>
-            `;
+                        <div class="empty-state">${mensaje}</div>
+                    `;
                     return;
                 }
 
@@ -2310,52 +2295,52 @@
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-            <div class="empty-state">
-                ❌ Error al cargar los datos
-            </div>
-        `;
+                    <div class="empty-state">
+                        ❌ Error al cargar los datos
+                    </div>
+                `;
             }
         }
 
         function renderTable(data) {
             var html = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Folio</th>
-                                <th>Nombre</th>
-                                <th>CURP</th>
-                                <th>Fecha Entrega</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                `;
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Nombre</th>
+                            <th>CURP</th>
+                            <th>Fecha Entrega</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
             data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
 
                 html += `
-                        <tr>
-                            <td><span class="badge">${row.folio || 'N/A'}</span></td>
-                            <td>${nombreCompleto}</td>
-                            <td>${row.curp || 'N/A'}</td>
-                            <td>${fechaEntrega}</td>
-                            <td>
-                                <div class="table-actions">
-                                    <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
-                                    <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                    <tr>
+                        <td><span class="badge">${row.folio || 'N/A'}</span></td>
+                        <td>${nombreCompleto}</td>
+                        <td>${row.curp || 'N/A'}</td>
+                        <td>${fechaEntrega}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
+                                <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             });
 
             html += `
-                        </tbody>
-                    </table>
-                `;
+                    </tbody>
+                </table>
+            `;
 
             censoContainer.innerHTML = html;
         }
@@ -2369,9 +2354,6 @@
                     await cargarCatalogos();
                 }
 
-                // ============================================================
-                // OBTENER USUARIO ACTUAL
-                // ============================================================
                 var user = await getUsuarioActual();
                 if (!user) return;
 
@@ -2387,9 +2369,7 @@
 
                 var row = result.data;
 
-                // ============================================================
                 // VERIFICAR QUE EL REGISTRO PERTENECE AL CLUES DEL USUARIO
-                // ============================================================
                 if (user.clues_id_uuid && row.clues_id_uuid !== user.clues_id_uuid) {
                     errorElement.textContent = '❌ No tienes permiso para editar este registro. Pertenece a otro centro de salud.';
                     errorElement.style.color = '#f72585';
@@ -2398,22 +2378,6 @@
                     }, 5000);
                     return;
                 }
-
-                document.getElementById('editId').value = row.id_uuid;
-                document.getElementById('modalTitle').textContent = '✏️ Editar Registro de Censo';
-                document.getElementById('submitBtn').textContent = 'Actualizar Registro';
-
-                var result = await supabaseClient
-                    .from('censo')
-                    .select('*')
-                    .eq('id_uuid', id)
-                    .single();
-
-                if (result.error) {
-                    throw result.error;
-                }
-
-                var row = result.data;
 
                 document.getElementById('editId').value = row.id_uuid;
                 document.getElementById('modalTitle').textContent = '✏️ Editar Registro de Censo';
@@ -2434,7 +2398,6 @@
                 document.getElementById('pob_migrante').checked = row.pob_migrante || false;
 
                 document.getElementById('entidad').value = row.entidad_id_uuid || '';
-                document.getElementById('clues').value = row.clues_id_uuid || '';
                 document.getElementById('pais').value = row.pais_id_uuid || '';
                 document.getElementById('tipo_cartilla').value = row.tipo_cartilla_id_uuid || '';
                 document.getElementById('motivo_entrega').value = row.motivo_entrega_id_uuid || '';
@@ -2443,6 +2406,21 @@
                 document.getElementById('discapacidad').value = row.discapacidad_id_uuid || '';
                 document.getElementById('embarazo').value = row.embarazo_id_uuid || '';
                 document.getElementById('tipo_migracion').value = row.migracion_id_uuid || '';
+
+                // Mostrar CLUES en el campo de solo lectura
+                var cluesDisplay = document.getElementById('cluesDisplay');
+                if (cluesDisplay) {
+                    var userClues = await supabaseClient
+                        .from('clues')
+                        .select('clues, nombre')
+                        .eq('id_uuid', row.clues_id_uuid)
+                        .single();
+                    if (userClues.data) {
+                        cluesDisplay.value = userClues.data.clues + ' - ' + userClues.data.nombre;
+                    } else {
+                        cluesDisplay.value = row.clues_id_uuid || 'Sin centro';
+                    }
+                }
 
                 var siNoValue = row.si_no_id_uuid ? 'si' : 'no';
                 document.getElementById('se_proporciono_info').value = siNoValue;
@@ -2509,7 +2487,114 @@
         }
 
         // ============================================================
-        // GUARDAR REGISTRO - CON MANEJO DE ERROR DE CURP DUPLICADA
+        // VERIFICAR SI CURP YA EXISTE
+        // ============================================================
+        async function verificarCurpDuplicada(curp, id_uuid_actual) {
+            if (!curp) return false;
+
+            try {
+                var query = supabaseClient
+                    .from('censo')
+                    .select('id_uuid, curp')
+                    .eq('curp', curp.toUpperCase().trim());
+
+                if (id_uuid_actual) {
+                    query = query.neq('id_uuid', id_uuid_actual);
+                }
+
+                var result = await query;
+
+                if (result.error) {
+                    console.error('Error al verificar CURP:', result.error);
+                    return false;
+                }
+
+                return result.data && result.data.length > 0;
+
+            } catch (error) {
+                console.error('Error al verificar CURP:', error);
+                return false;
+            }
+        }
+
+        // ============================================================
+        // VALIDAR CURP EN TIEMPO REAL
+        // ============================================================
+        async function validarCurpEnTiempoReal() {
+            var curpInput = document.getElementById('curp');
+            var curp = curpInput.value.trim().toUpperCase();
+            var curpError = document.getElementById('curpError');
+
+            if (!curpError) {
+                var errorDiv = document.createElement('div');
+                errorDiv.id = 'curpError';
+                errorDiv.className = 'helper-text';
+                errorDiv.style.marginTop = '0.2rem';
+                curpInput.parentNode.appendChild(errorDiv);
+                curpError = errorDiv;
+            }
+
+            if (!curp) {
+                curpError.textContent = '';
+                curpInput.style.borderColor = '';
+                curpInput.style.boxShadow = '';
+                return;
+            }
+
+            if (curp.length < 18) {
+                curpError.textContent = `⚠️ La CURP debe tener 18 caracteres (actual: ${curp.length})`;
+                curpError.style.color = '#f7b731';
+                curpInput.style.borderColor = '#f7b731';
+                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 183, 49, 0.2)';
+                return;
+            }
+
+            if (curp.length > 18) {
+                curpError.textContent = `⚠️ La CURP excede los 18 caracteres (actual: ${curp.length})`;
+                curpError.style.color = '#f72585';
+                curpInput.style.borderColor = '#f72585';
+                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                return;
+            }
+
+            if (!validarCurp(curp)) {
+                curpError.textContent = '⚠️ Formato de CURP inválido. Ejemplo: RATJ800318MGTMRR07';
+                curpError.style.color = '#f72585';
+                curpInput.style.borderColor = '#f72585';
+                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                return;
+            }
+
+            try {
+                var result = await supabaseClient
+                    .from('censo')
+                    .select('id_uuid, nombre, paterno')
+                    .eq('curp', curp);
+
+                var editIdVal = document.getElementById('editId').value;
+                if (editIdVal && result.data) {
+                    result.data = result.data.filter(item => item.id_uuid !== editIdVal);
+                }
+
+                if (result.data && result.data.length > 0) {
+                    var nombreExistente = result.data[0].nombre + ' ' + (result.data[0].paterno || '');
+                    curpError.textContent = `❌ Esta CURP ya está registrada a nombre de: ${nombreExistente}`;
+                    curpError.style.color = '#f72585';
+                    curpInput.style.borderColor = '#f72585';
+                    curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                } else {
+                    curpError.textContent = '✅ CURP válida y disponible';
+                    curpError.style.color = '#4cc9f0';
+                    curpInput.style.borderColor = '#4cc9f0';
+                    curpInput.style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
+                }
+            } catch (error) {
+                console.error('Error al validar CURP:', error);
+            }
+        }
+
+        // ============================================================
+        // GUARDAR REGISTRO - CON CLUES AUTOMÁTICO
         // ============================================================
         async function guardarCenso(event) {
             event.preventDefault();
@@ -2517,16 +2602,45 @@
             var editIdVal = document.getElementById('editId').value;
             var isEdit = editIdVal !== '';
 
-            // Obtener CURP
+            // ============================================================
+            // OBTENER CLUES DEL USUARIO (AUTOMÁTICO)
+            // ============================================================
+            if (!usuarioActual || !usuarioActual.clues_id_uuid) {
+                errorElement.textContent = '❌ No tienes un centro de salud asignado. Contacta al administrador.';
+                errorElement.style.color = '#f72585';
+                setTimeout(function () {
+                    errorElement.textContent = '';
+                }, 5000);
+                submitBtn.disabled = false;
+                submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
+                return;
+            }
+
+            var cluesId = usuarioActual.clues_id_uuid;
+
             var curp = document.getElementById('curp').value.trim().toUpperCase();
 
-            // Validar formato de CURP
             if (!validarCurp(curp)) {
                 errorElement.textContent = '❌ La CURP no tiene un formato válido. Debe tener 18 caracteres. Ejemplo: RATJ800318MGTMRR07';
                 errorElement.style.color = '#f72585';
                 setTimeout(function () {
                     errorElement.textContent = '';
                 }, 5000);
+                submitBtn.disabled = false;
+                submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
+                return;
+            }
+
+            // Verificar CURP duplicada
+            var duplicada = await verificarCurpDuplicada(curp, editIdVal);
+            if (duplicada) {
+                errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
+                errorElement.style.color = '#f72585';
+                setTimeout(function () {
+                    errorElement.textContent = '';
+                }, 5000);
+                submitBtn.disabled = false;
+                submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
                 return;
             }
 
@@ -2557,9 +2671,11 @@
                 pob_migrante: document.getElementById('pob_migrante').checked,
                 especificar_otro: document.getElementById('especificar_otro').value.trim() || null,
 
+                // CLUES - ASIGNADO AUTOMÁTICAMENTE DESDE EL USUARIO
+                clues_id_uuid: cluesId,
+
                 entidad_id_uuid: getUUID('entidad'),
                 municipio_id_uuid: getUUID('municipio'),
-                clues_id_uuid: getUUID('clues'),
                 pais_id_uuid: getUUID('pais'),
                 tipo_cartilla_id_uuid: getUUID('tipo_cartilla'),
                 motivo_entrega_id_uuid: getUUID('motivo_entrega'),
@@ -2571,9 +2687,8 @@
                 migracion_id_uuid: getUUID('tipo_migracion')
             };
 
-            // Validar campos requeridos
             if (!data.nombre || !data.paterno || !data.curp || !data.fecha_nac || !data.sexo || !data.fecha_entrega ||
-                !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid || !data.clues_id_uuid ||
+                !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid ||
                 !data.entidad_id_uuid || !data.municipio_id_uuid || !data.si_no_id_uuid) {
                 errorElement.textContent = '⚠️ Por favor completa todos los campos requeridos (*)';
                 errorElement.style.color = '#f72585';
@@ -2582,7 +2697,6 @@
                 return;
             }
 
-            // Limpiar mensajes de error anteriores
             errorElement.textContent = '';
             errorElement.style.color = '';
             submitBtn.disabled = true;
@@ -2606,20 +2720,6 @@
                 }
 
                 if (result.error) {
-                    // ============================================================
-                    // DETECTAR ERROR DE CURP DUPLICADA
-                    // ============================================================
-                    if (result.error.code === '23505' ||
-                        (result.error.message && result.error.message.includes('duplicate key'))) {
-                        errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
-                        errorElement.style.color = '#f72585';
-                        setTimeout(function () {
-                            errorElement.textContent = '';
-                        }, 5000);
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
-                        return;
-                    }
                     throw result.error;
                 }
 
@@ -2634,15 +2734,7 @@
 
             } catch (error) {
                 console.error('Error al guardar:', error);
-
-                // Verificar si el error contiene información sobre CURP duplicada
-                if (error.message && (error.message.includes('duplicate key') || error.message.includes('23505'))) {
-                    errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
-                } else if (error.message && error.message.includes('violates foreign key')) {
-                    errorElement.textContent = '❌ Error de relación: Uno de los valores seleccionados no existe en la base de datos.';
-                } else {
-                    errorElement.textContent = '❌ Error al guardar: ' + (error.message || JSON.stringify(error));
-                }
+                errorElement.textContent = '❌ Error al guardar: ' + (error.message || JSON.stringify(error));
                 errorElement.style.color = '#f72585';
                 setTimeout(function () {
                     errorElement.textContent = '';
@@ -2662,15 +2754,9 @@
             }
 
             try {
-                // ============================================================
-                // OBTENER USUARIO ACTUAL
-                // ============================================================
                 var user = await getUsuarioActual();
                 if (!user) return;
 
-                // ============================================================
-                // VERIFICAR QUE EL REGISTRO PERTENECE AL CLUES DEL USUARIO
-                // ============================================================
                 var checkResult = await supabaseClient
                     .from('censo')
                     .select('clues_id_uuid')
@@ -2721,10 +2807,8 @@
             createParticles();
             mostrarUsuario();
 
-            // Validar CURP en tiempo real
             var curpInput = document.getElementById('curp');
             if (curpInput) {
-                // Forzar mayúsculas mientras escribe
                 curpInput.addEventListener('input', function () {
                     this.value = this.value.toUpperCase();
                 });
@@ -2737,7 +2821,6 @@
                     }, 300);
                 });
 
-                // Validar al perder el foco
                 curpInput.addEventListener('blur', function () {
                     validarCurpEnTiempoReal();
                 });
@@ -2810,126 +2893,8 @@
         window.esUUID = esUUID;
         window.generarUUID = generarUUID;
         window.getSiNoUUID = getSiNoUUID;
-    </script>
-    <script>
-        // ============================================================
-        // VERIFICAR SI CURP YA EXISTE EN LA BASE DE DATOS
-        // ============================================================
-        async function verificarCurpDuplicada(curp, id_uuid_actual) {
-            if (!curp) return false;
-
-            try {
-                // Buscar registros con la misma CURP
-                var query = supabaseClient
-                    .from('censo')
-                    .select('id_uuid, curp')
-                    .eq('curp', curp.toUpperCase().trim());
-
-                // Si estamos editando, excluir el registro actual
-                if (id_uuid_actual) {
-                    query = query.neq('id_uuid', id_uuid_actual);
-                }
-
-                var result = await query;
-
-                if (result.error) {
-                    console.error('Error al verificar CURP:', result.error);
-                    return false;
-                }
-
-                return result.data && result.data.length > 0;
-
-            } catch (error) {
-                console.error('Error al verificar CURP:', error);
-                return false;
-            }
-        }
-    </script>
-    <script>
-        // ============================================================
-        // VALIDAR CURP EN TIEMPO REAL
-        // ============================================================
-        async function validarCurpEnTiempoReal() {
-            var curpInput = document.getElementById('curp');
-            var curp = curpInput.value.trim().toUpperCase();
-            var curpError = document.getElementById('curpError');
-
-            // Crear elemento de error si no existe
-            if (!curpError) {
-                var errorDiv = document.createElement('div');
-                errorDiv.id = 'curpError';
-                errorDiv.className = 'helper-text';
-                errorDiv.style.marginTop = '0.2rem';
-                curpInput.parentNode.appendChild(errorDiv);
-            }
-
-            var errorEl = document.getElementById('curpError');
-
-            // Si está vacío, limpiar mensaje
-            if (!curp) {
-                errorEl.textContent = '';
-                curpInput.style.borderColor = '';
-                curpInput.style.boxShadow = '';
-                return;
-            }
-
-            // Validar formato y longitud
-            if (curp.length < 18) {
-                errorEl.textContent = `⚠️ La CURP debe tener 18 caracteres (actual: ${curp.length})`;
-                errorEl.style.color = '#f7b731';
-                curpInput.style.borderColor = '#f7b731';
-                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 183, 49, 0.2)';
-                return;
-            }
-
-            if (curp.length > 18) {
-                errorEl.textContent = `⚠️ La CURP excede los 18 caracteres (actual: ${curp.length})`;
-                errorEl.style.color = '#f72585';
-                curpInput.style.borderColor = '#f72585';
-                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-                return;
-            }
-
-            // Validar formato con regex
-            if (!validarCurp(curp)) {
-                errorEl.textContent = '⚠️ Formato de CURP inválido. Ejemplo: RATJ800318MGTMRR07';
-                errorEl.style.color = '#f72585';
-                curpInput.style.borderColor = '#f72585';
-                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-                return;
-            }
-
-            // CURP con formato válido, verificar si ya existe en la BD
-            try {
-                var result = await supabaseClient
-                    .from('censo')
-                    .select('id_uuid, nombre, paterno')
-                    .eq('curp', curp);
-
-                // Si estamos editando, excluir el registro actual
-                var editIdVal = document.getElementById('editId').value;
-                if (editIdVal && result.data) {
-                    result.data = result.data.filter(item => item.id_uuid !== editIdVal);
-                }
-
-                if (result.data && result.data.length > 0) {
-                    // CURP ya existe
-                    var nombreExistente = result.data[0].nombre + ' ' + (result.data[0].paterno || '');
-                    errorEl.textContent = `❌ Esta CURP ya está registrada a nombre de: ${nombreExistente}`;
-                    errorEl.style.color = '#f72585';
-                    curpInput.style.borderColor = '#f72585';
-                    curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
-                } else {
-                    // CURP disponible y con formato válido
-                    errorEl.textContent = '✅ CURP válida y disponible';
-                    errorEl.style.color = '#4cc9f0';
-                    curpInput.style.borderColor = '#4cc9f0';
-                    curpInput.style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
-                }
-            } catch (error) {
-                console.error('Error al validar CURP:', error);
-            }
-        }
+        window.validarCurpEnTiempoReal = validarCurpEnTiempoReal;
+        window.verificarCurpDuplicada = verificarCurpDuplicada;
     </script>
 
 </body>

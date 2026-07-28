@@ -13,23 +13,12 @@
     <!-- CSS Principal - styles.css -->
     <link rel="stylesheet" href="common/styles.css" />
 
-    <!-- ============================================================
-    JAVASCRIPT EXTERNO
-    ============================================================ -->
     <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
-    <!-- Transiciones cinematográficas para modales -->
-    <script src="common/transiciones.js">
-    </script>
-
     <style>
-        /* ============================================================
-       CSS VARIABLES PARA TEMA DIURNO / NOCTURNO - ESTILO JUGUETE 80'S
-       ============================================================ */
         :root {
-            /* Modo nocturno (por defecto) */
             --bg-gradient-start: #141E30;
             --bg-gradient-end: #243B55;
             --container-bg: #1c2541;
@@ -66,7 +55,6 @@
             --card-bg: rgba(255, 255, 255, 0.02);
         }
 
-        /* Modo diurno */
         body.light-mode {
             --bg-gradient-start: #e0e5ec;
             --bg-gradient-end: #f0f2f8;
@@ -104,9 +92,6 @@
             --card-bg: rgba(255, 255, 255, 0.5);
         }
 
-        /* ============================================================
-       ESTILOS GENERALES
-       ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -128,9 +113,6 @@
             overflow-y: hidden;
         }
 
-        /* ============================================================
-       PARTÍCULAS
-       ============================================================ */
         .particles {
             position: fixed;
             top: 0;
@@ -162,9 +144,6 @@
             }
         }
 
-        /* ============================================================
-       CLAYMORPHISM CONTAINER - PLACA PRINCIPAL
-       ============================================================ */
         .censo-container {
             max-width: 1200px;
             width: 100%;
@@ -203,9 +182,6 @@
             }
         }
 
-        /* ============================================================
-       BOTÓN DE TEMA - CON RELIEVE
-       ============================================================ */
         .theme-toggle {
             position: absolute;
             top: 1rem;
@@ -237,9 +213,6 @@
                 inset -3px -3px 6px var(--container-shadow-2);
         }
 
-        /* ============================================================
-       HEADER
-       ============================================================ */
         .censo-header {
             display: flex;
             justify-content: space-between;
@@ -265,9 +238,6 @@
             transition: color 0.3s ease;
         }
 
-        /* ============================================================
-       BOTONES - CON RELIEVE PROFUNDO
-       ============================================================ */
         .btn {
             padding: 0.6rem 1.5rem;
             border: none;
@@ -352,9 +322,6 @@
             flex-wrap: wrap;
         }
 
-        /* ============================================================
-       USER BADGE - CON RELIEVE
-       ============================================================ */
         .user-badge {
             display: inline-flex;
             align-items: center;
@@ -388,9 +355,6 @@
             color: var(--badge-text);
         }
 
-        /* ============================================================
-       SEARCH BAR - CON RELIEVE
-       ============================================================ */
         .search-bar {
             display: flex;
             gap: 1rem;
@@ -455,9 +419,6 @@
                 -4px -4px 8px var(--container-shadow-2);
         }
 
-        /* ============================================================
-       TABLA - CON RELIEVE INTERNO
-       ============================================================ */
         .table-container {
             border-radius: 16px;
             overflow: auto;
@@ -533,14 +494,6 @@
             background: var(--table-row-hover);
         }
 
-        tbody tr[style*="display: none"] {
-            opacity: 0;
-            transform: scale(0.98);
-        }
-
-        /* ============================================================
-       BADGES - CON RELIEVE
-       ============================================================ */
         .badge {
             display: inline-block;
             padding: 0.2rem 0.6rem;
@@ -568,9 +521,6 @@
                 -4px -4px 8px var(--container-shadow-2);
         }
 
-        /* ============================================================
-       ACCIONES DE TABLA - BOTONES CON RELIEVE
-       ============================================================ */
         .table-actions {
             display: flex;
             gap: 0.4rem;
@@ -614,9 +564,6 @@
             color: var(--btn-danger, #f72585);
         }
 
-        /* ============================================================
-       MODAL - TRANSICIONES CINEMATOGRÁFICAS CON RELIEVE
-       ============================================================ */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -703,9 +650,6 @@
             background: rgba(0, 0, 0, 0.15);
         }
 
-        /* ============================================================
-       MODAL - TÍTULO Y ANIMACIONES
-       ============================================================ */
         .modal-content h2 {
             margin-bottom: 1.5rem;
             color: var(--text-primary);
@@ -782,9 +726,6 @@
             }
         }
 
-        /* ============================================================
-       FORMULARIO DEL MODAL - GRID 3 COLUMNAS CON RELIEVE
-       ============================================================ */
         .modal-content .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -910,9 +851,6 @@
             margin-top: 0.2rem;
         }
 
-        /* ============================================================
-       ESTADOS
-       ============================================================ */
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -960,9 +898,6 @@
             box-shadow: inset 2px 2px 4px rgba(76, 201, 240, 0.05);
         }
 
-        /* ============================================================
-       FOOTER
-       ============================================================ */
         .footer {
             text-align: center;
             padding: 0.8rem 0 0.3rem 0;
@@ -973,9 +908,6 @@
             margin-top: 0.5rem;
         }
 
-        /* ============================================================
-       RESPONSIVE
-       ============================================================ */
         @media (max-width: 1200px) {
             .modal-content {
                 max-width: 95vw;
@@ -1371,12 +1303,12 @@
                                 <option value="">Seleccionar...</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="clues">Centro de Salud (CLUES) *</label>
                             <select id="clues" required>
                                 <option value="">Seleccionar...</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label for="pais">País</label>
                             <select id="pais">
@@ -1422,7 +1354,8 @@
                         <div class="form-group">
                             <label for="se_proporciono_info">¿Se proporcionó información? *</label>
                             <select id="se_proporciono_info" required>
-                                <option value="">Seleccionar...</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1599,148 +1532,276 @@
         }
 
         // ============================================================
-        // DATOS DE RESPALDO COMPLETOS
+        // GENERADOR DE UUIDs VÁLIDOS (v4)
+        // ============================================================
+        function generarUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0;
+                var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // ============================================================
+        // UUIDs REALES DE LA BASE DE DATOS
+        // ============================================================
+        var UUIDS_REALES = {
+            agno_edicion: {
+                '2018': 'e4e84d57-639d-4e24-9613-382845bd3730',
+                '2021': 'bc6a0d93-e88c-4a14-b499-72a6536c9d3b',
+                '2017': 'feaec084-9864-4a21-b8dd-665f015257bf',
+                '2013': '0733e61e-d826-42c1-8370-8f04bd6b9167',
+                '2019': '8511f662-a50e-42a9-9111-0341018b819d',
+                '2016': 'f1d4efe8-c6c9-4b5b-b3ac-a0f38c388963',
+                '2008-2012': '14f3e556-f10e-4faf-88f8-447e84a63b8e',
+                '2020': '2bf2e792-ea2d-4771-b298-51cc294bc884',
+                '2022': '122ba3d8-5557-48df-a057-c571284674da',
+                '2023': 'a5da5d0f-1be9-4df5-bce3-5dc68b67f189',
+                '2024': '33e108e6-a13c-4b33-af73-eb553c7ee65e',
+                '2025': 'c2b7f519-cc6b-4bcc-a12e-ca91246be41a'
+            },
+            tipo_cartilla: {
+                'NIÑAS Y NIÑOS': '5abf0bc4-3c08-4365-a943-7dd894256cc6',
+                'ADOLESCENTES': '6dea1de7-14fd-4f68-a2bf-759b7802cc2a',
+                'HOMBRES': 'b9350f1e-5eef-4b81-af07-f3d1f3cda0c5',
+                'MUJERES': 'f8c08d30-04c7-41fc-8695-ecb49999d9d2',
+                'ADULTO MAYOR': 'cee027e9-4bfa-4250-9133-e224cf4193c3',
+                'Cartilla de Vacunación': '23125121-82cc-4487-999d-8b3ef1538e78',
+                'Cartilla de Embarazo': '6a03f90f-5663-42d6-96f7-0fb4debc0e24',
+                'Cartilla de Adulto Mayor': '6171056a-c183-47a5-b91f-df129cd6db27',
+                'Cartilla de Salud Mental': 'd726fc7a-29d4-4914-b681-3a498d2caa0c',
+                'Cartilla Nacional de Salud': '253c8044-e512-4b1b-8f14-adb708f6bfd5'
+            },
+            motivo_entrega: {
+                'NUEVO USUARIOS': 'b72398e5-e3b0-46f5-8865-c9126cc23c64',
+                'Primera vez': 'f5d1616c-3269-4370-8898-ed57b4e3c393',
+                'Reposición': 'ae7eab74-8646-4675-9aa1-76b3aabd6298'
+            },
+            servicio_entrega: {
+                'OTROS': '8cdc7756-39e9-4085-8858-41357d6752fb',
+                'Consulta General': '7f49330d-ff20-4536-8072-2041e89fbd43',
+                'ENFERMERIA': '094ad352-ed41-4f61-b9ac-de39ad439acb',
+                'PROMOCION DE LA SALUD': '703dcc96-9c86-4c2a-8b4e-05c960319fa4'
+            },
+            si_no: {
+                'SI': 'ebb1aa36-1f6a-41f2-b4a1-573c5627c4a4',
+                'NO': '8f13197f-c446-4d89-9abd-deaac62352d4'
+            },
+            discapacidad: {
+                'OTRAS FUNCIONES': '2991e7e9-fc97-4d73-9d28-2fe805fa723b',
+                'FUNCION DE LA VOZ Y EL HABLA': 'ac3feaee-10eb-414a-8ccd-f48b40754c0c',
+                'FUNCIONES SENSORIALES Y DOLOR': '23691562-b321-4c67-8542-f912401ede6f',
+                'Funciones neuromusculo-esqueléticas y relacionadas con el movimiento': '4605c619-7525-4178-a0c9-51728265f542',
+                'FUNCIONES MENTALES': 'f02ffceb-0e33-49a0-8891-562b4f8f7c34',
+                'NO': 'a7efd620-4771-47ce-bfb4-59ba78e8fe6e',
+                'Ninguna': '318d94fc-1e9d-4c2a-89f9-fffeb5307510',
+                'Motriz': '2965c3a0-0b66-489b-bd11-4ee5ea87293d',
+                'Visual': '402c9d18-ef41-48d2-94dc-3e1f83e93dbb',
+                'Auditiva': 'f4e81ce9-45e3-46d3-9400-36114544a9a6',
+                'Intelectual': 'f4e45616-a322-4ddc-b7d0-cde88859bddc',
+                'Psicosocial': 'aa5851ae-68f6-4443-a4ec-1edc8348a5c2'
+            },
+            embarazo: {
+                'NO': '6cb183f9-3fd7-450f-8d58-ef403a3dfb87',
+                'SI': '62f351e4-729f-4c99-800d-d051bdc028a2',
+                'Primer trimestre': '98487afa-8681-46ef-8eed-ec1684f90aca',
+                'Segundo trimestre': '3ee47244-1e06-4f61-8658-15465ab92807',
+                'Tercer trimestre': '95f2b95b-bff0-4436-b064-a50f010d4a03',
+                'No aplica': '52a626b9-7e7e-4246-bd90-29d7360e194d'
+            },
+            tipo_migracion: {
+                'CONNACIONAL': '92b1f0e6-1adb-411a-9d71-8edeb03e93cc',
+                'INTERNACIONAL': 'cae4b9f0-8efa-4fe7-b5d6-918e1242aad1',
+                'INTERESTATAL': '3327f64b-f3d3-4300-a5b9-1454542e549d',
+                'REPATRIADO': 'd347d7b1-0b36-406c-bca0-8f0506a3b5f3',
+                'INTERMUNICIPAL': 'f303d39f-0cda-4942-a36f-b2d4598cfe8d',
+                'Internacional': 'de9e9902-7840-43ad-b54b-edb53c27e0a5',
+                'Retorno': '627a5cca-832e-42cc-af6b-ad3e4021de47',
+                'Interna': 'b571f9b8-dc1e-4280-ba41-cb7ab9b234e4',
+                'No aplica': '25b1577f-637e-4067-b4d3-35369625e1b8'
+            },
+            entidad: {
+                'JALISCO': 'febba07c-89fb-426f-b44b-713a332a2504'
+            },
+            municipio: {
+                'PUERTO VALLARTA': '241dd144-8404-423e-8a67-6e314bd0a628',
+                'MASCOTA': 'd8f4c578-18e6-4531-8578-954779bd1e65',
+                'TALPA DE ALLENDE': 'ee4a1b4b-c1c5-4d1e-8b0a-3eda27a58f1b',
+                'Puerto Vallarta': '06677850-3385-4bde-9137-4b1a8df0cab2',
+                'Tonalá': 'd224bf4b-af36-453b-bc73-c5968cda7f46',
+                'Tlaquepaque': 'd2ec35e9-8bb7-4c0c-832e-26641dd472c3',
+                'Zapopan': '7146a0ed-5c69-461f-bd54-acee948b6acd',
+                'Guadalajara': '63cbea7e-1e85-4059-bae3-a42ac74a1fc4'
+            },
+            pais: {
+                'México': 'd22524a0-23d3-4a49-bd9a-f5c8c574f1bd'
+            },
+            clues: {
+                'JCSSA003583': '50363da6-0a58-4a78-be60-0e84520cc3f2'
+            }
+        };
+
+        // ============================================================
+        // DATOS DE RESPALDO
         // ============================================================
         var DATOS_FALLBACK = {
             entidad: [
-                { id_uuid: 'ent-01', entidad: 'Aguascalientes' },
-                { id_uuid: 'ent-02', entidad: 'Baja California' },
-                { id_uuid: 'ent-03', entidad: 'Baja California Sur' },
-                { id_uuid: 'ent-04', entidad: 'Campeche' },
-                { id_uuid: 'ent-05', entidad: 'Coahuila' },
-                { id_uuid: 'ent-06', entidad: 'Colima' },
-                { id_uuid: 'ent-07', entidad: 'Chiapas' },
-                { id_uuid: 'ent-08', entidad: 'Chihuahua' },
-                { id_uuid: 'ent-09', entidad: 'Ciudad de México' },
-                { id_uuid: 'ent-10', entidad: 'Durango' },
-                { id_uuid: 'ent-11', entidad: 'Guanajuato' },
-                { id_uuid: 'ent-12', entidad: 'Guerrero' },
-                { id_uuid: 'ent-13', entidad: 'Hidalgo' },
-                { id_uuid: 'ent-14', entidad: 'Jalisco' },
-                { id_uuid: 'ent-15', entidad: 'Estado de México' },
-                { id_uuid: 'ent-16', entidad: 'Michoacán' },
-                { id_uuid: 'ent-17', entidad: 'Morelos' },
-                { id_uuid: 'ent-18', entidad: 'Nayarit' },
-                { id_uuid: 'ent-19', entidad: 'Nuevo León' },
-                { id_uuid: 'ent-20', entidad: 'Oaxaca' },
-                { id_uuid: 'ent-21', entidad: 'Puebla' },
-                { id_uuid: 'ent-22', entidad: 'Querétaro' },
-                { id_uuid: 'ent-23', entidad: 'Quintana Roo' },
-                { id_uuid: 'ent-24', entidad: 'San Luis Potosí' },
-                { id_uuid: 'ent-25', entidad: 'Sinaloa' },
-                { id_uuid: 'ent-26', entidad: 'Sonora' },
-                { id_uuid: 'ent-27', entidad: 'Tabasco' },
-                { id_uuid: 'ent-28', entidad: 'Tamaulipas' },
-                { id_uuid: 'ent-29', entidad: 'Tlaxcala' },
-                { id_uuid: 'ent-30', entidad: 'Veracruz' },
-                { id_uuid: 'ent-31', entidad: 'Yucatán' },
-                { id_uuid: 'ent-32', entidad: 'Zacatecas' }
+                {id_uuid: UUIDS_REALES.entidad['JALISCO'] || generarUUID(), entidad: 'JALISCO'}
             ],
             pais: [
-                { id_uuid: 'pais-01', pais: 'México' },
-                { id_uuid: 'pais-02', pais: 'Estados Unidos' },
-                { id_uuid: 'pais-03', pais: 'Guatemala' },
-                { id_uuid: 'pais-04', pais: 'Honduras' },
-                { id_uuid: 'pais-05', pais: 'El Salvador' }
+                {id_uuid: UUIDS_REALES.pais['México'] || generarUUID(), pais: 'México'}
             ],
             agno_edicion: [
-                { id_uuid: 'agno-2024', agno_edicion: '2024' },
-                { id_uuid: 'agno-2023', agno_edicion: '2023' },
-                { id_uuid: 'agno-2022', agno_edicion: '2022' },
-                { id_uuid: 'agno-2021', agno_edicion: '2021' },
-                { id_uuid: 'agno-2020', agno_edicion: '2020' },
-                { id_uuid: 'agno-2019', agno_edicion: '2019' }
+                {id_uuid: UUIDS_REALES.agno_edicion['2024'] || generarUUID(), agno_edicion: '2024'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2023'] || generarUUID(), agno_edicion: '2023'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2022'] || generarUUID(), agno_edicion: '2022'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2021'] || generarUUID(), agno_edicion: '2021'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2020'] || generarUUID(), agno_edicion: '2020'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2019'] || generarUUID(), agno_edicion: '2019'}
             ],
             servicio_entrega: [
-                { id_uuid: 'serv-01', servicio_entrega: 'Consulta Externa' },
-                { id_uuid: 'serv-02', servicio_entrega: 'Urgencias' },
-                { id_uuid: 'serv-03', servicio_entrega: 'Hospitalización' },
-                { id_uuid: 'serv-04', servicio_entrega: 'Atención Domiciliaria' },
-                { id_uuid: 'serv-05', servicio_entrega: 'Prevención' }
+                {id_uuid: UUIDS_REALES.servicio_entrega['Consulta General'] || generarUUID(), servicio_entrega: 'Consulta General'},
+                {id_uuid: UUIDS_REALES.servicio_entrega['OTROS'] || generarUUID(), servicio_entrega: 'OTROS'},
+                {id_uuid: UUIDS_REALES.servicio_entrega['ENFERMERIA'] || generarUUID(), servicio_entrega: 'ENFERMERIA'},
+                {id_uuid: UUIDS_REALES.servicio_entrega['PROMOCION DE LA SALUD'] || generarUUID(), servicio_entrega: 'PROMOCION DE LA SALUD'},
+                {id_uuid: generarUUID(), servicio_entrega: 'Urgencias'},
+                {id_uuid: generarUUID(), servicio_entrega: 'Hospitalización'},
+                {id_uuid: generarUUID(), servicio_entrega: 'Prevención'}
             ],
             discapacidad: [
-                { id_uuid: 'disc-01', discapacidad: 'Ninguna' },
-                { id_uuid: 'disc-02', discapacidad: 'Física' },
-                { id_uuid: 'disc-03', discapacidad: 'Visual' },
-                { id_uuid: 'disc-04', discapacidad: 'Auditiva' },
-                { id_uuid: 'disc-05', discapacidad: 'Intelectual' },
-                { id_uuid: 'disc-06', discapacidad: 'Psicosocial' },
-                { id_uuid: 'disc-07', discapacidad: 'Múltiple' }
+                {id_uuid: UUIDS_REALES.discapacidad['Ninguna'] || generarUUID(), discapacidad: 'Ninguna'},
+                {id_uuid: UUIDS_REALES.discapacidad['Motriz'] || generarUUID(), discapacidad: 'Motriz'},
+                {id_uuid: UUIDS_REALES.discapacidad['Visual'] || generarUUID(), discapacidad: 'Visual'},
+                {id_uuid: UUIDS_REALES.discapacidad['Auditiva'] || generarUUID(), discapacidad: 'Auditiva'},
+                {id_uuid: UUIDS_REALES.discapacidad['Intelectual'] || generarUUID(), discapacidad: 'Intelectual'},
+                {id_uuid: UUIDS_REALES.discapacidad['Psicosocial'] || generarUUID(), discapacidad: 'Psicosocial'},
+                {id_uuid: UUIDS_REALES.discapacidad['NO'] || generarUUID(), discapacidad: 'NO'},
+                {id_uuid: UUIDS_REALES.discapacidad['OTRAS FUNCIONES'] || generarUUID(), discapacidad: 'OTRAS FUNCIONES'},
+                {id_uuid: UUIDS_REALES.discapacidad['FUNCION DE LA VOZ Y EL HABLA'] || generarUUID(), discapacidad: 'FUNCION DE LA VOZ Y EL HABLA'},
+                {id_uuid: UUIDS_REALES.discapacidad['FUNCIONES MENTALES'] || generarUUID(), discapacidad: 'FUNCIONES MENTALES'},
+                {id_uuid: UUIDS_REALES.discapacidad['Funciones neuromusculo-esqueléticas y relacionadas con el movimiento'] || generarUUID(), discapacidad: 'Funciones neuromusculo-esqueléticas y relacionadas con el movimiento'},
+                {id_uuid: UUIDS_REALES.discapacidad['FUNCIONES SENSORIALES Y DOLOR'] || generarUUID(), discapacidad: 'FUNCIONES SENSORIALES Y DOLOR'}
             ],
             tipo_migracion: [
-                { id_uuid: 'mig-01', migracion: 'Ninguna' },
-                { id_uuid: 'mig-02', migracion: 'Interna' },
-                { id_uuid: 'mig-03', migracion: 'Internacional' },
-                { id_uuid: 'mig-04', migracion: 'Retorno' },
-                { id_uuid: 'mig-05', migracion: 'Tránsito' }
-            ],
-            si_no: [
-                { id_uuid: 'sn-01', sino: 'Sí' },
-                { id_uuid: 'sn-02', sino: 'No' }
+                {id_uuid: UUIDS_REALES.tipo_migracion['CONNACIONAL'] || generarUUID(), migracion: 'CONNACIONAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['INTERNACIONAL'] || generarUUID(), migracion: 'INTERNACIONAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['INTERESTATAL'] || generarUUID(), migracion: 'INTERESTATAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['REPATRIADO'] || generarUUID(), migracion: 'REPATRIADO'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['INTERMUNICIPAL'] || generarUUID(), migracion: 'INTERMUNICIPAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['Internacional'] || generarUUID(), migracion: 'Internacional'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['Retorno'] || generarUUID(), migracion: 'Retorno'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['Interna'] || generarUUID(), migracion: 'Interna'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['No aplica'] || generarUUID(), migracion: 'No aplica'}
             ],
             embarazo: [
-                { id_uuid: 'emb-01', embarazo: 'No' },
-                { id_uuid: 'emb-02', embarazo: 'Sí' }
+                {id_uuid: UUIDS_REALES.embarazo['NO'] || generarUUID(), embarazo: 'NO'},
+                {id_uuid: UUIDS_REALES.embarazo['SI'] || generarUUID(), embarazo: 'SI'},
+                {id_uuid: UUIDS_REALES.embarazo['Primer trimestre'] || generarUUID(), embarazo: 'Primer trimestre'},
+                {id_uuid: UUIDS_REALES.embarazo['Segundo trimestre'] || generarUUID(), embarazo: 'Segundo trimestre'},
+                {id_uuid: UUIDS_REALES.embarazo['Tercer trimestre'] || generarUUID(), embarazo: 'Tercer trimestre'},
+                {id_uuid: UUIDS_REALES.embarazo['No aplica'] || generarUUID(), embarazo: 'No aplica'}
             ],
             municipio: [
-                { id_uuid: 'mun-01', municipio: 'Municipio 1' },
-                { id_uuid: 'mun-02', municipio: 'Municipio 2' }
+                {id_uuid: UUIDS_REALES.municipio['Guadalajara'] || generarUUID(), municipio: 'Guadalajara'},
+                {id_uuid: UUIDS_REALES.municipio['Zapopan'] || generarUUID(), municipio: 'Zapopan'},
+                {id_uuid: UUIDS_REALES.municipio['Tlaquepaque'] || generarUUID(), municipio: 'Tlaquepaque'},
+                {id_uuid: UUIDS_REALES.municipio['Tonalá'] || generarUUID(), municipio: 'Tonalá'},
+                {id_uuid: UUIDS_REALES.municipio['Puerto Vallarta'] || generarUUID(), municipio: 'Puerto Vallarta'},
+                {id_uuid: UUIDS_REALES.municipio['TALPA DE ALLENDE'] || generarUUID(), municipio: 'TALPA DE ALLENDE'},
+                {id_uuid: UUIDS_REALES.municipio['MASCOTA'] || generarUUID(), municipio: 'MASCOTA'}
+            ],
+            tipo_cartilla: [
+                {id_uuid: UUIDS_REALES.tipo_cartilla['NIÑAS Y NIÑOS'] || generarUUID(), tipo_cartilla: 'NIÑAS Y NIÑOS'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['ADOLESCENTES'] || generarUUID(), tipo_cartilla: 'ADOLESCENTES'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['HOMBRES'] || generarUUID(), tipo_cartilla: 'HOMBRES'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['MUJERES'] || generarUUID(), tipo_cartilla: 'MUJERES'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['ADULTO MAYOR'] || generarUUID(), tipo_cartilla: 'ADULTO MAYOR'}
+            ],
+            motivo_entrega: [
+                {id_uuid: UUIDS_REALES.motivo_entrega['Primera vez'] || generarUUID(), motivo: 'Primera vez'},
+                {id_uuid: UUIDS_REALES.motivo_entrega['NUEVO USUARIOS'] || generarUUID(), motivo: 'NUEVO USUARIOS'},
+                {id_uuid: UUIDS_REALES.motivo_entrega['Reposición'] || generarUUID(), motivo: 'Reposición'},
+                {id_uuid: generarUUID(), motivo: 'Renovación'},
+                {id_uuid: generarUUID(), motivo: 'Traslado'},
+                {id_uuid: generarUUID(), motivo: 'Otro'}
+            ],
+            clues: [
+                {id_uuid: UUIDS_REALES.clues['JCSSA003583'] || generarUUID(), clues: 'JCSSA003583'},
+                {id_uuid: generarUUID(), clues: 'CLUES001'},
+                {id_uuid: generarUUID(), clues: 'CLUES002'},
+                {id_uuid: generarUUID(), clues: 'CLUES003'},
+                {id_uuid: generarUUID(), clues: 'CLUES004'}
             ]
         };
 
         // ============================================================
-        // FUNCIÓN PARA CARGAR CATÁLOGO CON FALLBACK - MEJORADA
+        // VALIDAR UUID
+        // ============================================================
+        function esUUID(valor) {
+            if (!valor) return false;
+            var regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+            return regex.test(valor);
+        }
+
+        // ============================================================
+        // FUNCIÓN PARA CARGAR CATÁLOGO
         // ============================================================
         async function cargarCatalogo(idSelect, tabla, campoTexto) {
             try {
-                console.log(`🔄 Cargando ${idSelect} desde tabla "${tabla}"...`);
                 var select = document.getElementById(idSelect);
                 if (!select) {
                     console.warn(`⚠️ Select "${idSelect}" no encontrado`);
                     return false;
                 }
 
-                // Intentar cargar desde Supabase
-                var result = await supabaseClient.from(tabla).select(`id_uuid, ${campoTexto}`).order(campoTexto);
+                console.log(`🔄 Cargando ${idSelect} desde "${tabla}"...`);
+
+                var result = await supabaseClient
+                    .from(tabla)
+                    .select(`id_uuid, ${campoTexto}`)
+                    .order(campoTexto);
 
                 if (result.data && result.data.length > 0) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
+                    var vistos = {};
+                    var count = 0;
+
                     result.data.forEach(function (item) {
-                        var valor = item[campoTexto] || 'Sin nombre';
-                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                        if (esUUID(item.id_uuid)) {
+                            var valor = item[campoTexto] || 'Sin nombre';
+                            var key = valor.toUpperCase().trim();
+                            if (!vistos[key]) {
+                                vistos[key] = true;
+                                select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                                count++;
+                            }
+                        }
                     });
-                    console.log(`✅ ${idSelect} cargados desde BD:`, result.data.length);
+
+                    console.log(`✅ ${idSelect}: ${count} opciones únicas cargadas desde BD`);
                     return true;
                 }
 
-                // Si no hay datos en la BD, usar fallback
                 console.warn(`⚠️ No hay datos en "${tabla}", usando fallback para ${idSelect}`);
                 if (DATOS_FALLBACK[idSelect]) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
+                    var vistos = {};
                     DATOS_FALLBACK[idSelect].forEach(function (item) {
                         var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
-                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                        var key = valor.toUpperCase().trim();
+                        if (!vistos[key]) {
+                            vistos[key] = true;
+                            select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                        }
                     });
-                    console.log(`✅ ${idSelect} cargados desde fallback:`, DATOS_FALLBACK[idSelect].length);
+                    console.log(`✅ ${idSelect}: ${Object.keys(vistos).length} opciones desde fallback`);
                     return true;
-                } else {
-                    console.warn(`⚠️ No hay datos de respaldo para ${idSelect}`);
-                    return false;
                 }
+
+                return false;
 
             } catch (error) {
                 console.error(`❌ Error cargando ${idSelect}:`, error);
-                // Intentar usar fallback
-                var select = document.getElementById(idSelect);
-                if (select && DATOS_FALLBACK[idSelect]) {
-                    select.innerHTML = '<option value="">Seleccionar...</option>';
-                    DATOS_FALLBACK[idSelect].forEach(function (item) {
-                        var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
-                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
-                    });
-                    console.log(`✅ ${idSelect} cargados desde fallback (error)`);
-                    return true;
-                }
                 return false;
             }
         }
@@ -1748,13 +1809,12 @@
         // ============================================================
         // CARGAR TODOS LOS CATÁLOGOS
         // ============================================================
-        var catalogos = { cargados: false };
+        var catalogos = {cargados: false};
 
         async function cargarCatalogos() {
             try {
-                console.log('📦 Cargando todos los catálogos...');
+                console.log('📦 Cargando catálogos...');
 
-                // Cargar cada catálogo
                 await cargarCatalogo('entidad', 'entidad', 'entidad');
                 await cargarCatalogo('pais', 'pais', 'pais');
                 await cargarCatalogo('clues', 'clues', 'clues');
@@ -1764,57 +1824,27 @@
                 await cargarCatalogo('servicio_entrega', 'servicio_entrega', 'servicio_entrega');
                 await cargarCatalogo('discapacidad', 'discapacidad', 'discapacidad');
                 await cargarCatalogo('tipo_migracion', 'tipo_migracion', 'migracion');
-
-                // Cargar si_no (se_proporciono_info) - CRÍTICO
-                await cargarCatalogo('se_proporciono_info', 'si_no', 'sino');
-
-                // Cargar embarazo - CRÍTICO
                 await cargarCatalogo('embarazo', 'embarazo', 'embarazo');
 
                 catalogos.cargados = true;
-                console.log('✅ Todos los catálogos cargados correctamente');
-                verificarSelects();
+                console.log('✅ Catálogos cargados');
 
-                // SELECCIONAR "Sí" POR DEFECTO EN se_proporciono_info
-                var selectSiNo = document.getElementById('se_proporciono_info');
-                if (selectSiNo) {
-                    for (var i = 0; i < selectSiNo.options.length; i++) {
-                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
-                            selectSiNo.value = selectSiNo.options[i].value;
-                            console.log('✅ "Se proporcionó información" por defecto: "Sí"');
-                            break;
-                        }
-                    }
-                }
-
-                // Inicializar restricciones de embarazo
                 actualizarRestriccionesEmbarazo('', 0);
 
             } catch (error) {
-                console.error('❌ Error al cargar catálogos:', error);
+                console.error('Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
             }
         }
 
-        function verificarSelects() {
-            var selects = ['entidad', 'pais', 'clues', 'tipo_cartilla', 'motivo_entrega', 'agno_edicion', 'servicio_entrega', 'se_proporciono_info', 'discapacidad', 'embarazo', 'tipo_migracion'];
-            selects.forEach(function (id) {
-                var select = document.getElementById(id);
-                if (select) {
-                    console.log(`  - Select "${id}": ${select.options.length} opciones`);
-                }
-            });
-        }
-
         // ============================================================
-        // CARGAR MUNICIPIOS - CORREGIDO
+        // CARGAR MUNICIPIOS
         // ============================================================
         async function cargarMunicipios() {
             var entidadId = document.getElementById('entidad').value;
             var municipioSelect = document.getElementById('municipio');
 
-            if (!entidadId) {
+            if (!entidadId || !esUUID(entidadId)) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
             }
@@ -1828,25 +1858,45 @@
                     .order('municipio');
 
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                var vistos = {};
+                var count = 0;
+
                 if (result.data && result.data.length > 0) {
                     result.data.forEach(function (m) {
-                        municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
+                        if (esUUID(m.id_uuid)) {
+                            var valor = m.municipio || 'Sin nombre';
+                            var key = valor.toUpperCase().trim();
+                            if (!vistos[key]) {
+                                vistos[key] = true;
+                                municipioSelect.innerHTML += `<option value="${m.id_uuid}">${valor}</option>`;
+                                count++;
+                            }
+                        }
                     });
-                    console.log('✅ Municipios cargados desde BD:', result.data.length);
+                    console.log(`✅ Municipios cargados desde BD: ${count} únicos`);
                 } else {
-                    // Fallback: usar datos de respaldo
                     console.warn('⚠️ No hay municipios en BD, usando fallback');
                     DATOS_FALLBACK.municipio.forEach(function (m) {
-                        municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
+                        var valor = m.municipio || 'Sin nombre';
+                        var key = valor.toUpperCase().trim();
+                        if (!vistos[key]) {
+                            vistos[key] = true;
+                            municipioSelect.innerHTML += `<option value="${m.id_uuid}">${valor}</option>`;
+                            count++;
+                        }
                     });
-                    console.log('✅ Municipios cargados desde fallback');
+                    console.log(`✅ Municipios desde fallback: ${count}`);
                 }
             } catch (error) {
                 console.error('❌ Error al cargar municipios:', error);
-                // Fallback
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 DATOS_FALLBACK.municipio.forEach(function (m) {
-                    municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
+                    var valor = m.municipio || 'Sin nombre';
+                    var key = valor.toUpperCase().trim();
+                    if (!vistos[key]) {
+                        vistos[key] = true;
+                        municipioSelect.innerHTML += `<option value="${m.id_uuid}">${valor}</option>`;
+                    }
                 });
             }
         }
@@ -1854,7 +1904,7 @@
         async function cargarMunicipiosConValor(entidadId, valorSeleccionado) {
             var municipioSelect = document.getElementById('municipio');
 
-            if (!entidadId) {
+            if (!entidadId || !esUUID(entidadId)) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
             }
@@ -1868,25 +1918,42 @@
                     .order('municipio');
 
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                var vistos = {};
+
                 if (result.data && result.data.length > 0) {
                     result.data.forEach(function (m) {
-                        var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
-                        municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
+                        if (esUUID(m.id_uuid)) {
+                            var valor = m.municipio || 'Sin nombre';
+                            var key = valor.toUpperCase().trim();
+                            if (!vistos[key]) {
+                                vistos[key] = true;
+                                var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
+                                municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${valor}</option>`;
+                            }
+                        }
                     });
-                    console.log('✅ Municipios cargados con valor');
                 } else {
-                    municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                     DATOS_FALLBACK.municipio.forEach(function (m) {
-                        var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
-                        municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
+                        var valor = m.municipio || 'Sin nombre';
+                        var key = valor.toUpperCase().trim();
+                        if (!vistos[key]) {
+                            vistos[key] = true;
+                            var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
+                            municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${valor}</option>`;
+                        }
                     });
                 }
             } catch (error) {
                 console.error('❌ Error al cargar municipios:', error);
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 DATOS_FALLBACK.municipio.forEach(function (m) {
-                    var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
-                    municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
+                    var valor = m.municipio || 'Sin nombre';
+                    var key = valor.toUpperCase().trim();
+                    if (!vistos[key]) {
+                        vistos[key] = true;
+                        var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
+                        municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${valor}</option>`;
+                    }
                 });
             }
         }
@@ -1947,87 +2014,52 @@
         }
 
         // ============================================================
-        // ACTUALIZAR RESTRICCIONES DE EMBARAZO - CRÍTICO
+        // ACTUALIZAR RESTRICCIONES DE EMBARAZO
         // ============================================================
         function actualizarRestriccionesEmbarazo(sexo, edad) {
             var embarazoSelect = document.getElementById('embarazo');
-            if (!embarazoSelect) {
-                console.warn('⚠️ Select de embarazo no encontrado');
-                return;
-            }
+            if (!embarazoSelect) return;
 
-            // Esperar a que el select tenga opciones
             if (embarazoSelect.options.length <= 1) {
                 setTimeout(function () {
                     actualizarRestriccionesEmbarazo(sexo, edad);
-                }, 500);
+                }, 300);
                 return;
             }
 
-            // Buscar el valor "No"
             var noValue = '';
-            var siValue = '';
             for (var i = 0; i < embarazoSelect.options.length; i++) {
                 var text = embarazoSelect.options[i].text.toLowerCase().trim();
                 if (text === 'no') {
                     noValue = embarazoSelect.options[i].value;
-                }
-                if (text === 'sí' || text === 'si') {
-                    siValue = embarazoSelect.options[i].value;
+                    break;
                 }
             }
 
-            // Si no encuentra "No" o "Sí", usar el primer y segundo valor después del placeholder
             if (!noValue && embarazoSelect.options.length > 1) {
                 noValue = embarazoSelect.options[1].value;
             }
-            if (!siValue && embarazoSelect.options.length > 2) {
-                siValue = embarazoSelect.options[2].value;
-            }
-            if (!siValue && embarazoSelect.options.length > 1) {
-                siValue = embarazoSelect.options[1].value;
-            }
 
-            console.log(`🔍 Embarazo - Sexo: ${sexo || 'ninguno'}, Edad: ${edad || 'N/A'}, No: ${noValue}, Sí: ${siValue}`);
-
-            // Si es hombre, deshabilitar y poner "No"
             if (sexo === 'H') {
                 embarazoSelect.disabled = true;
-                if (noValue) {
-                    embarazoSelect.value = noValue;
-                    console.log('👤 Hombre → Embarazo: "No" (deshabilitado)');
-                }
+                if (noValue) embarazoSelect.value = noValue;
                 return;
             }
 
-            // Si es mujer
             if (sexo === 'M') {
-                // Edad fértil: 15-49 años
                 if (edad >= 15 && edad <= 49) {
                     embarazoSelect.disabled = false;
-                    if (noValue) {
-                        embarazoSelect.value = noValue;
-                    }
-                    console.log(`👩 Mujer en edad fértil (${edad} años) → Embarazo habilitado, valor por defecto: "No"`);
+                    if (noValue) embarazoSelect.value = noValue;
                 } else {
-                    // Fuera de edad fértil - deshabilitar y poner "No"
                     embarazoSelect.disabled = true;
-                    if (noValue) {
-                        embarazoSelect.value = noValue;
-                    }
-                    console.log(`👩 Mujer fuera de edad fértil (${edad} años) → Embarazo: "No" (deshabilitado)`);
+                    if (noValue) embarazoSelect.value = noValue;
                 }
                 return;
             }
 
-            // Si no hay sexo o edad, habilitar y poner "No" por defecto
-            if (!sexo || !edad) {
-                embarazoSelect.disabled = false;
-                if (noValue) {
-                    embarazoSelect.value = noValue;
-                }
-                console.log('⚠️ Sin sexo o edad definidos → Embarazo habilitado, valor: "No"');
-            }
+            // Sin sexo definido
+            embarazoSelect.disabled = false;
+            if (noValue) embarazoSelect.value = noValue;
         }
 
         // ============================================================
@@ -2051,26 +2083,46 @@
             return entidadMap[clave] || null;
         }
 
+        // ============================================================
+        // VALIDAR CURP - FORMATO Y LONGITUD
+        // ============================================================
         function validarCurp(curp) {
             if (!curp) return false;
+
+            // Limpiar y convertir a mayúsculas
             var curpLimpio = curp.trim().toUpperCase();
+
+            // Debe tener exactamente 18 caracteres
+            if (curpLimpio.length !== 18) {
+                return false;
+            }
+
+            // Expresión regular para CURP válida
+            // 4 letras + 6 dígitos + 1 letra (H/M) + 3 letras + 3 letras + 2 dígitos
             var regex = /^[A-Z]{4}[0-9]{6}[A-Z]{6}[0-9]{2}$/;
-            return regex.test(curpLimpio);
+
+            if (!regex.test(curpLimpio)) {
+                return false;
+            }
+
+            // Validar que el sexo sea H o M (posición 10, índice 9)
+            var sexo = curpLimpio.charAt(10);
+            if (sexo !== 'H' && sexo !== 'M') {
+                return false;
+            }
+
+            return true;
         }
 
         async function procesarCurp(curp) {
             if (!curp) return;
 
-            console.log('🔍 Procesando CURP:', curp);
-
             var curpLimpio = curp.trim().toUpperCase();
             var entidadSelect = document.getElementById('entidad');
             var fechaNacInput = document.getElementById('fecha_nac');
-            var edadInput = document.getElementById('edad');
             var sexoSelect = document.getElementById('sexo');
-            var tipoCartillaSelect = document.getElementById('tipo_cartilla');
 
-            // 1. DETECTAR SEXO
+            // Detectar sexo
             if (curpLimpio.length >= 11) {
                 var sexo = curpLimpio.charAt(10).toUpperCase();
                 if (sexo === 'H' || sexo === 'M') {
@@ -2080,7 +2132,7 @@
                 }
             }
 
-            // 2. DETECTAR FECHA DE NACIMIENTO
+            // Detectar fecha de nacimiento
             if (curpLimpio.length >= 17) {
                 var anioStr = curpLimpio.substring(4, 6);
                 var mesStr = curpLimpio.substring(6, 8);
@@ -2104,7 +2156,7 @@
                 }
             }
 
-            // 3. DETECTAR ENTIDAD
+            // Detectar entidad
             if (curpLimpio.length === 18) {
                 var claveEntidad = curpLimpio.substring(11, 13);
                 if (claveEntidad) {
@@ -2133,8 +2185,24 @@
         }
 
         // ============================================================
-        // MODAL
+        // FUNCIONES DE MODAL
         // ============================================================
+        function abrirModalCinematico(id) {
+            var overlay = document.getElementById(id);
+            if (overlay) {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function cerrarModalCinematico(id) {
+            var overlay = document.getElementById(id);
+            if (overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
         function abrirModal() {
             document.getElementById('censoForm').reset();
             document.getElementById('editId').value = '';
@@ -2144,7 +2212,8 @@
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
             document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
 
-            // Deshabilitar embarazo por defecto
+            document.getElementById('se_proporciono_info').value = 'si';
+
             var embarazoSelect = document.getElementById('embarazo');
             if (embarazoSelect) {
                 embarazoSelect.disabled = true;
@@ -2152,82 +2221,63 @@
 
             if (catalogos.cargados) {
                 console.log('📦 Catálogos ya cargados, abriendo modal...');
-                // Asegurar que el select de si_no tenga "Sí" seleccionado
-                var selectSiNo = document.getElementById('se_proporciono_info');
-                if (selectSiNo) {
-                    for (var i = 0; i < selectSiNo.options.length; i++) {
-                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
-                            selectSiNo.value = selectSiNo.options[i].value;
-                            break;
-                        }
-                    }
-                }
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
                 return;
             }
 
             console.log('📦 Cargando catálogos antes de abrir modal...');
             cargarCatalogos().then(function () {
                 console.log('✅ Catálogos cargados, abriendo modal...');
-                // Asegurar que el select de si_no tenga "Sí" seleccionado
-                var selectSiNo = document.getElementById('se_proporciono_info');
-                if (selectSiNo) {
-                    for (var i = 0; i < selectSiNo.options.length; i++) {
-                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
-                            selectSiNo.value = selectSiNo.options[i].value;
-                            break;
-                        }
-                    }
-                }
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
             }).catch(function (error) {
                 console.error('❌ Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos. Intenta de nuevo.';
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
             });
         }
 
         function cerrarModal() {
-            if (typeof cerrarModalCinematico === 'function') {
-                cerrarModalCinematico('modalOverlay');
-            } else {
-                modalOverlay.classList.remove('active');
-            }
+            cerrarModalCinematico('modalOverlay');
         }
 
+        window.abrirModalCinematico = abrirModalCinematico;
+        window.cerrarModalCinematico = cerrarModalCinematico;
+
         // ============================================================
-        // CARGAR REGISTROS DE CENSO
+        // CARGAR REGISTROS DE CENSO - FILTRADO POR CLUES DEL USUARIO
         // ============================================================
         async function cargarCenso() {
             try {
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="loading-spinner"></div>
-                        Cargando registros...
-                    </div>
-                `;
+            <div class="empty-state">
+                <div class="loading-spinner"></div>
+                Cargando registros...
+            </div>
+        `;
                 errorElement.textContent = '';
 
+                // ============================================================
+                // OBTENER USUARIO ACTUAL PARA FILTRAR POR CLUES
+                // ============================================================
+                var user = await getUsuarioActual();
+                if (!user) return;
+
                 var query = supabaseClient
-                    .from('vista_censo')
+                    .from('censo')
                     .select('*')
-                    .order('fecha_entrega', { ascending: false });
+                    .order('fecha_entrega', {ascending: false});
+
+                // ============================================================
+                // FILTRAR POR CLUES DEL USUARIO (si tiene uno asignado)
+                // ============================================================
+                if (user.clues_id_uuid) {
+                    query = query.eq('clues_id_uuid', user.clues_id_uuid);
+                    console.log('🔍 Filtrando censo por CLUES:', user.clues_id_uuid);
+                } else {
+                    console.log('👤 Usuario sin CLUES asignado, mostrando todos los registros');
+                }
 
                 if (search.length > 0) {
                     query = query.or(
@@ -2245,11 +2295,12 @@
                 totalRegistros.textContent = data.length + ' registros';
 
                 if (data.length === 0) {
+                    var mensaje = user.clues_id_uuid ?
+                        '📭 No hay registros de censo para tu centro de salud' :
+                        '📭 No hay registros de censo';
                     censoContainer.innerHTML = `
-                        <div class="empty-state">
-                            📭 No hay registros de censo
-                        </div>
-                    `;
+                <div class="empty-state">${mensaje}</div>
+            `;
                     return;
                 }
 
@@ -2259,58 +2310,52 @@
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        ❌ Error al cargar los datos
-                    </div>
-                `;
+            <div class="empty-state">
+                ❌ Error al cargar los datos
+            </div>
+        `;
             }
         }
 
         function renderTable(data) {
             var html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Folio</th>
-                            <th>Nombre</th>
-                            <th>CURP</th>
-                            <th>Cartilla</th>
-                            <th>Fecha Entrega</th>
-                            <th>Centro</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Nombre</th>
+                                <th>CURP</th>
+                                <th>Fecha Entrega</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
 
             data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
-                var tipoCartilla = row.tipo_cartilla || 'N/A';
-                var centro = row.clues || 'N/A';
 
                 html += `
-                    <tr>
-                        <td><span class="badge">${row.folio || 'N/A'}</span></td>
-                        <td>${nombreCompleto}</td>
-                        <td>${row.curp || 'N/A'}</td>
-                        <td>${tipoCartilla}</td>
-                        <td>${fechaEntrega}</td>
-                        <td><span class="badge-clues">${centro}</span></td>
-                        <td>
-                            <div class="table-actions">
-                                <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
-                                <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                        <tr>
+                            <td><span class="badge">${row.folio || 'N/A'}</span></td>
+                            <td>${nombreCompleto}</td>
+                            <td>${row.curp || 'N/A'}</td>
+                            <td>${fechaEntrega}</td>
+                            <td>
+                                <div class="table-actions">
+                                    <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
+                                    <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
             });
 
             html += `
-                    </tbody>
-                </table>
-            `;
+                        </tbody>
+                    </table>
+                `;
 
             censoContainer.innerHTML = html;
         }
@@ -2324,8 +2369,42 @@
                     await cargarCatalogos();
                 }
 
+                // ============================================================
+                // OBTENER USUARIO ACTUAL
+                // ============================================================
+                var user = await getUsuarioActual();
+                if (!user) return;
+
                 var result = await supabaseClient
-                    .from('vista_censo')
+                    .from('censo')
+                    .select('*')
+                    .eq('id_uuid', id)
+                    .single();
+
+                if (result.error) {
+                    throw result.error;
+                }
+
+                var row = result.data;
+
+                // ============================================================
+                // VERIFICAR QUE EL REGISTRO PERTENECE AL CLUES DEL USUARIO
+                // ============================================================
+                if (user.clues_id_uuid && row.clues_id_uuid !== user.clues_id_uuid) {
+                    errorElement.textContent = '❌ No tienes permiso para editar este registro. Pertenece a otro centro de salud.';
+                    errorElement.style.color = '#f72585';
+                    setTimeout(function () {
+                        errorElement.textContent = '';
+                    }, 5000);
+                    return;
+                }
+
+                document.getElementById('editId').value = row.id_uuid;
+                document.getElementById('modalTitle').textContent = '✏️ Editar Registro de Censo';
+                document.getElementById('submitBtn').textContent = 'Actualizar Registro';
+
+                var result = await supabaseClient
+                    .from('censo')
                     .select('*')
                     .eq('id_uuid', id)
                     .single();
@@ -2354,7 +2433,6 @@
                 document.getElementById('pob_afromex').checked = row.pob_afromex || false;
                 document.getElementById('pob_migrante').checked = row.pob_migrante || false;
 
-                // Establecer valores de los selects
                 document.getElementById('entidad').value = row.entidad_id_uuid || '';
                 document.getElementById('clues').value = row.clues_id_uuid || '';
                 document.getElementById('pais').value = row.pais_id_uuid || '';
@@ -2362,19 +2440,19 @@
                 document.getElementById('motivo_entrega').value = row.motivo_entrega_id_uuid || '';
                 document.getElementById('agno_edicion').value = row.agno_edicion_id_uuid || '';
                 document.getElementById('servicio_entrega').value = row.servicio_entrega_id_uuid || '';
-                document.getElementById('se_proporciono_info').value = row.si_no_id_uuid || '';
                 document.getElementById('discapacidad').value = row.discapacidad_id_uuid || '';
                 document.getElementById('embarazo').value = row.embarazo_id_uuid || '';
                 document.getElementById('tipo_migracion').value = row.migracion_id_uuid || '';
 
-                // Cargar municipios
-                if (row.entidad_id_uuid) {
+                var siNoValue = row.si_no_id_uuid ? 'si' : 'no';
+                document.getElementById('se_proporciono_info').value = siNoValue;
+
+                if (row.entidad_id_uuid && esUUID(row.entidad_id_uuid)) {
                     await cargarMunicipiosConValor(row.entidad_id_uuid, row.municipio_id_uuid);
                 } else {
                     document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
                 }
 
-                // Actualizar restricciones de embarazo
                 if (row.sexo) {
                     var edad = parseInt(row.edad) || 0;
                     actualizarRestriccionesEmbarazo(row.sexo, edad);
@@ -2382,11 +2460,7 @@
                     actualizarRestriccionesEmbarazo('', 0);
                 }
 
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
 
             } catch (error) {
                 console.error('Error al cargar registro:', error);
@@ -2395,7 +2469,47 @@
         }
 
         // ============================================================
-        // GUARDAR REGISTRO
+        // GENERAR FOLIO MANUALMENTE
+        // ============================================================
+        async function generarFolio() {
+            var año = new Date().getFullYear().toString().slice(-2);
+
+            var result = await supabaseClient
+                .from('censo')
+                .select('folio')
+                .like('folio', año + '%')
+                .order('folio', {ascending: false})
+                .limit(1);
+
+            var consecutivo = 1;
+            if (result.data && result.data.length > 0) {
+                var ultimoFolio = result.data[0].folio;
+                var numActual = parseInt(ultimoFolio.substring(2));
+                if (!isNaN(numActual)) {
+                    consecutivo = numActual + 1;
+                }
+            }
+
+            return año + String(consecutivo).padStart(8, '0');
+        }
+
+        // ============================================================
+        // OBTENER UUID DE SI_NO
+        // ============================================================
+        function getSiNoUUID(valor) {
+            var uuidSi = 'ebb1aa36-1f6a-41f2-b4a1-573c5627c4a4';
+            var uuidNo = '8f13197f-c446-4d89-9abd-deaac62352d4';
+
+            var valorUpper = valor.toUpperCase().trim();
+            if (valorUpper === 'SI' || valorUpper === 'SÍ') {
+                return uuidSi;
+            } else {
+                return uuidNo;
+            }
+        }
+
+        // ============================================================
+        // GUARDAR REGISTRO - CON MANEJO DE ERROR DE CURP DUPLICADA
         // ============================================================
         async function guardarCenso(event) {
             event.preventDefault();
@@ -2403,41 +2517,74 @@
             var editIdVal = document.getElementById('editId').value;
             var isEdit = editIdVal !== '';
 
+            // Obtener CURP
+            var curp = document.getElementById('curp').value.trim().toUpperCase();
+
+            // Validar formato de CURP
+            if (!validarCurp(curp)) {
+                errorElement.textContent = '❌ La CURP no tiene un formato válido. Debe tener 18 caracteres. Ejemplo: RATJ800318MGTMRR07';
+                errorElement.style.color = '#f72585';
+                setTimeout(function () {
+                    errorElement.textContent = '';
+                }, 5000);
+                return;
+            }
+
+            function getUUID(selectId) {
+                var select = document.getElementById(selectId);
+                if (!select) return null;
+                var val = select.value;
+                if (esUUID(val)) {
+                    return val;
+                }
+                return null;
+            }
+
+            var siNoValue = document.getElementById('se_proporciono_info').value;
+            var siNoUUID = getSiNoUUID(siNoValue === 'si' ? 'SI' : 'NO');
+
             var data = {
                 nombre: document.getElementById('nombre').value.trim(),
                 paterno: document.getElementById('paterno').value.trim(),
                 materno: document.getElementById('materno').value.trim(),
-                curp: document.getElementById('curp').value.trim().toUpperCase(),
+                curp: curp,
                 fecha_nac: document.getElementById('fecha_nac').value || null,
                 edad: parseInt(document.getElementById('edad').value) || null,
                 sexo: document.getElementById('sexo').value,
                 fecha_entrega: document.getElementById('fecha_entrega').value || null,
-                entidad_id_uuid: document.getElementById('entidad').value || null,
-                municipio_id_uuid: document.getElementById('municipio').value || null,
-                clues_id_uuid: document.getElementById('clues').value || null,
-                pais_id_uuid: document.getElementById('pais').value || null,
                 pob_indigena: document.getElementById('pob_indigena').checked,
                 pob_afromex: document.getElementById('pob_afromex').checked,
                 pob_migrante: document.getElementById('pob_migrante').checked,
-                tipo_cartilla_id_uuid: document.getElementById('tipo_cartilla').value || null,
-                motivo_entrega_id_uuid: document.getElementById('motivo_entrega').value || null,
-                agno_edicion_id_uuid: document.getElementById('agno_edicion').value || null,
-                servicio_entrega_id_uuid: document.getElementById('servicio_entrega').value || null,
-                si_no_id_uuid: document.getElementById('se_proporciono_info').value || null,
-                discapacidad_id_uuid: document.getElementById('discapacidad').value || null,
-                embarazo_id_uuid: document.getElementById('embarazo').value || null,
-                migracion_id_uuid: document.getElementById('tipo_migracion').value || null,
-                especificar_otro: document.getElementById('especificar_otro').value.trim() || null
+                especificar_otro: document.getElementById('especificar_otro').value.trim() || null,
+
+                entidad_id_uuid: getUUID('entidad'),
+                municipio_id_uuid: getUUID('municipio'),
+                clues_id_uuid: getUUID('clues'),
+                pais_id_uuid: getUUID('pais'),
+                tipo_cartilla_id_uuid: getUUID('tipo_cartilla'),
+                motivo_entrega_id_uuid: getUUID('motivo_entrega'),
+                agno_edicion_id_uuid: getUUID('agno_edicion'),
+                servicio_entrega_id_uuid: getUUID('servicio_entrega'),
+                si_no_id_uuid: siNoUUID,
+                discapacidad_id_uuid: getUUID('discapacidad'),
+                embarazo_id_uuid: getUUID('embarazo'),
+                migracion_id_uuid: getUUID('tipo_migracion')
             };
 
             // Validar campos requeridos
             if (!data.nombre || !data.paterno || !data.curp || !data.fecha_nac || !data.sexo || !data.fecha_entrega ||
-                !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid || !data.clues_id_uuid || !data.entidad_id_uuid || !data.municipio_id_uuid) {
-                errorElement.textContent = 'Por favor completa todos los campos requeridos (*)';
+                !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid || !data.clues_id_uuid ||
+                !data.entidad_id_uuid || !data.municipio_id_uuid || !data.si_no_id_uuid) {
+                errorElement.textContent = '⚠️ Por favor completa todos los campos requeridos (*)';
+                errorElement.style.color = '#f72585';
+                submitBtn.disabled = false;
+                submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
                 return;
             }
 
+            // Limpiar mensajes de error anteriores
             errorElement.textContent = '';
+            errorElement.style.color = '';
             submitBtn.disabled = true;
             submitBtn.textContent = 'Guardando...';
 
@@ -2450,12 +2597,8 @@
                         .update(data)
                         .eq('id_uuid', editIdVal);
                 } else {
-                    var folioResult = await supabaseClient.rpc('generar_folio');
-                    if (folioResult.error) {
-                        throw folioResult.error;
-                    }
-                    data.folio = folioResult.data || '0000000000';
-                    data.id_uuid = crypto.randomUUID ? crypto.randomUUID() : self.crypto.randomUUID();
+                    data.folio = await generarFolio();
+                    data.id_uuid = crypto.randomUUID ? crypto.randomUUID() : generarUUID();
 
                     result = await supabaseClient
                         .from('censo')
@@ -2463,10 +2606,25 @@
                 }
 
                 if (result.error) {
+                    // ============================================================
+                    // DETECTAR ERROR DE CURP DUPLICADA
+                    // ============================================================
+                    if (result.error.code === '23505' ||
+                        (result.error.message && result.error.message.includes('duplicate key'))) {
+                        errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
+                        errorElement.style.color = '#f72585';
+                        setTimeout(function () {
+                            errorElement.textContent = '';
+                        }, 5000);
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
+                        return;
+                    }
                     throw result.error;
                 }
 
                 successElement.textContent = isEdit ? '✅ Registro actualizado correctamente' : '✅ Registro guardado correctamente';
+                successElement.style.color = '#4cc9f0';
                 setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
@@ -2476,7 +2634,19 @@
 
             } catch (error) {
                 console.error('Error al guardar:', error);
-                errorElement.textContent = 'Error al guardar: ' + error.message;
+
+                // Verificar si el error contiene información sobre CURP duplicada
+                if (error.message && (error.message.includes('duplicate key') || error.message.includes('23505'))) {
+                    errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
+                } else if (error.message && error.message.includes('violates foreign key')) {
+                    errorElement.textContent = '❌ Error de relación: Uno de los valores seleccionados no existe en la base de datos.';
+                } else {
+                    errorElement.textContent = '❌ Error al guardar: ' + (error.message || JSON.stringify(error));
+                }
+                errorElement.style.color = '#f72585';
+                setTimeout(function () {
+                    errorElement.textContent = '';
+                }, 6000);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = isEdit ? 'Actualizar Registro' : 'Guardar Registro';
@@ -2484,7 +2654,7 @@
         }
 
         // ============================================================
-        // ELIMINAR REGISTRO
+        // ELIMINAR REGISTRO - CON VERIFICACIÓN DE CLUES
         // ============================================================
         async function eliminarCenso(id) {
             if (!confirm('¿Estás seguro de eliminar este registro?')) {
@@ -2492,6 +2662,34 @@
             }
 
             try {
+                // ============================================================
+                // OBTENER USUARIO ACTUAL
+                // ============================================================
+                var user = await getUsuarioActual();
+                if (!user) return;
+
+                // ============================================================
+                // VERIFICAR QUE EL REGISTRO PERTENECE AL CLUES DEL USUARIO
+                // ============================================================
+                var checkResult = await supabaseClient
+                    .from('censo')
+                    .select('clues_id_uuid')
+                    .eq('id_uuid', id)
+                    .single();
+
+                if (checkResult.error) {
+                    throw checkResult.error;
+                }
+
+                if (user.clues_id_uuid && checkResult.data.clues_id_uuid !== user.clues_id_uuid) {
+                    errorElement.textContent = '❌ No tienes permiso para eliminar este registro. Pertenece a otro centro de salud.';
+                    errorElement.style.color = '#f72585';
+                    setTimeout(function () {
+                        errorElement.textContent = '';
+                    }, 5000);
+                    return;
+                }
+
                 var result = await supabaseClient
                     .from('censo')
                     .delete()
@@ -2523,7 +2721,28 @@
             createParticles();
             mostrarUsuario();
 
-            // Evento para cambio de sexo - ACTUALIZA EMBARAZO
+            // Validar CURP en tiempo real
+            var curpInput = document.getElementById('curp');
+            if (curpInput) {
+                // Forzar mayúsculas mientras escribe
+                curpInput.addEventListener('input', function () {
+                    this.value = this.value.toUpperCase();
+                });
+
+                var timeoutId;
+                curpInput.addEventListener('input', function () {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(function () {
+                        validarCurpEnTiempoReal();
+                    }, 300);
+                });
+
+                // Validar al perder el foco
+                curpInput.addEventListener('blur', function () {
+                    validarCurpEnTiempoReal();
+                });
+            }
+
             var sexoSelect = document.getElementById('sexo');
             if (sexoSelect) {
                 sexoSelect.addEventListener('change', function () {
@@ -2553,7 +2772,6 @@
                 });
             }
 
-            // Evento para cambio de fecha de nacimiento
             var fechaNacInput = document.getElementById('fecha_nac');
             if (fechaNacInput) {
                 fechaNacInput.addEventListener('change', function () {
@@ -2561,19 +2779,16 @@
                 });
             }
 
-            // Cargar catálogos y censo
             cargarCatalogos().then(function () {
                 cargarCenso();
             });
 
-            // Evento para cerrar modal con ESC
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     cerrarModal();
                 }
             });
 
-            // Evento para cerrar modal al hacer clic fuera
             modalOverlay.addEventListener('click', function (e) {
                 if (e.target === modalOverlay) {
                     cerrarModal();
@@ -2581,7 +2796,6 @@
             });
         });
 
-        // Exponer funciones globalmente
         window.abrirModal = abrirModal;
         window.cerrarModal = cerrarModal;
         window.editarCenso = editarCenso;
@@ -2593,6 +2807,129 @@
         window.cargarMunicipios = cargarMunicipios;
         window.cargarCatalogos = cargarCatalogos;
         window.actualizarRestriccionesEmbarazo = actualizarRestriccionesEmbarazo;
+        window.esUUID = esUUID;
+        window.generarUUID = generarUUID;
+        window.getSiNoUUID = getSiNoUUID;
+    </script>
+    <script>
+        // ============================================================
+        // VERIFICAR SI CURP YA EXISTE EN LA BASE DE DATOS
+        // ============================================================
+        async function verificarCurpDuplicada(curp, id_uuid_actual) {
+            if (!curp) return false;
+
+            try {
+                // Buscar registros con la misma CURP
+                var query = supabaseClient
+                    .from('censo')
+                    .select('id_uuid, curp')
+                    .eq('curp', curp.toUpperCase().trim());
+
+                // Si estamos editando, excluir el registro actual
+                if (id_uuid_actual) {
+                    query = query.neq('id_uuid', id_uuid_actual);
+                }
+
+                var result = await query;
+
+                if (result.error) {
+                    console.error('Error al verificar CURP:', result.error);
+                    return false;
+                }
+
+                return result.data && result.data.length > 0;
+
+            } catch (error) {
+                console.error('Error al verificar CURP:', error);
+                return false;
+            }
+        }
+    </script>
+    <script>
+        // ============================================================
+        // VALIDAR CURP EN TIEMPO REAL
+        // ============================================================
+        async function validarCurpEnTiempoReal() {
+            var curpInput = document.getElementById('curp');
+            var curp = curpInput.value.trim().toUpperCase();
+            var curpError = document.getElementById('curpError');
+
+            // Crear elemento de error si no existe
+            if (!curpError) {
+                var errorDiv = document.createElement('div');
+                errorDiv.id = 'curpError';
+                errorDiv.className = 'helper-text';
+                errorDiv.style.marginTop = '0.2rem';
+                curpInput.parentNode.appendChild(errorDiv);
+            }
+
+            var errorEl = document.getElementById('curpError');
+
+            // Si está vacío, limpiar mensaje
+            if (!curp) {
+                errorEl.textContent = '';
+                curpInput.style.borderColor = '';
+                curpInput.style.boxShadow = '';
+                return;
+            }
+
+            // Validar formato y longitud
+            if (curp.length < 18) {
+                errorEl.textContent = `⚠️ La CURP debe tener 18 caracteres (actual: ${curp.length})`;
+                errorEl.style.color = '#f7b731';
+                curpInput.style.borderColor = '#f7b731';
+                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 183, 49, 0.2)';
+                return;
+            }
+
+            if (curp.length > 18) {
+                errorEl.textContent = `⚠️ La CURP excede los 18 caracteres (actual: ${curp.length})`;
+                errorEl.style.color = '#f72585';
+                curpInput.style.borderColor = '#f72585';
+                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                return;
+            }
+
+            // Validar formato con regex
+            if (!validarCurp(curp)) {
+                errorEl.textContent = '⚠️ Formato de CURP inválido. Ejemplo: RATJ800318MGTMRR07';
+                errorEl.style.color = '#f72585';
+                curpInput.style.borderColor = '#f72585';
+                curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                return;
+            }
+
+            // CURP con formato válido, verificar si ya existe en la BD
+            try {
+                var result = await supabaseClient
+                    .from('censo')
+                    .select('id_uuid, nombre, paterno')
+                    .eq('curp', curp);
+
+                // Si estamos editando, excluir el registro actual
+                var editIdVal = document.getElementById('editId').value;
+                if (editIdVal && result.data) {
+                    result.data = result.data.filter(item => item.id_uuid !== editIdVal);
+                }
+
+                if (result.data && result.data.length > 0) {
+                    // CURP ya existe
+                    var nombreExistente = result.data[0].nombre + ' ' + (result.data[0].paterno || '');
+                    errorEl.textContent = `❌ Esta CURP ya está registrada a nombre de: ${nombreExistente}`;
+                    errorEl.style.color = '#f72585';
+                    curpInput.style.borderColor = '#f72585';
+                    curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                } else {
+                    // CURP disponible y con formato válido
+                    errorEl.textContent = '✅ CURP válida y disponible';
+                    errorEl.style.color = '#4cc9f0';
+                    curpInput.style.borderColor = '#4cc9f0';
+                    curpInput.style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
+                }
+            } catch (error) {
+                console.error('Error al validar CURP:', error);
+            }
+        }
     </script>
 
 </body>
