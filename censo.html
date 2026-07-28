@@ -1714,19 +1714,32 @@
         // ============================================================
         function seleccionarSiPorDefecto() {
             var selectSiNo = document.getElementById('se_proporciono_info');
-            if (!selectSiNo) return;
-
-            if (selectSiNo.options.length <= 1) {
-                setTimeout(seleccionarSiPorDefecto, 300);
+            if (!selectSiNo) {
+                console.warn('⚠️ Select "se_proporciono_info" no encontrado');
                 return;
             }
 
+            // Si no tiene opciones, esperar
+            if (selectSiNo.options.length <= 1) {
+                console.log('⏳ Esperando opciones para "se_proporciono_info"...');
+                setTimeout(seleccionarSiPorDefecto, 500);
+                return;
+            }
+
+            // Buscar "Sí" en las opciones
             for (var i = 0; i < selectSiNo.options.length; i++) {
                 var texto = selectSiNo.options[i].text.toLowerCase().trim();
                 if (texto === 'sí' || texto === 'si') {
                     selectSiNo.value = selectSiNo.options[i].value;
+                    console.log('✅ "se_proporciono_info" seleccionado: "Sí" (valor: ' + selectSiNo.options[i].value + ')');
                     return;
                 }
+            }
+
+            // Si no encuentra "Sí", seleccionar la primera opción válida
+            if (selectSiNo.options.length > 1) {
+                selectSiNo.value = selectSiNo.options[1].value;
+                console.log('⚠️ "Sí" no encontrado, seleccionando: ' + selectSiNo.options[1].text);
             }
         }
 
@@ -1745,7 +1758,12 @@
         async function cargarCatalogo(idSelect, tabla, campoTexto) {
             try {
                 var select = document.getElementById(idSelect);
-                if (!select) return false;
+                if (!select) {
+                    console.warn(`⚠️ Select "${idSelect}" no encontrado`);
+                    return false;
+                }
+
+                console.log(`🔄 Cargando ${idSelect} desde "${tabla}"...`);
 
                 var result = await supabaseClient
                     .from(tabla)
@@ -1754,38 +1772,61 @@
 
                 if (result.data && result.data.length > 0) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
+                    var count = 0;
                     result.data.forEach(function (item) {
                         if (esUUID(item.id_uuid)) {
                             var valor = item[campoTexto] || 'Sin nombre';
                             select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                            count++;
                         }
                     });
+                    console.log(`✅ ${idSelect}: ${count} opciones cargadas desde BD`);
                     return true;
                 }
 
-                // Fallback si no hay datos
+                // Fallback
+                console.warn(`⚠️ No hay datos en "${tabla}", usando fallback para ${idSelect}`);
                 if (DATOS_FALLBACK[idSelect]) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
                     DATOS_FALLBACK[idSelect].forEach(function (item) {
                         var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
                         select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
                     });
+                    console.log(`✅ ${idSelect}: ${DATOS_FALLBACK[idSelect].length} opciones desde fallback`);
+                    return true;
+                }
+
+                // Si no hay fallback, crear opciones mínimas para selects críticos
+                if (idSelect === 'se_proporciono_info') {
+                    select.innerHTML = '<option value="">Seleccionar...</option>';
+                    select.innerHTML += `<option value="${generarUUID()}">Sí</option>`;
+                    select.innerHTML += `<option value="${generarUUID()}">No</option>`;
+                    console.log(`✅ ${idSelect}: creado manualmente con "Sí" y "No"`);
                     return true;
                 }
 
                 return false;
 
             } catch (error) {
-                console.error('Error cargando catálogo:', error);
-                // Intentar fallback
+                console.error(`❌ Error cargando ${idSelect}:`, error);
                 var select = document.getElementById(idSelect);
-                if (select && DATOS_FALLBACK[idSelect]) {
-                    select.innerHTML = '<option value="">Seleccionar...</option>';
-                    DATOS_FALLBACK[idSelect].forEach(function (item) {
-                        var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
-                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
-                    });
-                    return true;
+                if (select) {
+                    // Crear opciones mínimas para selects críticos
+                    if (idSelect === 'se_proporciono_info') {
+                        select.innerHTML = '<option value="">Seleccionar...</option>';
+                        select.innerHTML += `<option value="${generarUUID()}">Sí</option>`;
+                        select.innerHTML += `<option value="${generarUUID()}">No</option>`;
+                        console.log(`✅ ${idSelect}: creado manualmente (error)`);
+                        return true;
+                    }
+                    if (DATOS_FALLBACK[idSelect]) {
+                        select.innerHTML = '<option value="">Seleccionar...</option>';
+                        DATOS_FALLBACK[idSelect].forEach(function (item) {
+                            var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
+                            select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                        });
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -1815,7 +1856,11 @@
                 catalogos.cargados = true;
                 console.log('✅ Catálogos cargados');
 
-                seleccionarSiPorDefecto();
+                // FORZAR selección de "Sí" después de un breve retraso
+                setTimeout(function () {
+                    seleccionarSiPorDefecto();
+                }, 300);
+
                 actualizarRestriccionesEmbarazo('', 0);
 
             } catch (error) {
@@ -2140,16 +2185,24 @@
             }
 
             if (catalogos.cargados) {
-                seleccionarSiPorDefecto();
+                console.log('📦 Catálogos ya cargados, abriendo modal...');
+                // Forzar selección de "Sí" al abrir el modal
+                setTimeout(function () {
+                    seleccionarSiPorDefecto();
+                }, 100);
                 abrirModalCinematico('modalOverlay');
                 return;
             }
 
+            console.log('📦 Cargando catálogos antes de abrir modal...');
             cargarCatalogos().then(function () {
-                seleccionarSiPorDefecto();
+                console.log('✅ Catálogos cargados, abriendo modal...');
+                setTimeout(function () {
+                    seleccionarSiPorDefecto();
+                }, 300);
                 abrirModalCinematico('modalOverlay');
             }).catch(function (error) {
-                console.error('Error al cargar catálogos:', error);
+                console.error('❌ Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos. Intenta de nuevo.';
                 abrirModalCinematico('modalOverlay');
             });
