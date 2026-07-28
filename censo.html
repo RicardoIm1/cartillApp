@@ -1681,7 +1681,7 @@
                 {id_uuid: generarUUID(), migracion: 'Retorno'},
                 {id_uuid: generarUUID(), migracion: 'Tránsito'}
             ],
-            si_no: [
+            se_proporciono_info: [
                 {id_uuid: generarUUID(), sino: 'Sí'},
                 {id_uuid: generarUUID(), sino: 'No'}
             ],
@@ -1708,40 +1708,6 @@
                 {id_uuid: generarUUID(), motivo: 'Otro'}
             ]
         };
-
-        // ============================================================
-        // FUNCIÓN PARA SELECCIONAR "SÍ" POR DEFECTO
-        // ============================================================
-        function seleccionarSiPorDefecto() {
-            var selectSiNo = document.getElementById('se_proporciono_info');
-            if (!selectSiNo) {
-                console.warn('⚠️ Select "se_proporciono_info" no encontrado');
-                return;
-            }
-
-            // Si no tiene opciones, esperar
-            if (selectSiNo.options.length <= 1) {
-                console.log('⏳ Esperando opciones para "se_proporciono_info"...');
-                setTimeout(seleccionarSiPorDefecto, 500);
-                return;
-            }
-
-            // Buscar "Sí" en las opciones
-            for (var i = 0; i < selectSiNo.options.length; i++) {
-                var texto = selectSiNo.options[i].text.toLowerCase().trim();
-                if (texto === 'sí' || texto === 'si') {
-                    selectSiNo.value = selectSiNo.options[i].value;
-                    console.log('✅ "se_proporciono_info" seleccionado: "Sí" (valor: ' + selectSiNo.options[i].value + ')');
-                    return;
-                }
-            }
-
-            // Si no encuentra "Sí", seleccionar la primera opción válida
-            if (selectSiNo.options.length > 1) {
-                selectSiNo.value = selectSiNo.options[1].value;
-                console.log('⚠️ "Sí" no encontrado, seleccionando: ' + selectSiNo.options[1].text);
-            }
-        }
 
         // ============================================================
         // VALIDAR UUID
@@ -1826,10 +1792,17 @@
                 catalogos.cargados = true;
                 console.log('✅ Catálogos cargados');
 
-                // FORZAR selección de "Sí" después de un breve retraso
-                setTimeout(function () {
-                    seleccionarSiPorDefecto();
-                }, 300);
+                // Seleccionar "Sí" por defecto en se_proporciono_info
+                var selectSiNo = document.getElementById('se_proporciono_info');
+                if (selectSiNo && selectSiNo.options.length > 1) {
+                    for (var i = 0; i < selectSiNo.options.length; i++) {
+                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
+                        if (texto === 'sí' || texto === 'si') {
+                            selectSiNo.value = selectSiNo.options[i].value;
+                            break;
+                        }
+                    }
+                }
 
                 actualizarRestriccionesEmbarazo('', 0);
 
@@ -1843,41 +1816,14 @@
         // CARGAR MUNICIPIOS
         // ============================================================
         async function cargarMunicipios() {
-            var entidadSelect = document.getElementById('entidad');
-            var entidadId = entidadSelect.value;
-            var entidadTexto = entidadSelect.options[entidadSelect.selectedIndex]?.text || '';
+            var entidadId = document.getElementById('entidad').value;
             var municipioSelect = document.getElementById('municipio');
 
-            // Si no hay entidad seleccionada, limpiar municipios
             if (!entidadId) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
             }
 
-            // Verificar si es un marcador de fallback
-            var esFallback = entidadId.startsWith('fb_');
-
-            if (esFallback) {
-                // Si es fallback, usar municipios de fallback
-                console.log(`🔄 Usando fallback para municipios de: ${entidadTexto}`);
-                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-
-                // Generar municipios de ejemplo para el fallback
-                var municipiosFallback = [
-                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
-                ];
-
-                municipiosFallback.forEach(function (m) {
-                    municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
-                });
-                console.log('✅ Municipios de fallback cargados');
-                return;
-            }
-
-            // Si es UUID válido, buscar en la BD
             if (!esUUID(entidadId)) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
@@ -1900,61 +1846,24 @@
                     });
                     console.log(`✅ Municipios cargados desde BD: ${result.data.length}`);
                 } else {
-                    // Si no hay municipios en BD, usar fallback
                     console.warn('⚠️ No hay municipios en BD, usando fallback');
-                    var municipiosFallback = [
-                        {id_uuid: generarUUID(), municipio: 'Municipio 1'},
-                        {id_uuid: generarUUID(), municipio: 'Municipio 2'},
-                        {id_uuid: generarUUID(), municipio: 'Municipio 3'},
-                        {id_uuid: generarUUID(), municipio: 'Municipio 4'}
-                    ];
-                    municipiosFallback.forEach(function (m) {
+                    DATOS_FALLBACK.municipio.forEach(function (m) {
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                     });
                 }
             } catch (error) {
                 console.error('❌ Error al cargar municipios:', error);
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                var municipiosFallback = [
-                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
-                ];
-                municipiosFallback.forEach(function (m) {
+                DATOS_FALLBACK.municipio.forEach(function (m) {
                     municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                 });
             }
         }
 
-        // ============================================================
-        // CARGAR MUNICIPIOS CON VALOR SELECCIONADO - CON SOPORTE PARA FALLBACK
-        // ============================================================
         async function cargarMunicipiosConValor(entidadId, valorSeleccionado) {
-            var entidadSelect = document.getElementById('entidad');
-            var entidadTexto = entidadSelect.options[entidadSelect.selectedIndex]?.text || '';
             var municipioSelect = document.getElementById('municipio');
 
-            // Verificar si es un marcador de fallback
-            var esFallback = entidadId && entidadId.startsWith('fb_');
-
-            if (esFallback || !entidadId) {
-                // Si es fallback o no hay entidad, usar municipios de fallback
-                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                var municipiosFallback = [
-                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
-                ];
-                municipiosFallback.forEach(function (m) {
-                    var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
-                    municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
-                });
-                return;
-            }
-
-            if (!esUUID(entidadId)) {
+            if (!entidadId || !esUUID(entidadId)) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
             }
@@ -1976,13 +1885,7 @@
                         }
                     });
                 } else {
-                    var municipiosFallback = [
-                        {id_uuid: generarUUID(), municipio: 'Municipio 1'},
-                        {id_uuid: generarUUID(), municipio: 'Municipio 2'},
-                        {id_uuid: generarUUID(), municipio: 'Municipio 3'},
-                        {id_uuid: generarUUID(), municipio: 'Municipio 4'}
-                    ];
-                    municipiosFallback.forEach(function (m) {
+                    DATOS_FALLBACK.municipio.forEach(function (m) {
                         var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
                     });
@@ -1990,13 +1893,7 @@
             } catch (error) {
                 console.error('❌ Error al cargar municipios:', error);
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                var municipiosFallback = [
-                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
-                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
-                ];
-                municipiosFallback.forEach(function (m) {
+                DATOS_FALLBACK.municipio.forEach(function (m) {
                     var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
                     municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
                 });
@@ -2240,10 +2137,17 @@
 
             if (catalogos.cargados) {
                 console.log('📦 Catálogos ya cargados, abriendo modal...');
-                // Forzar selección de "Sí" al abrir el modal
-                setTimeout(function () {
-                    seleccionarSiPorDefecto();
-                }, 100);
+                // Seleccionar "Sí" por defecto
+                var selectSiNo = document.getElementById('se_proporciono_info');
+                if (selectSiNo && selectSiNo.options.length > 1) {
+                    for (var i = 0; i < selectSiNo.options.length; i++) {
+                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
+                        if (texto === 'sí' || texto === 'si') {
+                            selectSiNo.value = selectSiNo.options[i].value;
+                            break;
+                        }
+                    }
+                }
                 abrirModalCinematico('modalOverlay');
                 return;
             }
@@ -2251,9 +2155,16 @@
             console.log('📦 Cargando catálogos antes de abrir modal...');
             cargarCatalogos().then(function () {
                 console.log('✅ Catálogos cargados, abriendo modal...');
-                setTimeout(function () {
-                    seleccionarSiPorDefecto();
-                }, 300);
+                var selectSiNo = document.getElementById('se_proporciono_info');
+                if (selectSiNo && selectSiNo.options.length > 1) {
+                    for (var i = 0; i < selectSiNo.options.length; i++) {
+                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
+                        if (texto === 'sí' || texto === 'si') {
+                            selectSiNo.value = selectSiNo.options[i].value;
+                            break;
+                        }
+                    }
+                }
                 abrirModalCinematico('modalOverlay');
             }).catch(function (error) {
                 console.error('❌ Error al cargar catálogos:', error);
@@ -2277,14 +2188,13 @@
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-            <div class="empty-state">
-                <div class="loading-spinner"></div>
-                Cargando registros...
-            </div>
-        `;
+                <div class="empty-state">
+                    <div class="loading-spinner"></div>
+                    Cargando registros...
+                </div>
+            `;
                 errorElement.textContent = '';
 
-                // CAMBIAR: Usar tabla 'censo' en lugar de 'vista_censo'
                 var query = supabaseClient
                     .from('censo')
                     .select('*')
@@ -2307,10 +2217,10 @@
 
                 if (data.length === 0) {
                     censoContainer.innerHTML = `
-                <div class="empty-state">
-                    📭 No hay registros de censo
-                </div>
-            `;
+                    <div class="empty-state">
+                        📭 No hay registros de censo
+                    </div>
+                `;
                     return;
                 }
 
@@ -2320,52 +2230,52 @@
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-            <div class="empty-state">
-                ❌ Error al cargar los datos
-            </div>
-        `;
+                <div class="empty-state">
+                    ❌ Error al cargar los datos
+                </div>
+            `;
             }
         }
 
         function renderTable(data) {
             var html = `
-        <table>
-            <thead>
-                <tr>
-                    <th>Folio</th>
-                    <th>Nombre</th>
-                    <th>CURP</th>
-                    <th>Fecha Entrega</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
+            <table>
+                <thead>
+                    <tr>
+                        <th>Folio</th>
+                        <th>Nombre</th>
+                        <th>CURP</th>
+                        <th>Fecha Entrega</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
 
             data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
 
                 html += `
-            <tr>
-                <td><span class="badge">${row.folio || 'N/A'}</span></td>
-                <td>${nombreCompleto}</td>
-                <td>${row.curp || 'N/A'}</td>
-                <td>${fechaEntrega}</td>
-                <td>
-                    <div class="table-actions">
-                        <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
-                        <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
-                    </div>
-                </td>
-            </tr>
-        `;
+                <tr>
+                    <td><span class="badge">${row.folio || 'N/A'}</span></td>
+                    <td>${nombreCompleto}</td>
+                    <td>${row.curp || 'N/A'}</td>
+                    <td>${fechaEntrega}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
+                            <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
             });
 
             html += `
-            </tbody>
-        </table>
-    `;
+                </tbody>
+            </table>
+        `;
 
             censoContainer.innerHTML = html;
         }
@@ -2379,7 +2289,6 @@
                     await cargarCatalogos();
                 }
 
-                // CAMBIAR: Usar tabla 'censo' en lugar de 'vista_censo'
                 var result = await supabaseClient
                     .from('censo')
                     .select('*')
@@ -2680,7 +2589,6 @@
         window.cargarMunicipios = cargarMunicipios;
         window.cargarCatalogos = cargarCatalogos;
         window.actualizarRestriccionesEmbarazo = actualizarRestriccionesEmbarazo;
-        window.seleccionarSiPorDefecto = seleccionarSiPorDefecto;
         window.esUUID = esUUID;
         window.generarUUID = generarUUID;
     </script>
