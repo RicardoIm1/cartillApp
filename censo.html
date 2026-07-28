@@ -1599,35 +1599,175 @@
         }
 
         // ============================================================
-        // CATÁLOGOS - VERSIÓN CORREGIDA
+        // DATOS DE RESPALDO (FALLBACK) PARA CADA CATÁLOGO
         // ============================================================
-        var catalogos = {cargados: false};
+        var DATOS_FALLBACK = {
+            entidad: [
+                { id_uuid: 'ent-01', entidad: 'Aguascalientes' },
+                { id_uuid: 'ent-02', entidad: 'Baja California' },
+                { id_uuid: 'ent-03', entidad: 'Baja California Sur' },
+                { id_uuid: 'ent-04', entidad: 'Campeche' },
+                { id_uuid: 'ent-05', entidad: 'Coahuila' },
+                { id_uuid: 'ent-06', entidad: 'Colima' },
+                { id_uuid: 'ent-07', entidad: 'Chiapas' },
+                { id_uuid: 'ent-08', entidad: 'Chihuahua' },
+                { id_uuid: 'ent-09', entidad: 'Ciudad de México' },
+                { id_uuid: 'ent-10', entidad: 'Durango' },
+                { id_uuid: 'ent-11', entidad: 'Guanajuato' },
+                { id_uuid: 'ent-12', entidad: 'Guerrero' },
+                { id_uuid: 'ent-13', entidad: 'Hidalgo' },
+                { id_uuid: 'ent-14', entidad: 'Jalisco' },
+                { id_uuid: 'ent-15', entidad: 'Estado de México' },
+                { id_uuid: 'ent-16', entidad: 'Michoacán' },
+                { id_uuid: 'ent-17', entidad: 'Morelos' },
+                { id_uuid: 'ent-18', entidad: 'Nayarit' },
+                { id_uuid: 'ent-19', entidad: 'Nuevo León' },
+                { id_uuid: 'ent-20', entidad: 'Oaxaca' },
+                { id_uuid: 'ent-21', entidad: 'Puebla' },
+                { id_uuid: 'ent-22', entidad: 'Querétaro' },
+                { id_uuid: 'ent-23', entidad: 'Quintana Roo' },
+                { id_uuid: 'ent-24', entidad: 'San Luis Potosí' },
+                { id_uuid: 'ent-25', entidad: 'Sinaloa' },
+                { id_uuid: 'ent-26', entidad: 'Sonora' },
+                { id_uuid: 'ent-27', entidad: 'Tabasco' },
+                { id_uuid: 'ent-28', entidad: 'Tamaulipas' },
+                { id_uuid: 'ent-29', entidad: 'Tlaxcala' },
+                { id_uuid: 'ent-30', entidad: 'Veracruz' },
+                { id_uuid: 'ent-31', entidad: 'Yucatán' },
+                { id_uuid: 'ent-32', entidad: 'Zacatecas' }
+            ],
+            pais: [
+                { id_uuid: 'pais-01', pais: 'México' },
+                { id_uuid: 'pais-02', pais: 'Estados Unidos' },
+                { id_uuid: 'pais-03', pais: 'Guatemala' },
+                { id_uuid: 'pais-04', pais: 'Honduras' },
+                { id_uuid: 'pais-05', pais: 'El Salvador' }
+            ],
+            agno_edicion: [
+                { id_uuid: 'agno-2024', agno_edicion: '2024' },
+                { id_uuid: 'agno-2023', agno_edicion: '2023' },
+                { id_uuid: 'agno-2022', agno_edicion: '2022' },
+                { id_uuid: 'agno-2021', agno_edicion: '2021' },
+                { id_uuid: 'agno-2020', agno_edicion: '2020' }
+            ],
+            servicio_entrega: [
+                { id_uuid: 'serv-01', servicio_entrega: 'Consulta Externa' },
+                { id_uuid: 'serv-02', servicio_entrega: 'Urgencias' },
+                { id_uuid: 'serv-03', servicio_entrega: 'Hospitalización' },
+                { id_uuid: 'serv-04', servicio_entrega: 'Atención Domiciliaria' }
+            ],
+            discapacidad: [
+                { id_uuid: 'disc-01', discapacidad: 'Ninguna' },
+                { id_uuid: 'disc-02', discapacidad: 'Física' },
+                { id_uuid: 'disc-03', discapacidad: 'Visual' },
+                { id_uuid: 'disc-04', discapacidad: 'Auditiva' },
+                { id_uuid: 'disc-05', discapacidad: 'Intelectual' },
+                { id_uuid: 'disc-06', discapacidad: 'Psicosocial' }
+            ],
+            tipo_migracion: [
+                { id_uuid: 'mig-01', migracion: 'Ninguna' },
+                { id_uuid: 'mig-02', migracion: 'Interna' },
+                { id_uuid: 'mig-03', migracion: 'Internacional' },
+                { id_uuid: 'mig-04', migracion: 'Retorno' }
+            ],
+            si_no: [
+                { id_uuid: 'sn-01', sino: 'Sí' },
+                { id_uuid: 'sn-02', sino: 'No' }
+            ]
+        };
 
-        // Función principal para cargar todos los catálogos
+        // ============================================================
+        // CATÁLOGOS - FUNCIÓN MEJORADA CON FALLBACK
+        // ============================================================
+        var catalogos = { cargados: false };
+
         async function cargarCatalogos() {
             try {
                 console.log('📦 Cargando todos los catálogos...');
 
-                // Cargar cada catálogo secuencialmente para mejor control
-                await cargarEntidades();
-                await cargarPaises();
-                await cargarClues();
-                await cargarTiposCartilla();
-                await cargarMotivos();
-                await cargarAnios();
-                await cargarServicios();
-                await cargarSiNo();
-                await cargarDiscapacidades();
-                await cargarEmbarazos();
-                await cargarMigraciones();
+                // Cargar cada catálogo con fallback
+                await cargarCatalogoConFallback('entidad', 'entidad', 'entidad');
+                await cargarCatalogoConFallback('pais', 'pais', 'pais');
+                await cargarCatalogoConFallback('clues', 'clues', 'clues');
+                await cargarCatalogoConFallback('tipo_cartilla', 'tipo_cartilla', 'tipo_cartilla');
+                await cargarCatalogoConFallback('motivo_entrega', 'motivo_entrega', 'motivo');
+                await cargarCatalogoConFallback('agno_edicion', 'agno_edicion', 'agno_edicion');
+                await cargarCatalogoConFallback('servicio_entrega', 'servicio_entrega', 'servicio_entrega');
+                await cargarCatalogoConFallback('se_proporciono_info', 'si_no', 'sino');
+                await cargarCatalogoConFallback('discapacidad', 'discapacidad', 'discapacidad');
+                await cargarCatalogoConFallback('embarazo', 'embarazo', 'embarazo');
+                await cargarCatalogoConFallback('tipo_migracion', 'tipo_migracion', 'migracion');
 
                 catalogos.cargados = true;
                 console.log('✅ Todos los catálogos cargados correctamente');
                 verificarSelects();
 
+                // Seleccionar "Sí" por defecto en se_proporciono_info
+                var selectSiNo = document.getElementById('se_proporciono_info');
+                if (selectSiNo) {
+                    for (var i = 0; i < selectSiNo.options.length; i++) {
+                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
+                        if (texto === 'sí' || texto === 'si') {
+                            selectSiNo.value = selectSiNo.options[i].value;
+                            console.log('✅ "Se proporcionó información" por defecto: "Sí"');
+                            break;
+                        }
+                    }
+                }
+
             } catch (error) {
                 console.error('❌ Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos: ' + error.message;
+            }
+        }
+
+        async function cargarCatalogoConFallback(idSelect, tabla, campoTexto) {
+            try {
+                console.log(`🔄 Cargando ${idSelect} desde tabla "${tabla}"...`);
+                var result = await supabaseClient.from(tabla).select(`id_uuid, ${campoTexto}`).order(campoTexto);
+
+                var select = document.getElementById(idSelect);
+                if (!select) {
+                    console.warn(`⚠️ Select "${idSelect}" no encontrado`);
+                    return;
+                }
+
+                // Si hay datos en la BD, usarlos
+                if (result.data && result.data.length > 0) {
+                    select.innerHTML = '<option value="">Seleccionar...</option>';
+                    result.data.forEach(function (item) {
+                        var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
+                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                    });
+                    console.log(`✅ ${idSelect} cargados desde BD:`, result.data.length);
+                    return;
+                }
+
+                // Si no hay datos en la BD, usar fallback
+                console.warn(`⚠️ No hay datos en "${tabla}", usando datos de respaldo para ${idSelect}`);
+                if (DATOS_FALLBACK[idSelect]) {
+                    select.innerHTML = '<option value="">Seleccionar...</option>';
+                    DATOS_FALLBACK[idSelect].forEach(function (item) {
+                        var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
+                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                    });
+                    console.log(`✅ ${idSelect} cargados desde fallback:`, DATOS_FALLBACK[idSelect].length);
+                } else {
+                    console.warn(`⚠️ No hay datos de respaldo para ${idSelect}`);
+                }
+
+            } catch (error) {
+                console.error(`❌ Error cargando ${idSelect}:`, error);
+                // Intentar usar fallback
+                var select = document.getElementById(idSelect);
+                if (select && DATOS_FALLBACK[idSelect]) {
+                    select.innerHTML = '<option value="">Seleccionar...</option>';
+                    DATOS_FALLBACK[idSelect].forEach(function (item) {
+                        var valor = item[campoTexto] || item[Object.keys(item)[1]] || 'Sin nombre';
+                        select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
+                    });
+                    console.log(`✅ ${idSelect} cargados desde fallback (error):`, DATOS_FALLBACK[idSelect].length);
+                }
             }
         }
 
@@ -1639,257 +1779,6 @@
                     console.log(`  - Select "${id}": ${select.options.length} opciones`);
                 }
             });
-        }
-
-        // ============================================================
-        // FUNCIONES PARA CADA CATÁLOGO - CORREGIDAS
-        // ============================================================
-
-        async function cargarEntidades() {
-            try {
-                console.log('🔄 Cargando entidades...');
-                var result = await supabaseClient.from('entidad').select('id_uuid, entidad').order('entidad');
-                var select = document.getElementById('entidad');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (e) {
-                        select.innerHTML += `<option value="${e.id_uuid}">${e.entidad}</option>`;
-                    });
-                    console.log('✅ Entidades cargadas:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron entidades en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando entidades:', error);
-            }
-        }
-
-        async function cargarPaises() {
-            try {
-                console.log('🔄 Cargando países...');
-                var result = await supabaseClient.from('pais').select('id_uuid, pais').order('pais');
-                var select = document.getElementById('pais');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (p) {
-                        select.innerHTML += `<option value="${p.id_uuid}">${p.pais}</option>`;
-                    });
-                    console.log('✅ Países cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron países en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando países:', error);
-            }
-        }
-
-        async function cargarClues() {
-            try {
-                console.log('🔄 Cargando CLUES...');
-                var result = await supabaseClient.from('clues').select('id_uuid, clues, nombre').order('nombre');
-                var select = document.getElementById('clues');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (c) {
-                        select.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
-                    });
-                    console.log('✅ CLUES cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron CLUES en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando CLUES:', error);
-            }
-        }
-
-        async function cargarTiposCartilla() {
-            try {
-                console.log('🔄 Cargando tipos de cartilla...');
-                var result = await supabaseClient.from('tipo_cartilla').select('id_uuid, tipo_cartilla').order('tipo_cartilla');
-                var select = document.getElementById('tipo_cartilla');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (t) {
-                        select.innerHTML += `<option value="${t.id_uuid}">${t.tipo_cartilla}</option>`;
-                    });
-                    console.log('✅ Tipos de cartilla cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron tipos de cartilla en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando tipos de cartilla:', error);
-            }
-        }
-
-        async function cargarMotivos() {
-            try {
-                console.log('🔄 Cargando motivos de entrega...');
-                var result = await supabaseClient.from('motivo_entrega').select('id_uuid, motivo').order('motivo');
-                var select = document.getElementById('motivo_entrega');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (m) {
-                        select.innerHTML += `<option value="${m.id_uuid}">${m.motivo}</option>`;
-                    });
-                    console.log('✅ Motivos cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron motivos en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando motivos:', error);
-            }
-        }
-
-        async function cargarAnios() {
-            try {
-                console.log('🔄 Cargando años de edición...');
-                var result = await supabaseClient.from('agno_edicion').select('id_uuid, agno_edicion').order('agno_edicion', {ascending: false});
-                var select = document.getElementById('agno_edicion');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (a) {
-                        select.innerHTML += `<option value="${a.id_uuid}">${a.agno_edicion}</option>`;
-                    });
-                    console.log('✅ Años cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron años de edición en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando años:', error);
-            }
-        }
-
-        async function cargarServicios() {
-            try {
-                console.log('🔄 Cargando servicios de entrega...');
-                var result = await supabaseClient.from('servicio_entrega').select('id_uuid, servicio_entrega').order('servicio_entrega');
-                var select = document.getElementById('servicio_entrega');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (s) {
-                        select.innerHTML += `<option value="${s.id_uuid}">${s.servicio_entrega}</option>`;
-                    });
-                    console.log('✅ Servicios cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron servicios en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando servicios:', error);
-            }
-        }
-
-        async function cargarSiNo() {
-            try {
-                console.log('🔄 Cargando Si/No...');
-                var result = await supabaseClient.from('si_no').select('id_uuid, sino').order('sino');
-                var select = document.getElementById('se_proporciono_info');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (s) {
-                        select.innerHTML += `<option value="${s.id_uuid}">${s.sino}</option>`;
-                    });
-                    console.log('✅ Si/No cargados:', result.data.length);
-
-                    // Poner "Sí" como valor por defecto (CORREGIDO)
-                    for (var i = 0; i < select.options.length; i++) {
-                        var texto = select.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
-                            select.value = select.options[i].value;
-                            console.log('✅ "Se proporcionó información" por defecto: "Sí"');
-                            break;
-                        }
-                    }
-                } else {
-                    console.warn('⚠️ No se encontraron opciones Si/No en la base de datos');
-                    // Fallback: crear opciones manuales
-                    select.innerHTML = `
-                        <option value="">Seleccionar...</option>
-                        <option value="si">Sí</option>
-                        <option value="no">No</option>
-                    `;
-                    select.value = 'si';
-                    console.log('✅ "Se proporcionó información" por defecto: "Sí" (fallback)');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando Si/No:', error);
-                // Fallback
-                var select = document.getElementById('se_proporciono_info');
-                select.innerHTML = `
-                    <option value="">Seleccionar...</option>
-                    <option value="si">Sí</option>
-                    <option value="no">No</option>
-                `;
-                select.value = 'si';
-            }
-        }
-
-        async function cargarDiscapacidades() {
-            try {
-                console.log('🔄 Cargando discapacidades...');
-                var result = await supabaseClient.from('discapacidad').select('id_uuid, discapacidad').order('discapacidad');
-                var select = document.getElementById('discapacidad');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (d) {
-                        select.innerHTML += `<option value="${d.id_uuid}">${d.discapacidad}</option>`;
-                    });
-                    console.log('✅ Discapacidades cargadas:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron discapacidades en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando discapacidades:', error);
-            }
-        }
-
-        async function cargarEmbarazos() {
-            try {
-                console.log('🔄 Cargando embarazos...');
-                var result = await supabaseClient.from('embarazo').select('id_uuid, embarazo').order('embarazo');
-                var select = document.getElementById('embarazo');
-
-                if (result.data && result.data.length > 0) {
-                    select.innerHTML = '<option value="">Seleccionar...</option>';
-                    result.data.forEach(function (e) {
-                        select.innerHTML += `<option value="${e.id_uuid}">${e.embarazo}</option>`;
-                    });
-                    console.log('✅ Embarazos cargados desde BD:', result.data.length);
-                } else {
-                    console.warn('⚠️ No hay datos de embarazo, usando valores por defecto');
-                    select.innerHTML = `
-                        <option value="">Seleccionar...</option>
-                        <option value="no">No</option>
-                        <option value="si">Sí</option>
-                    `;
-                }
-            } catch (error) {
-                console.error('❌ Error cargando embarazos:', error);
-                var select = document.getElementById('embarazo');
-                select.innerHTML = `
-                    <option value="">Seleccionar...</option>
-                    <option value="no">No</option>
-                    <option value="si">Sí</option>
-                `;
-            }
-        }
-
-        async function cargarMigraciones() {
-            try {
-                console.log('🔄 Cargando tipos de migración...');
-                var result = await supabaseClient.from('tipo_migracion').select('id_uuid, migracion').order('migracion');
-                var select = document.getElementById('tipo_migracion');
-                select.innerHTML = '<option value="">Seleccionar...</option>';
-                if (result.data && result.data.length > 0) {
-                    result.data.forEach(function (m) {
-                        select.innerHTML += `<option value="${m.id_uuid}">${m.migracion}</option>`;
-                    });
-                    console.log('✅ Tipos de migración cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron tipos de migración en la base de datos');
-                }
-            } catch (error) {
-                console.error('❌ Error cargando migraciones:', error);
-            }
         }
 
         // ============================================================
@@ -2151,7 +2040,7 @@
         }
 
         // ============================================================
-        // MODAL - CORREGIDO PARA ESPERAR QUE CARGUEN LOS CATÁLOGOS
+        // MODAL
         // ============================================================
         function abrirModal() {
             document.getElementById('censoForm').reset();
@@ -2167,7 +2056,6 @@
                 embarazoSelect.disabled = false;
             }
 
-            // Si los catálogos ya están cargados, abrir el modal inmediatamente
             if (catalogos.cargados) {
                 console.log('📦 Catálogos ya cargados, abriendo modal...');
                 if (typeof abrirModalCinematico === 'function') {
@@ -2178,7 +2066,6 @@
                 return;
             }
 
-            // Si no están cargados, cargarlos y luego abrir
             console.log('📦 Cargando catálogos antes de abrir modal...');
             cargarCatalogos().then(function () {
                 console.log('✅ Catálogos cargados, abriendo modal...');
@@ -2190,7 +2077,6 @@
             }).catch(function (error) {
                 console.error('❌ Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos. Intenta de nuevo.';
-                // Aún así abrir el modal
                 if (typeof abrirModalCinematico === 'function') {
                     abrirModalCinematico('modalOverlay');
                 } else {
@@ -2225,7 +2111,7 @@
                 var query = supabaseClient
                     .from('vista_censo')
                     .select('*')
-                    .order('fecha_entrega', {ascending: false});
+                    .order('fecha_entrega', { ascending: false });
 
                 if (search.length > 0) {
                     query = query.or(
@@ -2318,7 +2204,6 @@
         // ============================================================
         async function editarCenso(id) {
             try {
-                // Asegurar que los catálogos estén cargados
                 if (!catalogos.cargados) {
                     await cargarCatalogos();
                 }
