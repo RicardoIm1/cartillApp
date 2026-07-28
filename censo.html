@@ -1874,15 +1874,48 @@
         // CARGAR MUNICIPIOS
         // ============================================================
         async function cargarMunicipios() {
-            var entidadId = document.getElementById('entidad').value;
+            var entidadSelect = document.getElementById('entidad');
+            var entidadId = entidadSelect.value;
+            var entidadTexto = entidadSelect.options[entidadSelect.selectedIndex]?.text || '';
             var municipioSelect = document.getElementById('municipio');
 
-            if (!entidadId || !esUUID(entidadId)) {
+            // Si no hay entidad seleccionada, limpiar municipios
+            if (!entidadId) {
+                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                return;
+            }
+
+            // Verificar si es un marcador de fallback
+            var esFallback = entidadId.startsWith('fb_');
+
+            if (esFallback) {
+                // Si es fallback, usar municipios de fallback
+                console.log(`🔄 Usando fallback para municipios de: ${entidadTexto}`);
+                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
+
+                // Generar municipios de ejemplo para el fallback
+                var municipiosFallback = [
+                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
+                ];
+
+                municipiosFallback.forEach(function (m) {
+                    municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
+                });
+                console.log('✅ Municipios de fallback cargados');
+                return;
+            }
+
+            // Si es UUID válido, buscar en la BD
+            if (!esUUID(entidadId)) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
             }
 
             try {
+                console.log(`🔄 Cargando municipios para entidad: ${entidadId}`);
                 var result = await supabaseClient
                     .from('municipio')
                     .select('id_uuid, municipio')
@@ -1896,30 +1929,69 @@
                             municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                         }
                     });
+                    console.log(`✅ Municipios cargados desde BD: ${result.data.length}`);
                 } else {
-                    // Fallback
-                    DATOS_FALLBACK.municipio.forEach(function (m) {
+                    // Si no hay municipios en BD, usar fallback
+                    console.warn('⚠️ No hay municipios en BD, usando fallback');
+                    var municipiosFallback = [
+                        {id_uuid: generarUUID(), municipio: 'Municipio 1'},
+                        {id_uuid: generarUUID(), municipio: 'Municipio 2'},
+                        {id_uuid: generarUUID(), municipio: 'Municipio 3'},
+                        {id_uuid: generarUUID(), municipio: 'Municipio 4'}
+                    ];
+                    municipiosFallback.forEach(function (m) {
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                     });
                 }
             } catch (error) {
-                console.error('Error al cargar municipios:', error);
+                console.error('❌ Error al cargar municipios:', error);
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                DATOS_FALLBACK.municipio.forEach(function (m) {
+                var municipiosFallback = [
+                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
+                ];
+                municipiosFallback.forEach(function (m) {
                     municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                 });
             }
         }
 
+        // ============================================================
+        // CARGAR MUNICIPIOS CON VALOR SELECCIONADO - CON SOPORTE PARA FALLBACK
+        // ============================================================
         async function cargarMunicipiosConValor(entidadId, valorSeleccionado) {
+            var entidadSelect = document.getElementById('entidad');
+            var entidadTexto = entidadSelect.options[entidadSelect.selectedIndex]?.text || '';
             var municipioSelect = document.getElementById('municipio');
 
-            if (!entidadId || !esUUID(entidadId)) {
+            // Verificar si es un marcador de fallback
+            var esFallback = entidadId && entidadId.startsWith('fb_');
+
+            if (esFallback || !entidadId) {
+                // Si es fallback o no hay entidad, usar municipios de fallback
+                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
+                var municipiosFallback = [
+                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
+                ];
+                municipiosFallback.forEach(function (m) {
+                    var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
+                    municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
+                });
+                return;
+            }
+
+            if (!esUUID(entidadId)) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
             }
 
             try {
+                console.log(`🔄 Cargando municipios con valor para entidad: ${entidadId}`);
                 var result = await supabaseClient
                     .from('municipio')
                     .select('id_uuid, municipio')
@@ -1935,15 +2007,27 @@
                         }
                     });
                 } else {
-                    DATOS_FALLBACK.municipio.forEach(function (m) {
+                    var municipiosFallback = [
+                        {id_uuid: generarUUID(), municipio: 'Municipio 1'},
+                        {id_uuid: generarUUID(), municipio: 'Municipio 2'},
+                        {id_uuid: generarUUID(), municipio: 'Municipio 3'},
+                        {id_uuid: generarUUID(), municipio: 'Municipio 4'}
+                    ];
+                    municipiosFallback.forEach(function (m) {
                         var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
                     });
                 }
             } catch (error) {
-                console.error('Error al cargar municipios:', error);
+                console.error('❌ Error al cargar municipios:', error);
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                DATOS_FALLBACK.municipio.forEach(function (m) {
+                var municipiosFallback = [
+                    {id_uuid: generarUUID(), municipio: 'Municipio 1'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 2'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 3'},
+                    {id_uuid: generarUUID(), municipio: 'Municipio 4'}
+                ];
+                municipiosFallback.forEach(function (m) {
                     var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
                     municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
                 });
