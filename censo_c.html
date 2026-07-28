@@ -1599,7 +1599,7 @@
         }
 
         // ============================================================
-        // CATÁLOGOS - VERSIÓN CORREGIDA
+        // CATÁLOGOS - VERSIÓN MEJORADA CON TODOS LOS SELECTS
         // ============================================================
         var catalogos = {cargados: false};
 
@@ -1608,21 +1608,24 @@
             try {
                 console.log('📦 Cargando todos los catálogos...');
 
-                // Cargar cada catálogo secuencialmente para mejor control
-                await cargarEntidades();
-                await cargarPaises();
-                await cargarClues();
-                await cargarTiposCartilla();
-                await cargarMotivos();
-                await cargarAnios();
-                await cargarServicios();
-                await cargarSiNo();
-                await cargarDiscapacidades();
-                await cargarEmbarazos();
-                await cargarMigraciones();
+                await Promise.all([
+                    cargarEntidades(),
+                    cargarPaises(),
+                    cargarClues(),
+                    cargarTiposCartilla(),
+                    cargarMotivos(),
+                    cargarAnios(),
+                    cargarServicios(),
+                    cargarSiNo(),
+                    cargarDiscapacidades(),
+                    cargarEmbarazos(),
+                    cargarMigraciones()
+                ]);
 
                 catalogos.cargados = true;
                 console.log('✅ Todos los catálogos cargados correctamente');
+
+                // Verificar que los selects tengan opciones
                 verificarSelects();
 
             } catch (error) {
@@ -1642,7 +1645,7 @@
         }
 
         // ============================================================
-        // FUNCIONES PARA CADA CATÁLOGO - CORREGIDAS
+        // FUNCIONES PARA CADA CATÁLOGO
         // ============================================================
 
         async function cargarEntidades() {
@@ -1657,7 +1660,7 @@
                     });
                     console.log('✅ Entidades cargadas:', result.data.length);
                 } else {
-                    console.warn('⚠️ No se encontraron entidades en la base de datos');
+                    console.warn('⚠️ No se encontraron entidades');
                 }
             } catch (error) {
                 console.error('❌ Error cargando entidades:', error);
@@ -1675,8 +1678,6 @@
                         select.innerHTML += `<option value="${p.id_uuid}">${p.pais}</option>`;
                     });
                     console.log('✅ Países cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron países en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando países:', error);
@@ -1694,8 +1695,6 @@
                         select.innerHTML += `<option value="${c.id_uuid}">${c.clues} - ${c.nombre}</option>`;
                     });
                     console.log('✅ CLUES cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron CLUES en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando CLUES:', error);
@@ -1713,8 +1712,6 @@
                         select.innerHTML += `<option value="${t.id_uuid}">${t.tipo_cartilla}</option>`;
                     });
                     console.log('✅ Tipos de cartilla cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron tipos de cartilla en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando tipos de cartilla:', error);
@@ -1732,8 +1729,6 @@
                         select.innerHTML += `<option value="${m.id_uuid}">${m.motivo}</option>`;
                     });
                     console.log('✅ Motivos cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron motivos en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando motivos:', error);
@@ -1751,8 +1746,6 @@
                         select.innerHTML += `<option value="${a.id_uuid}">${a.agno_edicion}</option>`;
                     });
                     console.log('✅ Años cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron años de edición en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando años:', error);
@@ -1770,8 +1763,6 @@
                         select.innerHTML += `<option value="${s.id_uuid}">${s.servicio_entrega}</option>`;
                     });
                     console.log('✅ Servicios cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron servicios en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando servicios:', error);
@@ -1790,36 +1781,17 @@
                     });
                     console.log('✅ Si/No cargados:', result.data.length);
 
-                    // Poner "Sí" como valor por defecto (CORREGIDO)
+                    // Poner "Sí" como valor por defecto
                     for (var i = 0; i < select.options.length; i++) {
-                        var texto = select.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
+                        if (select.options[i].text.toLowerCase() === 'sí' || select.options[i].text.toLowerCase() === 'si') {
                             select.value = select.options[i].value;
                             console.log('✅ "Se proporcionó información" por defecto: "Sí"');
                             break;
                         }
                     }
-                } else {
-                    console.warn('⚠️ No se encontraron opciones Si/No en la base de datos');
-                    // Fallback: crear opciones manuales
-                    select.innerHTML = `
-                        <option value="">Seleccionar...</option>
-                        <option value="si">Sí</option>
-                        <option value="no">No</option>
-                    `;
-                    select.value = 'si';
-                    console.log('✅ "Se proporcionó información" por defecto: "Sí" (fallback)');
                 }
             } catch (error) {
                 console.error('❌ Error cargando Si/No:', error);
-                // Fallback
-                var select = document.getElementById('se_proporciono_info');
-                select.innerHTML = `
-                    <option value="">Seleccionar...</option>
-                    <option value="si">Sí</option>
-                    <option value="no">No</option>
-                `;
-                select.value = 'si';
             }
         }
 
@@ -1834,8 +1806,6 @@
                         select.innerHTML += `<option value="${d.id_uuid}">${d.discapacidad}</option>`;
                     });
                     console.log('✅ Discapacidades cargadas:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron discapacidades en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando discapacidades:', error);
@@ -1855,6 +1825,7 @@
                     });
                     console.log('✅ Embarazos cargados desde BD:', result.data.length);
                 } else {
+                    // Fallback: opciones por defecto
                     console.warn('⚠️ No hay datos de embarazo, usando valores por defecto');
                     select.innerHTML = `
                         <option value="">Seleccionar...</option>
@@ -1864,6 +1835,7 @@
                 }
             } catch (error) {
                 console.error('❌ Error cargando embarazos:', error);
+                // Fallback
                 var select = document.getElementById('embarazo');
                 select.innerHTML = `
                     <option value="">Seleccionar...</option>
@@ -1884,8 +1856,6 @@
                         select.innerHTML += `<option value="${m.id_uuid}">${m.migracion}</option>`;
                     });
                     console.log('✅ Tipos de migración cargados:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron tipos de migración en la base de datos');
                 }
             } catch (error) {
                 console.error('❌ Error cargando migraciones:', error);
@@ -1916,9 +1886,6 @@
                     result.data.forEach(function (m) {
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}">${m.municipio}</option>`;
                     });
-                    console.log('✅ Municipios cargados para entidad:', result.data.length);
-                } else {
-                    console.warn('⚠️ No se encontraron municipios para esta entidad');
                 }
             } catch (error) {
                 console.error('❌ Error al cargar municipios:', error);
@@ -1946,7 +1913,6 @@
                         var selected = (m.id_uuid === valorSeleccionado) ? 'selected' : '';
                         municipioSelect.innerHTML += `<option value="${m.id_uuid}" ${selected}>${m.municipio}</option>`;
                     });
-                    console.log('✅ Municipios cargados con valor seleccionado');
                 }
             } catch (error) {
                 console.error('❌ Error al cargar municipios:', error);
@@ -2151,7 +2117,7 @@
         }
 
         // ============================================================
-        // MODAL - CORREGIDO PARA ESPERAR QUE CARGUEN LOS CATÁLOGOS
+        // MODAL
         // ============================================================
         function abrirModal() {
             document.getElementById('censoForm').reset();
@@ -2167,36 +2133,24 @@
                 embarazoSelect.disabled = false;
             }
 
-            // Si los catálogos ya están cargados, abrir el modal inmediatamente
-            if (catalogos.cargados) {
+            if (!catalogos.cargados) {
+                console.log('📦 Cargando catálogos...');
+                cargarCatalogos().then(function () {
+                    console.log('✅ Catálogos cargados, abriendo modal...');
+                    if (typeof abrirModalCinematico === 'function') {
+                        abrirModalCinematico('modalOverlay');
+                    } else {
+                        modalOverlay.classList.add('active');
+                    }
+                });
+            } else {
                 console.log('📦 Catálogos ya cargados, abriendo modal...');
                 if (typeof abrirModalCinematico === 'function') {
                     abrirModalCinematico('modalOverlay');
                 } else {
                     modalOverlay.classList.add('active');
                 }
-                return;
             }
-
-            // Si no están cargados, cargarlos y luego abrir
-            console.log('📦 Cargando catálogos antes de abrir modal...');
-            cargarCatalogos().then(function () {
-                console.log('✅ Catálogos cargados, abriendo modal...');
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
-            }).catch(function (error) {
-                console.error('❌ Error al cargar catálogos:', error);
-                errorElement.textContent = 'Error al cargar catálogos. Intenta de nuevo.';
-                // Aún así abrir el modal
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
-            });
         }
 
         function cerrarModal() {
@@ -2318,7 +2272,6 @@
         // ============================================================
         async function editarCenso(id) {
             try {
-                // Asegurar que los catálogos estén cargados
                 if (!catalogos.cargados) {
                     await cargarCatalogos();
                 }
