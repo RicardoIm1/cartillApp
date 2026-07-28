@@ -2437,7 +2437,7 @@
         // GUARDAR REGISTRO
         // ============================================================
         // ============================================================
-        // GUARDAR REGISTRO - CON VALIDACIÓN DE CURP ÚNICA
+        // GUARDAR REGISTRO - CON MANEJO DE ERROR DE CURP DUPLICADA
         // ============================================================
         async function guardarCenso(event) {
             event.preventDefault();
@@ -2448,13 +2448,9 @@
             // Obtener CURP
             var curp = document.getElementById('curp').value.trim().toUpperCase();
 
-            // ============================================================
-            // VALIDAR CURP DUPLICADA
-            // ============================================================
-            var curpDuplicada = await verificarCurpDuplicada(curp, isEdit ? editIdVal : null);
-
-            if (curpDuplicada) {
-                errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
+            // Validar formato de CURP
+            if (!validarCurp(curp)) {
+                errorElement.textContent = '❌ La CURP no tiene un formato válido. Debe tener 18 caracteres alfanuméricos.';
                 errorElement.style.color = '#f72585';
                 setTimeout(function () {
                     errorElement.textContent = '';
@@ -2507,13 +2503,16 @@
             if (!data.nombre || !data.paterno || !data.curp || !data.fecha_nac || !data.sexo || !data.fecha_entrega ||
                 !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid || !data.clues_id_uuid ||
                 !data.entidad_id_uuid || !data.municipio_id_uuid || !data.si_no_id_uuid) {
-                errorElement.textContent = 'Por favor completa todos los campos requeridos (*)';
+                errorElement.textContent = '⚠️ Por favor completa todos los campos requeridos (*)';
+                errorElement.style.color = '#f72585';
                 submitBtn.disabled = false;
                 submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
                 return;
             }
 
+            // Limpiar mensajes de error anteriores
             errorElement.textContent = '';
+            errorElement.style.color = '';
             submitBtn.disabled = true;
             submitBtn.textContent = 'Guardando...';
 
@@ -2535,10 +2534,25 @@
                 }
 
                 if (result.error) {
+                    // ============================================================
+                    // DETECTAR ERROR DE CURP DUPLICADA
+                    // ============================================================
+                    if (result.error.code === '23505' ||
+                        (result.error.message && result.error.message.includes('duplicate key'))) {
+                        errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
+                        errorElement.style.color = '#f72585';
+                        setTimeout(function () {
+                            errorElement.textContent = '';
+                        }, 5000);
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
+                        return;
+                    }
                     throw result.error;
                 }
 
                 successElement.textContent = isEdit ? '✅ Registro actualizado correctamente' : '✅ Registro guardado correctamente';
+                successElement.style.color = '#4cc9f0';
                 setTimeout(function () {
                     successElement.textContent = '';
                 }, 3000);
@@ -2548,7 +2562,19 @@
 
             } catch (error) {
                 console.error('Error al guardar:', error);
-                errorElement.textContent = 'Error al guardar: ' + (error.message || JSON.stringify(error));
+
+                // Verificar si el error contiene información sobre CURP duplicada
+                if (error.message && (error.message.includes('duplicate key') || error.message.includes('23505'))) {
+                    errorElement.textContent = '❌ Esta CURP ya está registrada en el sistema. No se permiten duplicados.';
+                } else if (error.message && error.message.includes('violates foreign key')) {
+                    errorElement.textContent = '❌ Error de relación: Uno de los valores seleccionados no existe en la base de datos.';
+                } else {
+                    errorElement.textContent = '❌ Error al guardar: ' + (error.message || JSON.stringify(error));
+                }
+                errorElement.style.color = '#f72585';
+                setTimeout(function () {
+                    errorElement.textContent = '';
+                }, 6000);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = isEdit ? 'Actualizar Registro' : 'Guardar Registro';
@@ -2594,6 +2620,18 @@
         window.addEventListener('load', function () {
             createParticles();
             mostrarUsuario();
+
+            // Validar CURP en tiempo real (con debounce)
+            var curpInput = document.getElementById('curp');
+            if (curpInput) {
+                var timeoutId;
+                curpInput.addEventListener('input', function () {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(function () {
+                        validarCurpEnTiempoReal();
+                    }, 500); // Esperar 500ms después de que el usuario deje de escribir
+                });
+            }
 
             var sexoSelect = document.getElementById('sexo');
             if (sexoSelect) {
@@ -2694,6 +2732,60 @@
             } catch (error) {
                 console.error('Error al verificar CURP:', error);
                 return false;
+            }
+        }
+    </script>
+    <script>
+        // ============================================================
+        // VALIDAR CURP EN TIEMPO REAL (CUANDO EL USUARIO TERMINA DE ESCRIBIR)
+        // ============================================================
+        async function validarCurpEnTiempoReal() {
+            var curpInput = document.getElementById('curp');
+            var curp = curpInput.value.trim().toUpperCase();
+            var curpError = document.getElementById('curpError');
+
+            if (!curp || curp.length < 18) {
+                if (curpError) curpError.textContent = '';
+                return;
+            }
+
+            try {
+                // Buscar si la CURP ya existe
+                var result = await supabaseClient
+                    .from('censo')
+                    .select('id_uuid, nombre, paterno')
+                    .eq('curp', curp);
+
+                // Si estamos editando, excluir el registro actual
+                var editIdVal = document.getElementById('editId').value;
+                if (editIdVal && result.data) {
+                    result.data = result.data.filter(item => item.id_uuid !== editIdVal);
+                }
+
+                if (result.data && result.data.length > 0) {
+                    // CURP ya existe
+                    var nombreExistente = result.data[0].nombre + ' ' + (result.data[0].paterno || '');
+                    if (!curpError) {
+                        // Crear elemento de error si no existe
+                        var errorDiv = document.createElement('div');
+                        errorDiv.id = 'curpError';
+                        errorDiv.className = 'helper-text';
+                        errorDiv.style.color = '#f72585';
+                        curpInput.parentNode.appendChild(errorDiv);
+                    }
+                    var errorEl = document.getElementById('curpError');
+                    errorEl.textContent = `⚠️ Esta CURP ya está registrada a nombre de: ${nombreExistente}`;
+                    curpInput.style.borderColor = '#f72585';
+                    curpInput.style.boxShadow = '0 0 0 3px rgba(247, 37, 133, 0.2)';
+                } else {
+                    // CURP disponible
+                    var errorEl = document.getElementById('curpError');
+                    if (errorEl) errorEl.textContent = '✅ CURP disponible para registro';
+                    curpInput.style.borderColor = '#4cc9f0';
+                    curpInput.style.boxShadow = '0 0 0 3px rgba(76, 201, 240, 0.2)';
+                }
+            } catch (error) {
+                console.error('Error al validar CURP:', error);
             }
         }
     </script>
