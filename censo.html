@@ -20,10 +20,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
     </script>
 
-    <!-- Transiciones cinematográficas para modales -->
-    <script src="common/transiciones.js">
-    </script>
-
     <style>
         /* ============================================================
        CSS VARIABLES PARA TEMA DIURNO / NOCTURNO - ESTILO JUGUETE 80'S
@@ -1698,14 +1694,32 @@
                 return;
             }
 
-            // Esperar a que el select tenga opciones
+            // Si el select tiene menos de 2 opciones, esperar
             if (selectSiNo.options.length <= 1) {
                 console.log('⏳ Esperando que se carguen las opciones de "se_proporciono_info"...');
+                // Limitar el número de intentos para evitar bucle infinito
+                if (!window._siNoIntentos) window._siNoIntentos = 0;
+                window._siNoIntentos++;
+                if (window._siNoIntentos > 10) {
+                    console.warn('⚠️ Demasiados intentos para seleccionar "Sí", forzando...');
+                    // Forzar opción por defecto
+                    if (selectSiNo.options.length > 0) {
+                        // Si hay al menos una opción (placeholder + alguna)
+                        if (selectSiNo.options.length > 1) {
+                            selectSiNo.value = selectSiNo.options[1].value;
+                        }
+                    }
+                    window._siNoIntentos = 0;
+                    return;
+                }
                 setTimeout(function () {
                     seleccionarSiPorDefecto();
-                }, 500);
+                }, 300);
                 return;
             }
+
+            // Reiniciar contador
+            window._siNoIntentos = 0;
 
             // Buscar la opción "Sí"
             var encontrado = false;
@@ -1713,14 +1727,14 @@
                 var texto = selectSiNo.options[i].text.toLowerCase().trim();
                 if (texto === 'sí' || texto === 'si') {
                     selectSiNo.value = selectSiNo.options[i].value;
-                    console.log('✅ "Se proporcionó información" seleccionado: "Sí" (valor: ' + selectSiNo.options[i].value + ')');
+                    console.log('✅ "Se proporcionó información" seleccionado: "Sí" (valor: ' + selectSiNo.options[i].value +
+                        ')');
                     encontrado = true;
                     break;
                 }
             }
 
             if (!encontrado && selectSiNo.options.length > 1) {
-                // Si no encuentra "Sí", seleccionar la primera opción después del placeholder
                 selectSiNo.value = selectSiNo.options[1].value;
                 console.log('⚠️ No se encontró "Sí", seleccionando primera opción: ' + selectSiNo.options[1].text);
             }
@@ -1763,6 +1777,14 @@
                     return true;
                 } else {
                     console.warn(`⚠️ No hay datos de respaldo para ${idSelect}`);
+                    // Para si_no, crear opciones manualmente
+                    if (idSelect === 'se_proporciono_info') {
+                        select.innerHTML = '<option value="">Seleccionar...</option>';
+                        select.innerHTML += '<option value="sn-01">Sí</option>';
+                        select.innerHTML += '<option value="sn-02">No</option>';
+                        console.log('✅ se_proporciono_info creado manualmente');
+                        return true;
+                    }
                     return false;
                 }
 
@@ -1778,6 +1800,17 @@
                     });
                     console.log(`✅ ${idSelect} cargados desde fallback (error)`);
                     return true;
+                }
+                // Para si_no, crear opciones manualmente
+                if (idSelect === 'se_proporciono_info') {
+                    var select = document.getElementById(idSelect);
+                    if (select) {
+                        select.innerHTML = '<option value="">Seleccionar...</option>';
+                        select.innerHTML += '<option value="sn-01">Sí</option>';
+                        select.innerHTML += '<option value="sn-02">No</option>';
+                        console.log('✅ se_proporciono_info creado manualmente (error)');
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -1849,6 +1882,7 @@
 
             try {
                 console.log(`🔄 Cargando municipios para entidad: ${entidadId}`);
+                // Usar el campo correcto según la tabla municipio
                 var result = await supabaseClient
                     .from('municipio')
                     .select('id_uuid, municipio')
@@ -1988,7 +2022,7 @@
             if (embarazoSelect.options.length <= 1) {
                 setTimeout(function () {
                     actualizarRestriccionesEmbarazo(sexo, edad);
-                }, 500);
+                }, 300);
                 return;
             }
 
@@ -2161,7 +2195,26 @@
         }
 
         // ============================================================
-        // MODAL - CORREGIDO CON seleccionarSiPorDefecto()
+        // FUNCIONES DE MODAL (sin transiciones.js)
+        // ============================================================
+        function abrirModalCinematico(id) {
+            var overlay = document.getElementById(id);
+            if (overlay) {
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function cerrarModalCinematico(id) {
+            var overlay = document.getElementById(id);
+            if (overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // ============================================================
+        // MODAL - CORREGIDO
         // ============================================================
         function abrirModal() {
             document.getElementById('censoForm').reset();
@@ -2180,44 +2233,30 @@
 
             if (catalogos.cargados) {
                 console.log('📦 Catálogos ya cargados, abriendo modal...');
-                // Asegurar que el select de si_no tenga "Sí" seleccionado
                 seleccionarSiPorDefecto();
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
                 return;
             }
 
             console.log('📦 Cargando catálogos antes de abrir modal...');
             cargarCatalogos().then(function () {
                 console.log('✅ Catálogos cargados, abriendo modal...');
-                // Asegurar que el select de si_no tenga "Sí" seleccionado
                 seleccionarSiPorDefecto();
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
             }).catch(function (error) {
                 console.error('❌ Error al cargar catálogos:', error);
                 errorElement.textContent = 'Error al cargar catálogos. Intenta de nuevo.';
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
             });
         }
 
         function cerrarModal() {
-            if (typeof cerrarModalCinematico === 'function') {
-                cerrarModalCinematico('modalOverlay');
-            } else {
-                modalOverlay.classList.remove('active');
-            }
+            cerrarModalCinematico('modalOverlay');
         }
+
+        // Exponer funciones de modal globalmente
+        window.abrirModalCinematico = abrirModalCinematico;
+        window.cerrarModalCinematico = cerrarModalCinematico;
 
         // ============================================================
         // CARGAR REGISTROS DE CENSO
@@ -2392,11 +2431,7 @@
                     actualizarRestriccionesEmbarazo('', 0);
                 }
 
-                if (typeof abrirModalCinematico === 'function') {
-                    abrirModalCinematico('modalOverlay');
-                } else {
-                    modalOverlay.classList.add('active');
-                }
+                abrirModalCinematico('modalOverlay');
 
             } catch (error) {
                 console.error('Error al cargar registro:', error);
