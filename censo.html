@@ -25,7 +25,6 @@
        CSS VARIABLES PARA TEMA DIURNO / NOCTURNO - ESTILO JUGUETE 80'S
        ============================================================ */
         :root {
-            /* Modo nocturno (por defecto) */
             --bg-gradient-start: #141E30;
             --bg-gradient-end: #243B55;
             --container-bg: #1c2541;
@@ -62,7 +61,6 @@
             --card-bg: rgba(255, 255, 255, 0.02);
         }
 
-        /* Modo diurno */
         body.light-mode {
             --bg-gradient-start: #e0e5ec;
             --bg-gradient-end: #f0f2f8;
@@ -100,9 +98,6 @@
             --card-bg: rgba(255, 255, 255, 0.5);
         }
 
-        /* ============================================================
-       ESTILOS GENERALES
-       ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -124,9 +119,6 @@
             overflow-y: hidden;
         }
 
-        /* ============================================================
-       PARTÍCULAS
-       ============================================================ */
         .particles {
             position: fixed;
             top: 0;
@@ -151,16 +143,12 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
-
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
             }
         }
 
-        /* ============================================================
-       CLAYMORPHISM CONTAINER - PLACA PRINCIPAL
-       ============================================================ */
         .censo-container {
             max-width: 1200px;
             width: 100%;
@@ -192,16 +180,12 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* ============================================================
-       BOTÓN DE TEMA - CON RELIEVE
-       ============================================================ */
         .theme-toggle {
             position: absolute;
             top: 1rem;
@@ -233,9 +217,6 @@
                 inset -3px -3px 6px var(--container-shadow-2);
         }
 
-        /* ============================================================
-       HEADER
-       ============================================================ */
         .censo-header {
             display: flex;
             justify-content: space-between;
@@ -261,9 +242,6 @@
             transition: color 0.3s ease;
         }
 
-        /* ============================================================
-       BOTONES - CON RELIEVE PROFUNDO
-       ============================================================ */
         .btn {
             padding: 0.6rem 1.5rem;
             border: none;
@@ -348,9 +326,6 @@
             flex-wrap: wrap;
         }
 
-        /* ============================================================
-       USER BADGE - CON RELIEVE
-       ============================================================ */
         .user-badge {
             display: inline-flex;
             align-items: center;
@@ -384,9 +359,6 @@
             color: var(--badge-text);
         }
 
-        /* ============================================================
-       SEARCH BAR - CON RELIEVE
-       ============================================================ */
         .search-bar {
             display: flex;
             gap: 1rem;
@@ -451,9 +423,6 @@
                 -4px -4px 8px var(--container-shadow-2);
         }
 
-        /* ============================================================
-       TABLA - CON RELIEVE INTERNO
-       ============================================================ */
         .table-container {
             border-radius: 16px;
             overflow: auto;
@@ -529,14 +498,6 @@
             background: var(--table-row-hover);
         }
 
-        tbody tr[style*="display: none"] {
-            opacity: 0;
-            transform: scale(0.98);
-        }
-
-        /* ============================================================
-       BADGES - CON RELIEVE
-       ============================================================ */
         .badge {
             display: inline-block;
             padding: 0.2rem 0.6rem;
@@ -564,9 +525,6 @@
                 -4px -4px 8px var(--container-shadow-2);
         }
 
-        /* ============================================================
-       ACCIONES DE TABLA - BOTONES CON RELIEVE
-       ============================================================ */
         .table-actions {
             display: flex;
             gap: 0.4rem;
@@ -610,9 +568,6 @@
             color: var(--btn-danger, #f72585);
         }
 
-        /* ============================================================
-       MODAL - TRANSICIONES CINEMATOGRÁFICAS CON RELIEVE
-       ============================================================ */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -699,9 +654,6 @@
             background: rgba(0, 0, 0, 0.15);
         }
 
-        /* ============================================================
-       MODAL - TÍTULO Y ANIMACIONES
-       ============================================================ */
         .modal-content h2 {
             margin-bottom: 1.5rem;
             color: var(--text-primary);
@@ -718,11 +670,9 @@
                 opacity: 0;
                 transform: translateY(-15px) scale(0.95);
             }
-
             60% {
                 transform: translateY(3px) scale(1.02);
             }
-
             100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -741,11 +691,9 @@
                 opacity: 0;
                 transform: scale(0.3) rotate(-20deg);
             }
-
             60% {
                 transform: scale(1.2) rotate(5deg);
             }
-
             100% {
                 opacity: 1;
                 transform: scale(1) rotate(0deg);
@@ -767,20 +715,15 @@
                 opacity: 0;
                 transform: translateY(20px) scale(0.97);
             }
-
             60% {
                 transform: translateY(-3px) scale(1.005);
             }
-
             100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
             }
         }
 
-        /* ============================================================
-       FORMULARIO DEL MODAL - GRID 3 COLUMNAS CON RELIEVE
-       ============================================================ */
         .modal-content .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -906,9 +849,6 @@
             margin-top: 0.2rem;
         }
 
-        /* ============================================================
-       ESTADOS
-       ============================================================ */
         .loading-spinner {
             display: inline-block;
             width: 20px;
@@ -956,9 +896,6 @@
             box-shadow: inset 2px 2px 4px rgba(76, 201, 240, 0.05);
         }
 
-        /* ============================================================
-       FOOTER
-       ============================================================ */
         .footer {
             text-align: center;
             padding: 0.8rem 0 0.3rem 0;
@@ -969,15 +906,11 @@
             margin-top: 0.5rem;
         }
 
-        /* ============================================================
-       RESPONSIVE
-       ============================================================ */
         @media (max-width: 1200px) {
             .modal-content {
                 max-width: 95vw;
                 padding: 2rem;
             }
-
             .modal-content .form-grid {
                 grid-template-columns: 1fr 1fr;
             }
@@ -989,26 +922,22 @@
                 height: auto;
                 overflow-y: auto;
             }
-
             .censo-container {
                 padding: 1.5rem;
                 height: auto;
                 max-height: none;
                 overflow: visible;
             }
-
             .modal-content {
                 padding: 1.5rem;
                 max-width: 100%;
                 margin: 0.5rem;
                 max-height: 95vh;
             }
-
             .modal-content .form-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 1rem;
             }
-
             .modal-content .form-section {
                 padding: 1rem 1.2rem;
             }
@@ -1020,80 +949,64 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .censo-header h1 {
                 font-size: 1.4rem;
             }
-
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
-
             .search-bar .search-input-wrap {
                 max-width: 100%;
             }
-
             .censo-container {
                 padding: 1rem;
             }
-
             .user-badge {
                 font-size: 0.75rem;
                 padding: 0.4rem 0.8rem;
             }
-
             table {
                 font-size: 0.75rem;
                 min-width: 600px;
             }
-
             th,
             td {
                 padding: 0.5rem 0.6rem;
             }
-
             .btn-icon {
                 width: 28px;
                 height: 28px;
                 font-size: 0.75rem;
             }
-
             .modal-content {
                 padding: 1rem;
                 border-radius: 16px;
                 margin: 0.3rem;
                 max-height: 98vh;
             }
-
             .modal-content .form-grid {
                 grid-template-columns: 1fr;
                 gap: 0.8rem;
             }
-
             .modal-content .form-group.full-width,
             .modal-content .form-group.half-width {
                 grid-column: 1;
             }
-
             .modal-content .form-section {
                 padding: 0.8rem 1rem;
                 margin-bottom: 0.8rem;
             }
-
             .modal-content h2 {
                 font-size: 1.3rem;
                 margin-bottom: 1rem;
             }
-
             .modal-content .checkbox-group {
                 gap: 1rem;
             }
-
             .modal-actions {
                 flex-direction: column;
             }
-
             .modal-actions .btn {
                 width: 100%;
                 justify-content: center;
@@ -1104,62 +1017,50 @@
             body {
                 padding: 0.5rem;
             }
-
             .censo-container {
                 padding: 0.8rem;
                 border-radius: 16px;
             }
-
             table {
                 min-width: 480px;
                 font-size: 0.7rem;
             }
-
             th,
             td {
                 padding: 0.35rem 0.4rem;
             }
-
             .btn-icon {
                 width: 24px;
                 height: 24px;
                 font-size: 0.65rem;
                 border-radius: 8px;
             }
-
             .badge {
                 font-size: 0.6rem;
                 padding: 0.1rem 0.4rem;
             }
-
             .badge-clues {
                 font-size: 0.55rem;
                 padding: 0.1rem 0.4rem;
                 min-width: 35px;
             }
-
             .modal-content {
                 padding: 0.8rem;
             }
-
             .modal-content .form-section {
                 padding: 0.6rem 0.8rem;
             }
-
             .modal-content .form-group input,
             .modal-content .form-group select {
                 padding: 0.5rem 0.7rem;
                 font-size: 0.8rem;
             }
-
             .modal-content .form-group label {
                 font-size: 0.75rem;
             }
-
             .modal-content .checkbox-group label {
                 font-size: 0.75rem;
             }
-
             .modal-content h2 {
                 font-size: 1.1rem;
             }
@@ -1170,69 +1071,55 @@
                 height: calc(100vh - 2rem);
                 padding: 1rem;
             }
-
             .censo-header {
                 margin-bottom: 0.5rem;
             }
-
             .censo-header h1 {
                 font-size: 1.2rem;
             }
-
             .user-badge {
                 padding: 0.3rem 0.8rem;
                 font-size: 0.7rem;
                 margin-bottom: 0.5rem;
             }
-
             .search-bar {
                 margin-bottom: 0.5rem;
             }
-
             .table-container {
                 padding: 0.3rem;
             }
-
             thead th {
                 padding: 0.4rem 0.6rem;
                 font-size: 0.65rem;
             }
-
             tbody td {
                 padding: 0.4rem 0.6rem;
             }
-
             .btn-icon {
                 width: 24px;
                 height: 24px;
                 font-size: 0.65rem;
             }
-
             .modal-content {
                 padding: 1.2rem;
                 max-height: 95vh;
             }
-
             .modal-content .form-section {
                 padding: 0.8rem 1rem;
                 margin-bottom: 0.6rem;
             }
-
             .modal-content .form-grid {
                 gap: 0.6rem;
             }
-
             .modal-content h2 {
                 font-size: 1.2rem;
                 margin-bottom: 0.8rem;
             }
-
             .modal-content .form-group input,
             .modal-content .form-group select {
                 padding: 0.5rem 0.8rem;
                 font-size: 0.8rem;
             }
-
             .modal-actions {
                 margin-top: 0.8rem;
                 padding-top: 0.5rem;
@@ -1415,10 +1302,12 @@
                                 <option value="">Seleccionar...</option>
                             </select>
                         </div>
+                        <!-- se_proporciono_info: Select FIJO - no se carga desde BD -->
                         <div class="form-group">
                             <label for="se_proporciono_info">¿Se proporcionó información? *</label>
                             <select id="se_proporciono_info" required>
-                                <option value="">Seleccionar...</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1606,106 +1495,102 @@
         }
 
         // ============================================================
-        // DATOS DE RESPALDO CON UUIDs VÁLIDOS
+        // DATOS DE RESPALDO
         // ============================================================
         var DATOS_FALLBACK = {
             entidad: [
-                {id_uuid: generarUUID(), entidad: 'Aguascalientes'},
-                {id_uuid: generarUUID(), entidad: 'Baja California'},
-                {id_uuid: generarUUID(), entidad: 'Baja California Sur'},
-                {id_uuid: generarUUID(), entidad: 'Campeche'},
-                {id_uuid: generarUUID(), entidad: 'Coahuila'},
-                {id_uuid: generarUUID(), entidad: 'Colima'},
-                {id_uuid: generarUUID(), entidad: 'Chiapas'},
-                {id_uuid: generarUUID(), entidad: 'Chihuahua'},
-                {id_uuid: generarUUID(), entidad: 'Ciudad de México'},
-                {id_uuid: generarUUID(), entidad: 'Durango'},
-                {id_uuid: generarUUID(), entidad: 'Guanajuato'},
-                {id_uuid: generarUUID(), entidad: 'Guerrero'},
-                {id_uuid: generarUUID(), entidad: 'Hidalgo'},
-                {id_uuid: generarUUID(), entidad: 'Jalisco'},
-                {id_uuid: generarUUID(), entidad: 'Estado de México'},
-                {id_uuid: generarUUID(), entidad: 'Michoacán'},
-                {id_uuid: generarUUID(), entidad: 'Morelos'},
-                {id_uuid: generarUUID(), entidad: 'Nayarit'},
-                {id_uuid: generarUUID(), entidad: 'Nuevo León'},
-                {id_uuid: generarUUID(), entidad: 'Oaxaca'},
-                {id_uuid: generarUUID(), entidad: 'Puebla'},
-                {id_uuid: generarUUID(), entidad: 'Querétaro'},
-                {id_uuid: generarUUID(), entidad: 'Quintana Roo'},
-                {id_uuid: generarUUID(), entidad: 'San Luis Potosí'},
-                {id_uuid: generarUUID(), entidad: 'Sinaloa'},
-                {id_uuid: generarUUID(), entidad: 'Sonora'},
-                {id_uuid: generarUUID(), entidad: 'Tabasco'},
-                {id_uuid: generarUUID(), entidad: 'Tamaulipas'},
-                {id_uuid: generarUUID(), entidad: 'Tlaxcala'},
-                {id_uuid: generarUUID(), entidad: 'Veracruz'},
-                {id_uuid: generarUUID(), entidad: 'Yucatán'},
-                {id_uuid: generarUUID(), entidad: 'Zacatecas'}
+                { id_uuid: generarUUID(), entidad: 'Aguascalientes' },
+                { id_uuid: generarUUID(), entidad: 'Baja California' },
+                { id_uuid: generarUUID(), entidad: 'Baja California Sur' },
+                { id_uuid: generarUUID(), entidad: 'Campeche' },
+                { id_uuid: generarUUID(), entidad: 'Coahuila' },
+                { id_uuid: generarUUID(), entidad: 'Colima' },
+                { id_uuid: generarUUID(), entidad: 'Chiapas' },
+                { id_uuid: generarUUID(), entidad: 'Chihuahua' },
+                { id_uuid: generarUUID(), entidad: 'Ciudad de México' },
+                { id_uuid: generarUUID(), entidad: 'Durango' },
+                { id_uuid: generarUUID(), entidad: 'Guanajuato' },
+                { id_uuid: generarUUID(), entidad: 'Guerrero' },
+                { id_uuid: generarUUID(), entidad: 'Hidalgo' },
+                { id_uuid: generarUUID(), entidad: 'Jalisco' },
+                { id_uuid: generarUUID(), entidad: 'Estado de México' },
+                { id_uuid: generarUUID(), entidad: 'Michoacán' },
+                { id_uuid: generarUUID(), entidad: 'Morelos' },
+                { id_uuid: generarUUID(), entidad: 'Nayarit' },
+                { id_uuid: generarUUID(), entidad: 'Nuevo León' },
+                { id_uuid: generarUUID(), entidad: 'Oaxaca' },
+                { id_uuid: generarUUID(), entidad: 'Puebla' },
+                { id_uuid: generarUUID(), entidad: 'Querétaro' },
+                { id_uuid: generarUUID(), entidad: 'Quintana Roo' },
+                { id_uuid: generarUUID(), entidad: 'San Luis Potosí' },
+                { id_uuid: generarUUID(), entidad: 'Sinaloa' },
+                { id_uuid: generarUUID(), entidad: 'Sonora' },
+                { id_uuid: generarUUID(), entidad: 'Tabasco' },
+                { id_uuid: generarUUID(), entidad: 'Tamaulipas' },
+                { id_uuid: generarUUID(), entidad: 'Tlaxcala' },
+                { id_uuid: generarUUID(), entidad: 'Veracruz' },
+                { id_uuid: generarUUID(), entidad: 'Yucatán' },
+                { id_uuid: generarUUID(), entidad: 'Zacatecas' }
             ],
             pais: [
-                {id_uuid: generarUUID(), pais: 'México'},
-                {id_uuid: generarUUID(), pais: 'Estados Unidos'},
-                {id_uuid: generarUUID(), pais: 'Guatemala'},
-                {id_uuid: generarUUID(), pais: 'Honduras'},
-                {id_uuid: generarUUID(), pais: 'El Salvador'}
+                { id_uuid: generarUUID(), pais: 'México' },
+                { id_uuid: generarUUID(), pais: 'Estados Unidos' },
+                { id_uuid: generarUUID(), pais: 'Guatemala' },
+                { id_uuid: generarUUID(), pais: 'Honduras' },
+                { id_uuid: generarUUID(), pais: 'El Salvador' }
             ],
             agno_edicion: [
-                {id_uuid: generarUUID(), agno_edicion: '2024'},
-                {id_uuid: generarUUID(), agno_edicion: '2023'},
-                {id_uuid: generarUUID(), agno_edicion: '2022'},
-                {id_uuid: generarUUID(), agno_edicion: '2021'},
-                {id_uuid: generarUUID(), agno_edicion: '2020'},
-                {id_uuid: generarUUID(), agno_edicion: '2019'}
+                { id_uuid: generarUUID(), agno_edicion: '2024' },
+                { id_uuid: generarUUID(), agno_edicion: '2023' },
+                { id_uuid: generarUUID(), agno_edicion: '2022' },
+                { id_uuid: generarUUID(), agno_edicion: '2021' },
+                { id_uuid: generarUUID(), agno_edicion: '2020' },
+                { id_uuid: generarUUID(), agno_edicion: '2019' }
             ],
             servicio_entrega: [
-                {id_uuid: generarUUID(), servicio_entrega: 'Consulta Externa'},
-                {id_uuid: generarUUID(), servicio_entrega: 'Urgencias'},
-                {id_uuid: generarUUID(), servicio_entrega: 'Hospitalización'},
-                {id_uuid: generarUUID(), servicio_entrega: 'Atención Domiciliaria'},
-                {id_uuid: generarUUID(), servicio_entrega: 'Prevención'}
+                { id_uuid: generarUUID(), servicio_entrega: 'Consulta Externa' },
+                { id_uuid: generarUUID(), servicio_entrega: 'Urgencias' },
+                { id_uuid: generarUUID(), servicio_entrega: 'Hospitalización' },
+                { id_uuid: generarUUID(), servicio_entrega: 'Atención Domiciliaria' },
+                { id_uuid: generarUUID(), servicio_entrega: 'Prevención' }
             ],
             discapacidad: [
-                {id_uuid: generarUUID(), discapacidad: 'Ninguna'},
-                {id_uuid: generarUUID(), discapacidad: 'Física'},
-                {id_uuid: generarUUID(), discapacidad: 'Visual'},
-                {id_uuid: generarUUID(), discapacidad: 'Auditiva'},
-                {id_uuid: generarUUID(), discapacidad: 'Intelectual'},
-                {id_uuid: generarUUID(), discapacidad: 'Psicosocial'},
-                {id_uuid: generarUUID(), discapacidad: 'Múltiple'}
+                { id_uuid: generarUUID(), discapacidad: 'Ninguna' },
+                { id_uuid: generarUUID(), discapacidad: 'Física' },
+                { id_uuid: generarUUID(), discapacidad: 'Visual' },
+                { id_uuid: generarUUID(), discapacidad: 'Auditiva' },
+                { id_uuid: generarUUID(), discapacidad: 'Intelectual' },
+                { id_uuid: generarUUID(), discapacidad: 'Psicosocial' },
+                { id_uuid: generarUUID(), discapacidad: 'Múltiple' }
             ],
             tipo_migracion: [
-                {id_uuid: generarUUID(), migracion: 'Ninguna'},
-                {id_uuid: generarUUID(), migracion: 'Interna'},
-                {id_uuid: generarUUID(), migracion: 'Internacional'},
-                {id_uuid: generarUUID(), migracion: 'Retorno'},
-                {id_uuid: generarUUID(), migracion: 'Tránsito'}
-            ],
-            se_proporciono_info: [
-                {id_uuid: generarUUID(), sino: 'Sí'},
-                {id_uuid: generarUUID(), sino: 'No'}
+                { id_uuid: generarUUID(), migracion: 'Ninguna' },
+                { id_uuid: generarUUID(), migracion: 'Interna' },
+                { id_uuid: generarUUID(), migracion: 'Internacional' },
+                { id_uuid: generarUUID(), migracion: 'Retorno' },
+                { id_uuid: generarUUID(), migracion: 'Tránsito' }
             ],
             embarazo: [
-                {id_uuid: generarUUID(), embarazo: 'No'},
-                {id_uuid: generarUUID(), embarazo: 'Sí'}
+                { id_uuid: generarUUID(), embarazo: 'No' },
+                { id_uuid: generarUUID(), embarazo: 'Sí' }
             ],
             municipio: [
-                {id_uuid: generarUUID(), municipio: 'Municipio 1'},
-                {id_uuid: generarUUID(), municipio: 'Municipio 2'}
+                { id_uuid: generarUUID(), municipio: 'Municipio 1' },
+                { id_uuid: generarUUID(), municipio: 'Municipio 2' }
             ],
             tipo_cartilla: [
-                {id_uuid: generarUUID(), tipo_cartilla: 'NIÑAS Y NIÑOS'},
-                {id_uuid: generarUUID(), tipo_cartilla: 'ADOLESCENTES'},
-                {id_uuid: generarUUID(), tipo_cartilla: 'HOMBRES'},
-                {id_uuid: generarUUID(), tipo_cartilla: 'MUJERES'},
-                {id_uuid: generarUUID(), tipo_cartilla: 'ADULTO MAYOR'}
+                { id_uuid: generarUUID(), tipo_cartilla: 'NIÑAS Y NIÑOS' },
+                { id_uuid: generarUUID(), tipo_cartilla: 'ADOLESCENTES' },
+                { id_uuid: generarUUID(), tipo_cartilla: 'HOMBRES' },
+                { id_uuid: generarUUID(), tipo_cartilla: 'MUJERES' },
+                { id_uuid: generarUUID(), tipo_cartilla: 'ADULTO MAYOR' }
             ],
             motivo_entrega: [
-                {id_uuid: generarUUID(), motivo: 'Primera vez'},
-                {id_uuid: generarUUID(), motivo: 'Renovación'},
-                {id_uuid: generarUUID(), motivo: 'Reposición'},
-                {id_uuid: generarUUID(), motivo: 'Traslado'},
-                {id_uuid: generarUUID(), motivo: 'Otro'}
+                { id_uuid: generarUUID(), motivo: 'Primera vez' },
+                { id_uuid: generarUUID(), motivo: 'Renovación' },
+                { id_uuid: generarUUID(), motivo: 'Reposición' },
+                { id_uuid: generarUUID(), motivo: 'Traslado' },
+                { id_uuid: generarUUID(), motivo: 'Otro' }
             ]
         };
 
@@ -1771,7 +1656,7 @@
         // ============================================================
         // CARGAR TODOS LOS CATÁLOGOS
         // ============================================================
-        var catalogos = {cargados: false};
+        var catalogos = { cargados: false };
 
         async function cargarCatalogos() {
             try {
@@ -1786,23 +1671,11 @@
                 await cargarCatalogo('servicio_entrega', 'servicio_entrega', 'servicio_entrega');
                 await cargarCatalogo('discapacidad', 'discapacidad', 'discapacidad');
                 await cargarCatalogo('tipo_migracion', 'tipo_migracion', 'migracion');
-                await cargarCatalogo('se_proporciono_info', 'si_no', 'sino');
+                // se_proporciono_info NO se carga desde BD - es fijo en el HTML
                 await cargarCatalogo('embarazo', 'embarazo', 'embarazo');
 
                 catalogos.cargados = true;
                 console.log('✅ Catálogos cargados');
-
-                // Seleccionar "Sí" por defecto en se_proporciono_info
-                var selectSiNo = document.getElementById('se_proporciono_info');
-                if (selectSiNo && selectSiNo.options.length > 1) {
-                    for (var i = 0; i < selectSiNo.options.length; i++) {
-                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
-                            selectSiNo.value = selectSiNo.options[i].value;
-                            break;
-                        }
-                    }
-                }
 
                 actualizarRestriccionesEmbarazo('', 0);
 
@@ -1819,12 +1692,7 @@
             var entidadId = document.getElementById('entidad').value;
             var municipioSelect = document.getElementById('municipio');
 
-            if (!entidadId) {
-                municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
-                return;
-            }
-
-            if (!esUUID(entidadId)) {
+            if (!entidadId || !esUUID(entidadId)) {
                 municipioSelect.innerHTML = '<option value="">Seleccionar...</option>';
                 return;
             }
@@ -2130,6 +1998,9 @@
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
             document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
 
+            // Por defecto "Sí" en se_proporciono_info
+            document.getElementById('se_proporciono_info').value = 'si';
+
             var embarazoSelect = document.getElementById('embarazo');
             if (embarazoSelect) {
                 embarazoSelect.disabled = true;
@@ -2137,17 +2008,6 @@
 
             if (catalogos.cargados) {
                 console.log('📦 Catálogos ya cargados, abriendo modal...');
-                // Seleccionar "Sí" por defecto
-                var selectSiNo = document.getElementById('se_proporciono_info');
-                if (selectSiNo && selectSiNo.options.length > 1) {
-                    for (var i = 0; i < selectSiNo.options.length; i++) {
-                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
-                            selectSiNo.value = selectSiNo.options[i].value;
-                            break;
-                        }
-                    }
-                }
                 abrirModalCinematico('modalOverlay');
                 return;
             }
@@ -2155,16 +2015,6 @@
             console.log('📦 Cargando catálogos antes de abrir modal...');
             cargarCatalogos().then(function () {
                 console.log('✅ Catálogos cargados, abriendo modal...');
-                var selectSiNo = document.getElementById('se_proporciono_info');
-                if (selectSiNo && selectSiNo.options.length > 1) {
-                    for (var i = 0; i < selectSiNo.options.length; i++) {
-                        var texto = selectSiNo.options[i].text.toLowerCase().trim();
-                        if (texto === 'sí' || texto === 'si') {
-                            selectSiNo.value = selectSiNo.options[i].value;
-                            break;
-                        }
-                    }
-                }
                 abrirModalCinematico('modalOverlay');
             }).catch(function (error) {
                 console.error('❌ Error al cargar catálogos:', error);
@@ -2188,17 +2038,17 @@
                 var search = searchInput.value.trim().toLowerCase();
 
                 censoContainer.innerHTML = `
-                <div class="empty-state">
-                    <div class="loading-spinner"></div>
-                    Cargando registros...
-                </div>
-            `;
+                    <div class="empty-state">
+                        <div class="loading-spinner"></div>
+                        Cargando registros...
+                    </div>
+                `;
                 errorElement.textContent = '';
 
                 var query = supabaseClient
                     .from('censo')
                     .select('*')
-                    .order('fecha_entrega', {ascending: false});
+                    .order('fecha_entrega', { ascending: false });
 
                 if (search.length > 0) {
                     query = query.or(
@@ -2217,10 +2067,10 @@
 
                 if (data.length === 0) {
                     censoContainer.innerHTML = `
-                    <div class="empty-state">
-                        📭 No hay registros de censo
-                    </div>
-                `;
+                        <div class="empty-state">
+                            📭 No hay registros de censo
+                        </div>
+                    `;
                     return;
                 }
 
@@ -2230,52 +2080,52 @@
                 console.error('Error al cargar censo:', error);
                 errorElement.textContent = 'Error al cargar censo: ' + error.message;
                 censoContainer.innerHTML = `
-                <div class="empty-state">
-                    ❌ Error al cargar los datos
-                </div>
-            `;
+                    <div class="empty-state">
+                        ❌ Error al cargar los datos
+                    </div>
+                `;
             }
         }
 
         function renderTable(data) {
             var html = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Folio</th>
-                        <th>Nombre</th>
-                        <th>CURP</th>
-                        <th>Fecha Entrega</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Folio</th>
+                            <th>Nombre</th>
+                            <th>CURP</th>
+                            <th>Fecha Entrega</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
             data.forEach(function (row) {
                 var nombreCompleto = row.nombre + ' ' + (row.paterno || '') + ' ' + (row.materno || '');
                 var fechaEntrega = row.fecha_entrega ? new Date(row.fecha_entrega).toLocaleDateString('es-MX') : 'N/A';
 
                 html += `
-                <tr>
-                    <td><span class="badge">${row.folio || 'N/A'}</span></td>
-                    <td>${nombreCompleto}</td>
-                    <td>${row.curp || 'N/A'}</td>
-                    <td>${fechaEntrega}</td>
-                    <td>
-                        <div class="table-actions">
-                            <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
-                            <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
-                        </div>
-                    </td>
-                </tr>
-            `;
+                    <tr>
+                        <td><span class="badge">${row.folio || 'N/A'}</span></td>
+                        <td>${nombreCompleto}</td>
+                        <td>${row.curp || 'N/A'}</td>
+                        <td>${fechaEntrega}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="btn-icon btn-icon-edit" onclick="editarCenso('${row.id_uuid}')" title="Editar">✏️</button>
+                                <button class="btn-icon btn-icon-delete" onclick="eliminarCenso('${row.id_uuid}')" title="Eliminar">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
             });
 
             html += `
-                </tbody>
-            </table>
-        `;
+                    </tbody>
+                </table>
+            `;
 
             censoContainer.innerHTML = html;
         }
@@ -2327,10 +2177,13 @@
                 document.getElementById('motivo_entrega').value = row.motivo_entrega_id_uuid || '';
                 document.getElementById('agno_edicion').value = row.agno_edicion_id_uuid || '';
                 document.getElementById('servicio_entrega').value = row.servicio_entrega_id_uuid || '';
-                document.getElementById('se_proporciono_info').value = row.si_no_id_uuid || '';
                 document.getElementById('discapacidad').value = row.discapacidad_id_uuid || '';
                 document.getElementById('embarazo').value = row.embarazo_id_uuid || '';
                 document.getElementById('tipo_migracion').value = row.migracion_id_uuid || '';
+
+                // se_proporciono_info: convertir el valor de la BD a "si" o "no"
+                var siNoValue = row.si_no_id_uuid ? 'si' : 'no';
+                document.getElementById('se_proporciono_info').value = siNoValue;
 
                 // Cargar municipios
                 if (row.entidad_id_uuid && esUUID(row.entidad_id_uuid)) {
@@ -2365,7 +2218,7 @@
                 .from('censo')
                 .select('folio')
                 .like('folio', año + '%')
-                .order('folio', {ascending: false})
+                .order('folio', { ascending: false })
                 .limit(1);
 
             var consecutivo = 1;
@@ -2378,6 +2231,42 @@
             }
 
             return año + String(consecutivo).padStart(8, '0');
+        }
+
+        // ============================================================
+        // OBTENER UUID DE SI_NO PARA "SI" O "NO"
+        // ============================================================
+        async function getSiNoUUID(valor) {
+            try {
+                var result = await supabaseClient
+                    .from('si_no')
+                    .select('id_uuid')
+                    .ilike('sino', valor)
+                    .limit(1);
+
+                if (result.data && result.data.length > 0) {
+                    return result.data[0].id_uuid;
+                }
+
+                // Si no encuentra, usar fallback
+                console.warn(`⚠️ No se encontró "${valor}" en si_no, buscando alternativas...`);
+
+                // Buscar sin importar mayúsculas/minúsculas
+                var result2 = await supabaseClient
+                    .from('si_no')
+                    .select('id_uuid')
+                    .limit(1);
+
+                if (result2.data && result2.data.length > 0) {
+                    return result2.data[0].id_uuid;
+                }
+
+                return null;
+
+            } catch (error) {
+                console.error('Error al obtener UUID de si_no:', error);
+                return null;
+            }
         }
 
         // ============================================================
@@ -2399,6 +2288,10 @@
                 }
                 return null;
             }
+
+            // Obtener el valor de se_proporciono_info ("si" o "no")
+            var siNoValue = document.getElementById('se_proporciono_info').value;
+            var siNoUUID = await getSiNoUUID(siNoValue === 'si' ? 'Sí' : 'No');
 
             var data = {
                 nombre: document.getElementById('nombre').value.trim(),
@@ -2423,7 +2316,7 @@
                 motivo_entrega_id_uuid: getUUID('motivo_entrega'),
                 agno_edicion_id_uuid: getUUID('agno_edicion'),
                 servicio_entrega_id_uuid: getUUID('servicio_entrega'),
-                si_no_id_uuid: getUUID('se_proporciono_info'),
+                si_no_id_uuid: siNoUUID,
                 discapacidad_id_uuid: getUUID('discapacidad'),
                 embarazo_id_uuid: getUUID('embarazo'),
                 migracion_id_uuid: getUUID('tipo_migracion')
@@ -2432,8 +2325,10 @@
             // Validar campos requeridos
             if (!data.nombre || !data.paterno || !data.curp || !data.fecha_nac || !data.sexo || !data.fecha_entrega ||
                 !data.tipo_cartilla_id_uuid || !data.motivo_entrega_id_uuid || !data.clues_id_uuid ||
-                !data.entidad_id_uuid || !data.municipio_id_uuid) {
+                !data.entidad_id_uuid || !data.municipio_id_uuid || !data.si_no_id_uuid) {
                 errorElement.textContent = 'Por favor completa todos los campos requeridos (*)';
+                submitBtn.disabled = false;
+                submitBtn.textContent = editIdVal ? 'Actualizar Registro' : 'Guardar Registro';
                 return;
             }
 
