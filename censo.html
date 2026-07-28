@@ -18,6 +18,9 @@
     </script>
 
     <style>
+        /* ============================================================
+       CSS VARIABLES PARA TEMA DIURNO / NOCTURNO
+       ============================================================ */
         :root {
             --bg-gradient-start: #141E30;
             --bg-gradient-end: #243B55;
@@ -137,6 +140,7 @@
                 transform: translateY(0) rotate(0deg);
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(-1000px) rotate(720deg);
                 opacity: 0;
@@ -174,6 +178,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -664,9 +669,11 @@
                 opacity: 0;
                 transform: translateY(-15px) scale(0.95);
             }
+
             60% {
                 transform: translateY(3px) scale(1.02);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -685,9 +692,11 @@
                 opacity: 0;
                 transform: scale(0.3) rotate(-20deg);
             }
+
             60% {
                 transform: scale(1.2) rotate(5deg);
             }
+
             100% {
                 opacity: 1;
                 transform: scale(1) rotate(0deg);
@@ -709,9 +718,11 @@
                 opacity: 0;
                 transform: translateY(20px) scale(0.97);
             }
+
             60% {
                 transform: translateY(-3px) scale(1.005);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -905,6 +916,7 @@
                 max-width: 95vw;
                 padding: 2rem;
             }
+
             .modal-content .form-grid {
                 grid-template-columns: 1fr 1fr;
             }
@@ -916,22 +928,26 @@
                 height: auto;
                 overflow-y: auto;
             }
+
             .censo-container {
                 padding: 1.5rem;
                 height: auto;
                 max-height: none;
                 overflow: visible;
             }
+
             .modal-content {
                 padding: 1.5rem;
                 max-width: 100%;
                 margin: 0.5rem;
                 max-height: 95vh;
             }
+
             .modal-content .form-grid {
                 grid-template-columns: 1fr 1fr;
                 gap: 1rem;
             }
+
             .modal-content .form-section {
                 padding: 1rem 1.2rem;
             }
@@ -943,64 +959,80 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .censo-header h1 {
                 font-size: 1.4rem;
             }
+
             .search-bar {
                 flex-direction: column;
                 align-items: stretch;
             }
+
             .search-bar .search-input-wrap {
                 max-width: 100%;
             }
+
             .censo-container {
                 padding: 1rem;
             }
+
             .user-badge {
                 font-size: 0.75rem;
                 padding: 0.4rem 0.8rem;
             }
+
             table {
                 font-size: 0.75rem;
                 min-width: 600px;
             }
+
             th,
             td {
                 padding: 0.5rem 0.6rem;
             }
+
             .btn-icon {
                 width: 28px;
                 height: 28px;
                 font-size: 0.75rem;
             }
+
             .modal-content {
                 padding: 1rem;
                 border-radius: 16px;
                 margin: 0.3rem;
                 max-height: 98vh;
             }
+
             .modal-content .form-grid {
                 grid-template-columns: 1fr;
                 gap: 0.8rem;
             }
+
             .modal-content .form-group.full-width,
             .modal-content .form-group.half-width {
                 grid-column: 1;
             }
+
             .modal-content .form-section {
                 padding: 0.8rem 1rem;
                 margin-bottom: 0.8rem;
             }
+
             .modal-content h2 {
                 font-size: 1.3rem;
                 margin-bottom: 1rem;
             }
+
             .modal-content .checkbox-group {
                 gap: 1rem;
             }
+
             .modal-actions {
                 flex-direction: column;
             }
+
             .modal-actions .btn {
                 width: 100%;
                 justify-content: center;
@@ -1011,50 +1043,62 @@
             body {
                 padding: 0.5rem;
             }
+
             .censo-container {
                 padding: 0.8rem;
                 border-radius: 16px;
             }
+
             table {
                 min-width: 480px;
                 font-size: 0.7rem;
             }
+
             th,
             td {
                 padding: 0.35rem 0.4rem;
             }
+
             .btn-icon {
                 width: 24px;
                 height: 24px;
                 font-size: 0.65rem;
                 border-radius: 8px;
             }
+
             .badge {
                 font-size: 0.6rem;
                 padding: 0.1rem 0.4rem;
             }
+
             .badge-clues {
                 font-size: 0.55rem;
                 padding: 0.1rem 0.4rem;
                 min-width: 35px;
             }
+
             .modal-content {
                 padding: 0.8rem;
             }
+
             .modal-content .form-section {
                 padding: 0.6rem 0.8rem;
             }
+
             .modal-content .form-group input,
             .modal-content .form-group select {
                 padding: 0.5rem 0.7rem;
                 font-size: 0.8rem;
             }
+
             .modal-content .form-group label {
                 font-size: 0.75rem;
             }
+
             .modal-content .checkbox-group label {
                 font-size: 0.75rem;
             }
+
             .modal-content h2 {
                 font-size: 1.1rem;
             }
@@ -1065,55 +1109,69 @@
                 height: calc(100vh - 2rem);
                 padding: 1rem;
             }
+
             .censo-header {
                 margin-bottom: 0.5rem;
             }
+
             .censo-header h1 {
                 font-size: 1.2rem;
             }
+
             .user-badge {
                 padding: 0.3rem 0.8rem;
                 font-size: 0.7rem;
                 margin-bottom: 0.5rem;
             }
+
             .search-bar {
                 margin-bottom: 0.5rem;
             }
+
             .table-container {
                 padding: 0.3rem;
             }
+
             thead th {
                 padding: 0.4rem 0.6rem;
                 font-size: 0.65rem;
             }
+
             tbody td {
                 padding: 0.4rem 0.6rem;
             }
+
             .btn-icon {
                 width: 24px;
                 height: 24px;
                 font-size: 0.65rem;
             }
+
             .modal-content {
                 padding: 1.2rem;
                 max-height: 95vh;
             }
+
             .modal-content .form-section {
                 padding: 0.8rem 1rem;
                 margin-bottom: 0.6rem;
             }
+
             .modal-content .form-grid {
                 gap: 0.6rem;
             }
+
             .modal-content h2 {
                 font-size: 1.2rem;
                 margin-bottom: 0.8rem;
             }
+
             .modal-content .form-group input,
             .modal-content .form-group select {
                 padding: 0.5rem 0.8rem;
                 font-size: 0.8rem;
             }
+
             .modal-actions {
                 margin-top: 0.8rem;
                 padding-top: 0.5rem;
@@ -1296,7 +1354,6 @@
                                 <option value="">Seleccionar...</option>
                             </select>
                         </div>
-                        <!-- se_proporciono_info: Select FIJO - no se carga desde BD -->
                         <div class="form-group">
                             <label for="se_proporciono_info">¿Se proporcionó información? *</label>
                             <select id="se_proporciono_info" required>
@@ -1489,7 +1546,7 @@
         }
 
         // ============================================================
-        // UUIDs REALES DE LA BASE DE DATOS (FALLBACK)
+        // UUIDs REALES DE LA BASE DE DATOS
         // ============================================================
         var UUIDS_REALES = {
             agno_edicion: {
@@ -1511,12 +1568,7 @@
                 'ADOLESCENTES': '6dea1de7-14fd-4f68-a2bf-759b7802cc2a',
                 'HOMBRES': 'b9350f1e-5eef-4b81-af07-f3d1f3cda0c5',
                 'MUJERES': 'f8c08d30-04c7-41fc-8695-ecb49999d9d2',
-                'ADULTO MAYOR': 'cee027e9-4bfa-4250-9133-e224cf4193c3',
-                'Cartilla de Vacunación': '23125121-82cc-4487-999d-8b3ef1538e78',
-                'Cartilla de Embarazo': '6a03f90f-5663-42d6-96f7-0fb4debc0e24',
-                'Cartilla de Adulto Mayor': '6171056a-c183-47a5-b91f-df129cd6db27',
-                'Cartilla de Salud Mental': 'd726fc7a-29d4-4914-b681-3a498d2caa0c',
-                'Cartilla Nacional de Salud': '253c8044-e512-4b1b-8f14-adb708f6bfd5'
+                'ADULTO MAYOR': 'cee027e9-4bfa-4250-9133-e224cf4193c3'
             },
             motivo_entrega: {
                 'NUEVO USUARIOS': 'b72398e5-e3b0-46f5-8865-c9126cc23c64',
@@ -1533,6 +1585,39 @@
                 'SI': 'ebb1aa36-1f6a-41f2-b4a1-573c5627c4a4',
                 'NO': '8f13197f-c446-4d89-9abd-deaac62352d4'
             },
+            discapacidad: {
+                'OTRAS FUNCIONES': '2991e7e9-fc97-4d73-9d28-2fe805fa723b',
+                'FUNCION DE LA VOZ Y EL HABLA': 'ac3feaee-10eb-414a-8ccd-f48b40754c0c',
+                'FUNCIONES SENSORIALES Y DOLOR': '23691562-b321-4c67-8542-f912401ede6f',
+                'Funciones neuromusculo-esqueléticas y relacionadas con el movimiento': '4605c619-7525-4178-a0c9-51728265f542',
+                'FUNCIONES MENTALES': 'f02ffceb-0e33-49a0-8891-562b4f8f7c34',
+                'NO': 'a7efd620-4771-47ce-bfb4-59ba78e8fe6e',
+                'Ninguna': '318d94fc-1e9d-4c2a-89f9-fffeb5307510',
+                'Motriz': '2965c3a0-0b66-489b-bd11-4ee5ea87293d',
+                'Visual': '402c9d18-ef41-48d2-94dc-3e1f83e93dbb',
+                'Auditiva': 'f4e81ce9-45e3-46d3-9400-36114544a9a6',
+                'Intelectual': 'f4e45616-a322-4ddc-b7d0-cde88859bddc',
+                'Psicosocial': 'aa5851ae-68f6-4443-a4ec-1edc8348a5c2'
+            },
+            embarazo: {
+                'NO': '6cb183f9-3fd7-450f-8d58-ef403a3dfb87',
+                'SI': '62f351e4-729f-4c99-800d-d051bdc028a2',
+                'Primer trimestre': '98487afa-8681-46ef-8eed-ec1684f90aca',
+                'Segundo trimestre': '3ee47244-1e06-4f61-8658-15465ab92807',
+                'Tercer trimestre': '95f2b95b-bff0-4436-b064-a50f010d4a03',
+                'No aplica': '52a626b9-7e7e-4246-bd90-29d7360e194d'
+            },
+            tipo_migracion: {
+                'CONNACIONAL': '92b1f0e6-1adb-411a-9d71-8edeb03e93cc',
+                'INTERNACIONAL': 'cae4b9f0-8efa-4fe7-b5d6-918e1242aad1',
+                'INTERESTATAL': '3327f64b-f3d3-4300-a5b9-1454542e549d',
+                'REPATRIADO': 'd347d7b1-0b36-406c-bca0-8f0506a3b5f3',
+                'INTERMUNICIPAL': 'f303d39f-0cda-4942-a36f-b2d4598cfe8d',
+                'Internacional': 'de9e9902-7840-43ad-b54b-edb53c27e0a5',
+                'Retorno': '627a5cca-832e-42cc-af6b-ad3e4021de47',
+                'Interna': 'b571f9b8-dc1e-4280-ba41-cb7ab9b234e4',
+                'No aplica': '25b1577f-637e-4067-b4d3-35369625e1b8'
+            },
             entidad: {
                 'JALISCO': 'febba07c-89fb-426f-b44b-713a332a2504'
             },
@@ -1545,111 +1630,126 @@
         };
 
         // ============================================================
-        // DATOS DE RESPALDO (SOLO USA UUIDs REALES)
+        // DATOS DE RESPALDO - CON UUIDs REALES
         // ============================================================
         var DATOS_FALLBACK = {
             entidad: [
-                { id_uuid: UUIDS_REALES.entidad['JALISCO'] || generarUUID(), entidad: 'JALISCO' },
-                { id_uuid: generarUUID(), entidad: 'Aguascalientes' },
-                { id_uuid: generarUUID(), entidad: 'Baja California' },
-                { id_uuid: generarUUID(), entidad: 'Baja California Sur' },
-                { id_uuid: generarUUID(), entidad: 'Campeche' },
-                { id_uuid: generarUUID(), entidad: 'Coahuila' },
-                { id_uuid: generarUUID(), entidad: 'Colima' },
-                { id_uuid: generarUUID(), entidad: 'Chiapas' },
-                { id_uuid: generarUUID(), entidad: 'Chihuahua' },
-                { id_uuid: generarUUID(), entidad: 'Ciudad de México' },
-                { id_uuid: generarUUID(), entidad: 'Durango' },
-                { id_uuid: generarUUID(), entidad: 'Guanajuato' },
-                { id_uuid: generarUUID(), entidad: 'Guerrero' },
-                { id_uuid: generarUUID(), entidad: 'Hidalgo' },
-                { id_uuid: generarUUID(), entidad: 'Estado de México' },
-                { id_uuid: generarUUID(), entidad: 'Michoacán' },
-                { id_uuid: generarUUID(), entidad: 'Morelos' },
-                { id_uuid: generarUUID(), entidad: 'Nayarit' },
-                { id_uuid: generarUUID(), entidad: 'Nuevo León' },
-                { id_uuid: generarUUID(), entidad: 'Oaxaca' },
-                { id_uuid: generarUUID(), entidad: 'Puebla' },
-                { id_uuid: generarUUID(), entidad: 'Querétaro' },
-                { id_uuid: generarUUID(), entidad: 'Quintana Roo' },
-                { id_uuid: generarUUID(), entidad: 'San Luis Potosí' },
-                { id_uuid: generarUUID(), entidad: 'Sinaloa' },
-                { id_uuid: generarUUID(), entidad: 'Sonora' },
-                { id_uuid: generarUUID(), entidad: 'Tabasco' },
-                { id_uuid: generarUUID(), entidad: 'Tamaulipas' },
-                { id_uuid: generarUUID(), entidad: 'Tlaxcala' },
-                { id_uuid: generarUUID(), entidad: 'Veracruz' },
-                { id_uuid: generarUUID(), entidad: 'Yucatán' },
-                { id_uuid: generarUUID(), entidad: 'Zacatecas' }
+                {id_uuid: UUIDS_REALES.entidad['JALISCO'] || generarUUID(), entidad: 'JALISCO'},
+                {id_uuid: generarUUID(), entidad: 'Aguascalientes'},
+                {id_uuid: generarUUID(), entidad: 'Baja California'},
+                {id_uuid: generarUUID(), entidad: 'Baja California Sur'},
+                {id_uuid: generarUUID(), entidad: 'Campeche'},
+                {id_uuid: generarUUID(), entidad: 'Coahuila'},
+                {id_uuid: generarUUID(), entidad: 'Colima'},
+                {id_uuid: generarUUID(), entidad: 'Chiapas'},
+                {id_uuid: generarUUID(), entidad: 'Chihuahua'},
+                {id_uuid: generarUUID(), entidad: 'Ciudad de México'},
+                {id_uuid: generarUUID(), entidad: 'Durango'},
+                {id_uuid: generarUUID(), entidad: 'Guanajuato'},
+                {id_uuid: generarUUID(), entidad: 'Guerrero'},
+                {id_uuid: generarUUID(), entidad: 'Hidalgo'},
+                {id_uuid: generarUUID(), entidad: 'Estado de México'},
+                {id_uuid: generarUUID(), entidad: 'Michoacán'},
+                {id_uuid: generarUUID(), entidad: 'Morelos'},
+                {id_uuid: generarUUID(), entidad: 'Nayarit'},
+                {id_uuid: generarUUID(), entidad: 'Nuevo León'},
+                {id_uuid: generarUUID(), entidad: 'Oaxaca'},
+                {id_uuid: generarUUID(), entidad: 'Puebla'},
+                {id_uuid: generarUUID(), entidad: 'Querétaro'},
+                {id_uuid: generarUUID(), entidad: 'Quintana Roo'},
+                {id_uuid: generarUUID(), entidad: 'San Luis Potosí'},
+                {id_uuid: generarUUID(), entidad: 'Sinaloa'},
+                {id_uuid: generarUUID(), entidad: 'Sonora'},
+                {id_uuid: generarUUID(), entidad: 'Tabasco'},
+                {id_uuid: generarUUID(), entidad: 'Tamaulipas'},
+                {id_uuid: generarUUID(), entidad: 'Tlaxcala'},
+                {id_uuid: generarUUID(), entidad: 'Veracruz'},
+                {id_uuid: generarUUID(), entidad: 'Yucatán'},
+                {id_uuid: generarUUID(), entidad: 'Zacatecas'}
             ],
             pais: [
-                { id_uuid: generarUUID(), pais: 'México' },
-                { id_uuid: generarUUID(), pais: 'Estados Unidos' },
-                { id_uuid: generarUUID(), pais: 'Guatemala' },
-                { id_uuid: generarUUID(), pais: 'Honduras' },
-                { id_uuid: generarUUID(), pais: 'El Salvador' }
+                {id_uuid: generarUUID(), pais: 'México'},
+                {id_uuid: generarUUID(), pais: 'Estados Unidos'},
+                {id_uuid: generarUUID(), pais: 'Guatemala'},
+                {id_uuid: generarUUID(), pais: 'Honduras'},
+                {id_uuid: generarUUID(), pais: 'El Salvador'}
             ],
             agno_edicion: [
-                { id_uuid: UUIDS_REALES.agno_edicion['2024'] || generarUUID(), agno_edicion: '2024' },
-                { id_uuid: UUIDS_REALES.agno_edicion['2023'] || generarUUID(), agno_edicion: '2023' },
-                { id_uuid: UUIDS_REALES.agno_edicion['2022'] || generarUUID(), agno_edicion: '2022' },
-                { id_uuid: UUIDS_REALES.agno_edicion['2021'] || generarUUID(), agno_edicion: '2021' },
-                { id_uuid: UUIDS_REALES.agno_edicion['2020'] || generarUUID(), agno_edicion: '2020' },
-                { id_uuid: UUIDS_REALES.agno_edicion['2019'] || generarUUID(), agno_edicion: '2019' }
+                {id_uuid: UUIDS_REALES.agno_edicion['2024'] || generarUUID(), agno_edicion: '2024'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2023'] || generarUUID(), agno_edicion: '2023'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2022'] || generarUUID(), agno_edicion: '2022'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2021'] || generarUUID(), agno_edicion: '2021'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2020'] || generarUUID(), agno_edicion: '2020'},
+                {id_uuid: UUIDS_REALES.agno_edicion['2019'] || generarUUID(), agno_edicion: '2019'}
             ],
             servicio_entrega: [
-                { id_uuid: UUIDS_REALES.servicio_entrega['Consulta General'] || generarUUID(), servicio_entrega: 'Consulta General' },
-                { id_uuid: UUIDS_REALES.servicio_entrega['OTROS'] || generarUUID(), servicio_entrega: 'OTROS' },
-                { id_uuid: generarUUID(), servicio_entrega: 'Urgencias' },
-                { id_uuid: generarUUID(), servicio_entrega: 'Hospitalización' },
-                { id_uuid: generarUUID(), servicio_entrega: 'Prevención' }
+                {id_uuid: UUIDS_REALES.servicio_entrega['Consulta General'] || generarUUID(), servicio_entrega: 'Consulta General'},
+                {id_uuid: UUIDS_REALES.servicio_entrega['OTROS'] || generarUUID(), servicio_entrega: 'OTROS'},
+                {id_uuid: UUIDS_REALES.servicio_entrega['ENFERMERIA'] || generarUUID(), servicio_entrega: 'ENFERMERIA'},
+                {id_uuid: UUIDS_REALES.servicio_entrega['PROMOCION DE LA SALUD'] || generarUUID(), servicio_entrega: 'PROMOCION DE LA SALUD'},
+                {id_uuid: generarUUID(), servicio_entrega: 'Urgencias'},
+                {id_uuid: generarUUID(), servicio_entrega: 'Hospitalización'},
+                {id_uuid: generarUUID(), servicio_entrega: 'Prevención'}
             ],
             discapacidad: [
-                { id_uuid: generarUUID(), discapacidad: 'Ninguna' },
-                { id_uuid: generarUUID(), discapacidad: 'Física' },
-                { id_uuid: generarUUID(), discapacidad: 'Visual' },
-                { id_uuid: generarUUID(), discapacidad: 'Auditiva' },
-                { id_uuid: generarUUID(), discapacidad: 'Intelectual' },
-                { id_uuid: generarUUID(), discapacidad: 'Psicosocial' },
-                { id_uuid: generarUUID(), discapacidad: 'Múltiple' }
+                {id_uuid: UUIDS_REALES.discapacidad['Ninguna'] || generarUUID(), discapacidad: 'Ninguna'},
+                {id_uuid: UUIDS_REALES.discapacidad['Motriz'] || generarUUID(), discapacidad: 'Motriz'},
+                {id_uuid: UUIDS_REALES.discapacidad['Visual'] || generarUUID(), discapacidad: 'Visual'},
+                {id_uuid: UUIDS_REALES.discapacidad['Auditiva'] || generarUUID(), discapacidad: 'Auditiva'},
+                {id_uuid: UUIDS_REALES.discapacidad['Intelectual'] || generarUUID(), discapacidad: 'Intelectual'},
+                {id_uuid: UUIDS_REALES.discapacidad['Psicosocial'] || generarUUID(), discapacidad: 'Psicosocial'},
+                {id_uuid: UUIDS_REALES.discapacidad['NO'] || generarUUID(), discapacidad: 'NO'},
+                {id_uuid: UUIDS_REALES.discapacidad['OTRAS FUNCIONES'] || generarUUID(), discapacidad: 'OTRAS FUNCIONES'},
+                {id_uuid: UUIDS_REALES.discapacidad['FUNCION DE LA VOZ Y EL HABLA'] || generarUUID(), discapacidad: 'FUNCION DE LA VOZ Y EL HABLA'},
+                {id_uuid: UUIDS_REALES.discapacidad['FUNCIONES MENTALES'] || generarUUID(), discapacidad: 'FUNCIONES MENTALES'},
+                {id_uuid: UUIDS_REALES.discapacidad['Funciones neuromusculo-esqueléticas y relacionadas con el movimiento'] || generarUUID(), discapacidad: 'Funciones neuromusculo-esqueléticas y relacionadas con el movimiento'},
+                {id_uuid: UUIDS_REALES.discapacidad['FUNCIONES SENSORIALES Y DOLOR'] || generarUUID(), discapacidad: 'FUNCIONES SENSORIALES Y DOLOR'}
             ],
             tipo_migracion: [
-                { id_uuid: generarUUID(), migracion: 'Ninguna' },
-                { id_uuid: generarUUID(), migracion: 'Interna' },
-                { id_uuid: generarUUID(), migracion: 'Internacional' },
-                { id_uuid: generarUUID(), migracion: 'Retorno' },
-                { id_uuid: generarUUID(), migracion: 'Tránsito' }
+                {id_uuid: UUIDS_REALES.tipo_migracion['CONNACIONAL'] || generarUUID(), migracion: 'CONNACIONAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['INTERNACIONAL'] || generarUUID(), migracion: 'INTERNACIONAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['INTERESTATAL'] || generarUUID(), migracion: 'INTERESTATAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['REPATRIADO'] || generarUUID(), migracion: 'REPATRIADO'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['INTERMUNICIPAL'] || generarUUID(), migracion: 'INTERMUNICIPAL'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['Internacional'] || generarUUID(), migracion: 'Internacional'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['Retorno'] || generarUUID(), migracion: 'Retorno'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['Interna'] || generarUUID(), migracion: 'Interna'},
+                {id_uuid: UUIDS_REALES.tipo_migracion['No aplica'] || generarUUID(), migracion: 'No aplica'}
             ],
             embarazo: [
-                { id_uuid: generarUUID(), embarazo: 'No' },
-                { id_uuid: generarUUID(), embarazo: 'Sí' }
+                {id_uuid: UUIDS_REALES.embarazo['NO'] || generarUUID(), embarazo: 'NO'},
+                {id_uuid: UUIDS_REALES.embarazo['SI'] || generarUUID(), embarazo: 'SI'},
+                {id_uuid: UUIDS_REALES.embarazo['Primer trimestre'] || generarUUID(), embarazo: 'Primer trimestre'},
+                {id_uuid: UUIDS_REALES.embarazo['Segundo trimestre'] || generarUUID(), embarazo: 'Segundo trimestre'},
+                {id_uuid: UUIDS_REALES.embarazo['Tercer trimestre'] || generarUUID(), embarazo: 'Tercer trimestre'},
+                {id_uuid: UUIDS_REALES.embarazo['No aplica'] || generarUUID(), embarazo: 'No aplica'}
             ],
             municipio: [
-                { id_uuid: UUIDS_REALES.municipio['TALPA DE ALLENDE'] || generarUUID(), municipio: 'TALPA DE ALLENDE' },
-                { id_uuid: generarUUID(), municipio: 'Municipio 1' },
-                { id_uuid: generarUUID(), municipio: 'Municipio 2' }
+                {id_uuid: UUIDS_REALES.municipio['TALPA DE ALLENDE'] || generarUUID(), municipio: 'TALPA DE ALLENDE'},
+                {id_uuid: generarUUID(), municipio: 'Municipio 1'},
+                {id_uuid: generarUUID(), municipio: 'Municipio 2'}
             ],
             tipo_cartilla: [
-                { id_uuid: UUIDS_REALES.tipo_cartilla['NIÑAS Y NIÑOS'] || generarUUID(), tipo_cartilla: 'NIÑAS Y NIÑOS' },
-                { id_uuid: UUIDS_REALES.tipo_cartilla['ADOLESCENTES'] || generarUUID(), tipo_cartilla: 'ADOLESCENTES' },
-                { id_uuid: UUIDS_REALES.tipo_cartilla['HOMBRES'] || generarUUID(), tipo_cartilla: 'HOMBRES' },
-                { id_uuid: UUIDS_REALES.tipo_cartilla['MUJERES'] || generarUUID(), tipo_cartilla: 'MUJERES' },
-                { id_uuid: UUIDS_REALES.tipo_cartilla['ADULTO MAYOR'] || generarUUID(), tipo_cartilla: 'ADULTO MAYOR' }
+                {id_uuid: UUIDS_REALES.tipo_cartilla['NIÑAS Y NIÑOS'] || generarUUID(), tipo_cartilla: 'NIÑAS Y NIÑOS'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['ADOLESCENTES'] || generarUUID(), tipo_cartilla: 'ADOLESCENTES'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['HOMBRES'] || generarUUID(), tipo_cartilla: 'HOMBRES'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['MUJERES'] || generarUUID(), tipo_cartilla: 'MUJERES'},
+                {id_uuid: UUIDS_REALES.tipo_cartilla['ADULTO MAYOR'] || generarUUID(), tipo_cartilla: 'ADULTO MAYOR'}
             ],
             motivo_entrega: [
-                { id_uuid: UUIDS_REALES.motivo_entrega['Primera vez'] || generarUUID(), motivo: 'Primera vez' },
-                { id_uuid: UUIDS_REALES.motivo_entrega['NUEVO USUARIOS'] || generarUUID(), motivo: 'NUEVO USUARIOS' },
-                { id_uuid: UUIDS_REALES.motivo_entrega['Reposición'] || generarUUID(), motivo: 'Reposición' },
-                { id_uuid: generarUUID(), motivo: 'Renovación' },
-                { id_uuid: generarUUID(), motivo: 'Traslado' },
-                { id_uuid: generarUUID(), motivo: 'Otro' }
+                {id_uuid: UUIDS_REALES.motivo_entrega['Primera vez'] || generarUUID(), motivo: 'Primera vez'},
+                {id_uuid: UUIDS_REALES.motivo_entrega['NUEVO USUARIOS'] || generarUUID(), motivo: 'NUEVO USUARIOS'},
+                {id_uuid: UUIDS_REALES.motivo_entrega['Reposición'] || generarUUID(), motivo: 'Reposición'},
+                {id_uuid: generarUUID(), motivo: 'Renovación'},
+                {id_uuid: generarUUID(), motivo: 'Traslado'},
+                {id_uuid: generarUUID(), motivo: 'Otro'}
             ],
             clues: [
-                { id_uuid: UUIDS_REALES.clues['JCSSA003583'] || generarUUID(), clues: 'JCSSA003583' },
-                { id_uuid: generarUUID(), clues: 'CLUES001' },
-                { id_uuid: generarUUID(), clues: 'CLUES002' },
-                { id_uuid: generarUUID(), clues: 'CLUES003' },
-                { id_uuid: generarUUID(), clues: 'CLUES004' }
+                {id_uuid: UUIDS_REALES.clues['JCSSA003583'] || generarUUID(), clues: 'JCSSA003583'},
+                {id_uuid: generarUUID(), clues: 'CLUES001'},
+                {id_uuid: generarUUID(), clues: 'CLUES002'},
+                {id_uuid: generarUUID(), clues: 'CLUES003'},
+                {id_uuid: generarUUID(), clues: 'CLUES004'}
             ]
         };
 
@@ -1663,7 +1763,7 @@
         }
 
         // ============================================================
-        // FUNCIÓN PARA CARGAR CATÁLOGO - SIEMPRE DESDE BD
+        // FUNCIÓN PARA CARGAR CATÁLOGO
         // ============================================================
         async function cargarCatalogo(idSelect, tabla, campoTexto) {
             try {
@@ -1675,28 +1775,23 @@
 
                 console.log(`🔄 Cargando ${idSelect} desde "${tabla}"...`);
 
-                // Intentar cargar desde Supabase
                 var result = await supabaseClient
                     .from(tabla)
                     .select(`id_uuid, ${campoTexto}`)
                     .order(campoTexto);
 
-                // SIEMPRE usar datos de la BD si existen
                 if (result.data && result.data.length > 0) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
-                    var count = 0;
                     result.data.forEach(function (item) {
                         if (esUUID(item.id_uuid)) {
                             var valor = item[campoTexto] || 'Sin nombre';
                             select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
-                            count++;
                         }
                     });
-                    console.log(`✅ ${idSelect}: ${count} opciones cargadas desde BD`);
+                    console.log(`✅ ${idSelect}: ${result.data.length} opciones cargadas desde BD`);
                     return true;
                 }
 
-                // Solo si NO hay datos en la BD, usar fallback
                 console.warn(`⚠️ No hay datos en "${tabla}", usando fallback para ${idSelect}`);
                 if (DATOS_FALLBACK[idSelect]) {
                     select.innerHTML = '<option value="">Seleccionar...</option>';
@@ -1705,15 +1800,6 @@
                         select.innerHTML += `<option value="${item.id_uuid}">${valor}</option>`;
                     });
                     console.log(`✅ ${idSelect}: ${DATOS_FALLBACK[idSelect].length} opciones desde fallback`);
-                    return true;
-                }
-
-                // Si no hay fallback, crear opciones mínimas
-                if (idSelect === 'se_proporciono_info') {
-                    select.innerHTML = '<option value="">Seleccionar...</option>';
-                    select.innerHTML += `<option value="${UUIDS_REALES.si_no['SI']}">Sí</option>`;
-                    select.innerHTML += `<option value="${UUIDS_REALES.si_no['NO']}">No</option>`;
-                    console.log(`✅ ${idSelect}: creado manualmente con UUIDs reales`);
                     return true;
                 }
 
@@ -1728,7 +1814,7 @@
         // ============================================================
         // CARGAR TODOS LOS CATÁLOGOS
         // ============================================================
-        var catalogos = { cargados: false };
+        var catalogos = {cargados: false};
 
         async function cargarCatalogos() {
             try {
@@ -2069,7 +2155,6 @@
             document.getElementById('fecha_entrega').value = new Date().toISOString().split('T')[0];
             document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
 
-            // Por defecto "Sí" en se_proporciono_info
             document.getElementById('se_proporciono_info').value = 'si';
 
             var embarazoSelect = document.getElementById('embarazo');
@@ -2119,7 +2204,7 @@
                 var query = supabaseClient
                     .from('censo')
                     .select('*')
-                    .order('fecha_entrega', { ascending: false });
+                    .order('fecha_entrega', {ascending: false});
 
                 if (search.length > 0) {
                     query = query.or(
@@ -2240,7 +2325,6 @@
                 document.getElementById('pob_afromex').checked = row.pob_afromex || false;
                 document.getElementById('pob_migrante').checked = row.pob_migrante || false;
 
-                // Establecer valores de los selects (UUIDs)
                 document.getElementById('entidad').value = row.entidad_id_uuid || '';
                 document.getElementById('clues').value = row.clues_id_uuid || '';
                 document.getElementById('pais').value = row.pais_id_uuid || '';
@@ -2252,18 +2336,15 @@
                 document.getElementById('embarazo').value = row.embarazo_id_uuid || '';
                 document.getElementById('tipo_migracion').value = row.migracion_id_uuid || '';
 
-                // se_proporciono_info: convertir el valor de la BD a "si" o "no"
                 var siNoValue = row.si_no_id_uuid ? 'si' : 'no';
                 document.getElementById('se_proporciono_info').value = siNoValue;
 
-                // Cargar municipios
                 if (row.entidad_id_uuid && esUUID(row.entidad_id_uuid)) {
                     await cargarMunicipiosConValor(row.entidad_id_uuid, row.municipio_id_uuid);
                 } else {
                     document.getElementById('municipio').innerHTML = '<option value="">Seleccionar...</option>';
                 }
 
-                // Actualizar restricciones de embarazo
                 if (row.sexo) {
                     var edad = parseInt(row.edad) || 0;
                     actualizarRestriccionesEmbarazo(row.sexo, edad);
@@ -2289,7 +2370,7 @@
                 .from('censo')
                 .select('folio')
                 .like('folio', año + '%')
-                .order('folio', { ascending: false })
+                .order('folio', {ascending: false})
                 .limit(1);
 
             var consecutivo = 1;
@@ -2320,7 +2401,7 @@
         }
 
         // ============================================================
-        // GUARDAR REGISTRO - SOLO UUIDs
+        // GUARDAR REGISTRO
         // ============================================================
         async function guardarCenso(event) {
             event.preventDefault();
