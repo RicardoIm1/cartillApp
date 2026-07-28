@@ -2289,55 +2289,41 @@
         }
 
         // ============================================================
-        // OBTENER UUID DE SI_NO PARA "SI" O "NO"
+        // OBTENER UUID DE SI_NO - VERSIÓN CON VALORES FIJOS
         // ============================================================
         async function getSiNoUUID(valor) {
+            // Usar UUIDs fijos de la tabla si_no
+            var uuidSi = 'ebb1aa36-1f6a-41f2-b4a1-573c5627c4a4'; // "SI"
+            var uuidNo = '8f13197f-c446-4d89-9abd-deaac62352d4'; // "NO"
+
+            // Verificar si el valor es "SI" o "NO"
+            var valorUpper = valor.toUpperCase().trim();
+            if (valorUpper === 'SI' || valorUpper === 'SÍ') {
+                console.log(`✅ Usando UUID fijo para "SI": ${uuidSi}`);
+                return uuidSi;
+            } else if (valorUpper === 'NO') {
+                console.log(`✅ Usando UUID fijo para "NO": ${uuidNo}`);
+                return uuidNo;
+            }
+
+            // Fallback: intentar buscar en la BD
             try {
-                // Buscar sin importar mayúsculas/minúsculas ni acentos
                 var result = await supabaseClient
                     .from('si_no')
-                    .select('id_uuid, sino')
-                    .ilike('sino', valor);
+                    .select('id_uuid')
+                    .limit(1);
 
                 if (result.data && result.data.length > 0) {
-                    console.log(`✅ Encontrado "${result.data[0].sino}" en si_no con UUID: ${result.data[0].id_uuid}`);
+                    console.log(`✅ Usando primer UUID de si_no: ${result.data[0].id_uuid}`);
                     return result.data[0].id_uuid;
                 }
-
-                // Si no encuentra, buscar con like exacto
-                console.warn(`⚠️ No se encontró "${valor}" en si_no, buscando alternativas...`);
-
-                // Obtener todos los registros de si_no para depuración
-                var allResult = await supabaseClient
-                    .from('si_no')
-                    .select('id_uuid, sino');
-
-                console.log('📊 Todos los valores en si_no:', allResult.data);
-
-                // Buscar cualquier valor que contenga "si" o "no"
-                var searchTerm = valor.toLowerCase().includes('sí') || valor.toLowerCase().includes('si') ? 'si' : 'no';
-
-                for (var i = 0; i < allResult.data.length; i++) {
-                    var item = allResult.data[i];
-                    var itemLower = item.sino.toLowerCase();
-                    if (itemLower.includes(searchTerm)) {
-                        console.log(`✅ Encontrado "${item.sino}" como coincidencia para "${valor}"`);
-                        return item.id_uuid;
-                    }
-                }
-
-                // Si todo falla, usar el primer registro de si_no
-                if (allResult.data && allResult.data.length > 0) {
-                    console.warn(`⚠️ Usando primer registro de si_no: "${allResult.data[0].sino}"`);
-                    return allResult.data[0].id_uuid;
-                }
-
-                return null;
-
             } catch (error) {
-                console.error('Error al obtener UUID de si_no:', error);
-                return null;
+                console.error('Error al buscar en si_no:', error);
             }
+
+            // Último fallback: generar un UUID temporal
+            console.warn('⚠️ Usando UUID generado como último recurso');
+            return generarUUID();
         }
 
         // ============================================================
